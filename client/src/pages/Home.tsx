@@ -282,6 +282,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Secret to Productivity Section */}
+      <section className="bg-white py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Desktop Layout */}
+          <div className="hidden md:block">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-6">
+              The secret to <span className="underline decoration-[#30B8C4] decoration-4">Productivity</span> isn't<br />
+              Discipline. It's <span className="bg-yellow-200 px-2">joy</span>
+            </h2>
+            
+            <div className="space-y-6 text-lg">
+              <p>
+                You won't <strong>just</strong> accomplish more.<br />
+                You'll feel <strong>happier</strong> and more <strong>fulfilled</strong> along the way.
+              </p>
+              
+              <p>
+                We think that productivity is all about hard work. That the road to success is lined with endless frustration and toil. But what if there's another way?
+              </p>
+              
+              <p>
+                In <em>Feel-Good Productivity</em>, Dr Ali Abdaal uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
+              </p>
+            </div>
+          </div>
+          
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <h2 className="text-3xl font-bold text-[#1A1A1A] mb-4">
+              The secret to <span className="underline decoration-[#30B8C4] decoration-2">Productivity</span> isn't<br />
+              Discipline. It's <span className="bg-yellow-200 px-1">joy</span>
+            </h2>
+            
+            <div className="space-y-4 text-base">
+              <p>
+                You won't <strong>just</strong> accomplish more.<br />
+                You'll feel <strong>happier</strong> and more <strong>fulfilled</strong> along the way.
+              </p>
+              
+              <p>
+                We think that productivity is all about hard work. That the road to success is lined with endless frustration and toil. But what if there's another way?
+              </p>
+              
+              <p>
+                In <em>Feel-Good Productivity</em>, Dr Ali Abdaal uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Additional Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
