@@ -1,8 +1,17 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { storage } from "./storage";
 import { isAdmin } from "./auth";
 import * as schema from "@shared/schema";
 import { z } from "zod";
+
+// Extend Express Request interface
+declare global {
+  namespace Express {
+    interface Request {
+      validatedBody: any;
+    }
+  }
+}
 
 export const adminRouter = Router();
 
@@ -11,7 +20,7 @@ adminRouter.use(isAdmin);
 
 // Helper function to handle validation and errors
 const validateRequest = (schema: z.ZodType<any, any>) => {
-  return (req: any, res: any, next: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     try {
       req.validatedBody = schema.parse(req.body);
       next();
