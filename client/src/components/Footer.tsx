@@ -1,135 +1,107 @@
-
-import { FaYoutube, FaInstagram, FaLinkedin, FaTiktok, FaTwitter, FaFacebook } from 'react-icons/fa';
-import { Link } from 'wouter';
+import { useFooterCategories, useFooterLinks, useSocialLinks, useSiteSettings } from "@/hooks/use-content";
+import { Loader2 } from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-  
+  const { data: footerCategories, isLoading: categoriesLoading } = useFooterCategories();
+  const { data: footerLinks, isLoading: linksLoading } = useFooterLinks();
+  const { data: socialLinks, isLoading: socialLoading } = useSocialLinks();
+  const { data: siteSettings, isLoading: settingsLoading } = useSiteSettings();
+
+  const isLoading = categoriesLoading || linksLoading || socialLoading || settingsLoading;
+
+  if (isLoading) {
+    return (
+      <footer className="bg-slate-900 text-white py-16">
+        <div className="container mx-auto flex justify-center items-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      </footer>
+    );
+  }
+
+  // Organize links by category
+  const linksByCategory = footerCategories?.map(category => {
+    const categoryLinks = footerLinks?.filter(link => link.categoryId === category.id) || [];
+    return {
+      ...category,
+      links: categoryLinks
+    };
+  }) || [];
+
+  // Get social icon component based on type
+  const getSocialIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'facebook':
+        return <FaFacebook className="h-5 w-5" />;
+      case 'twitter':
+        return <FaTwitter className="h-5 w-5" />;
+      case 'instagram':
+        return <FaInstagram className="h-5 w-5" />;
+      case 'linkedin':
+        return <FaLinkedin className="h-5 w-5" />;
+      case 'youtube':
+        return <FaYoutube className="h-5 w-5" />;
+      default:
+        return <FaTwitter className="h-5 w-5" />;
+    }
+  };
+
   return (
-    <footer className="bg-white pt-16 pb-8 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start">
-          {/* Logo and Copyright - Left Column */}
-          <div className="mb-8 md:mb-0">
-            <div className="flex items-center mb-4">
-              <svg className="w-10 h-10 text-[#30B8C4] mr-2" viewBox="0 0 40 40" fill="currentColor">
-                <path d="M6.5 26.5L13.5 13.5M26.5 26.5L19.5 13.5M8 18.5H25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-2xl font-bold">Ali Abdaal</span>
-            </div>
-            <p className="text-gray-500 text-sm mb-6">
-              © Ali Abdaal {currentYear}. All rights reserved.
+    <footer className="bg-slate-900 text-white pt-16 pb-8">
+      <div className="container mx-auto px-4">
+        {/* Main footer content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* Brand section */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold">{siteSettings?.siteName || "Feel-Good Productivity"}</h3>
+            <p className="text-slate-300 text-sm max-w-xs">
+              {siteSettings?.footerTagline || "The science-based guide to achieving more while feeling good in the process."}
             </p>
             
-            {/* Social Icons */}
-            <div className="flex space-x-3">
-              <a href="https://youtube.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="YouTube">
-                <FaYoutube className="text-gray-700 w-5 h-5" />
-              </a>
-              <a href="https://instagram.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="Instagram">
-                <FaInstagram className="text-gray-700 w-5 h-5" />
-              </a>
-              <a href="https://linkedin.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="LinkedIn">
-                <FaLinkedin className="text-gray-700 w-5 h-5" />
-              </a>
-              <a href="https://tiktok.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="TikTok">
-                <FaTiktok className="text-gray-700 w-5 h-5" />
-              </a>
-              <a href="https://twitter.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="Twitter">
-                <FaTwitter className="text-gray-700 w-5 h-5" />
-              </a>
-              <a href="https://facebook.com" className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors" aria-label="Facebook">
-                <FaFacebook className="text-gray-700 w-5 h-5" />
-              </a>
+            {/* Social icons */}
+            <div className="flex space-x-4 pt-2">
+              {socialLinks?.map((link) => (
+                <a 
+                  key={link.id} 
+                  href={link.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-white transition"
+                >
+                  {getSocialIcon(link.type)}
+                </a>
+              ))}
             </div>
           </div>
-          
-          {/* Desktop Links - Right Column */}
-          <div className="hidden md:grid md:grid-cols-3 gap-12">
-            {/* More Column */}
-            <div>
-              <h3 className="font-semibold mb-4">More</h3>
-              <ul className="space-y-3">
-                <li><Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link></li>
-                <li><Link href="/jobs" className="text-gray-600 hover:text-gray-900">Jobs</Link></li>
-                <li><Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link></li>
-                <li><Link href="/account" className="text-gray-600 hover:text-gray-900">My Account</Link></li>
+
+          {/* Link categories */}
+          {linksByCategory.map((category) => (
+            <div key={category.id} className="space-y-4">
+              <h3 className="text-md font-semibold">{category.name}</h3>
+              <ul className="space-y-2">
+                {category.links.map((link) => (
+                  <li key={link.id}>
+                    <a 
+                      href={link.url} 
+                      className="text-slate-300 hover:text-white text-sm transition"
+                    >
+                      {link.text}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
-            
-            {/* Free Content Column */}
-            <div>
-              <h3 className="font-semibold mb-4">Free Content</h3>
-              <ul className="space-y-3">
-                <li><Link href="/newsletter" className="text-gray-600 hover:text-gray-900">Newsletter</Link></li>
-                <li><Link href="/articles" className="text-gray-600 hover:text-gray-900">Articles & Guides</Link></li>
-                <li><Link href="/podcast" className="text-gray-600 hover:text-gray-900">Podcast</Link></li>
-                <li><Link href="/videos" className="text-gray-600 hover:text-gray-900">Videos</Link></li>
-                <li><Link href="/book-notes" className="text-gray-600 hover:text-gray-900">Book Notes</Link></li>
-              </ul>
-            </div>
-            
-            {/* Products Column */}
-            <div>
-              <h3 className="font-semibold mb-4">Products</h3>
-              <ul className="space-y-3">
-                <li><Link href="/book" className="text-gray-600 hover:text-gray-900">My Book</Link></li>
-                <li><Link href="/academy" className="text-gray-600 hover:text-gray-900">YouTuber Academy</Link></li>
-                <li><Link href="/lifeos" className="text-gray-600 hover:text-gray-900">LifeOS</Link></li>
-              </ul>
-            </div>
-          </div>
-          
-          {/* Mobile Links */}
-          <div className="md:hidden">
-            <div className="mb-6">
-              <h3 className="font-semibold mb-4 text-center">More</h3>
-              <ul className="space-y-3 text-center">
-                <li><Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link></li>
-                <li><Link href="/jobs" className="text-gray-600 hover:text-gray-900">Jobs</Link></li>
-                <li><Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link></li>
-                <li><Link href="/account" className="text-gray-600 hover:text-gray-900">My Account</Link></li>
-              </ul>
-            </div>
-            
-            <div className="mb-6">
-              <h3 className="font-semibold mb-4 text-center">Free Content</h3>
-              <ul className="space-y-3 text-center">
-                <li><Link href="/newsletter" className="text-gray-600 hover:text-gray-900">Newsletter</Link></li>
-                <li><Link href="/articles" className="text-gray-600 hover:text-gray-900">Articles & Guides</Link></li>
-                <li><Link href="/podcast" className="text-gray-600 hover:text-gray-900">Podcast</Link></li>
-                <li><Link href="/videos" className="text-gray-600 hover:text-gray-900">Videos</Link></li>
-                <li><Link href="/book-notes" className="text-gray-600 hover:text-gray-900">Book Notes</Link></li>
-              </ul>
-            </div>
-            
-            <div className="mb-6">
-              <h3 className="font-semibold mb-4 text-center">Products</h3>
-              <ul className="space-y-3 text-center">
-                <li><Link href="/book" className="text-gray-600 hover:text-gray-900">My Book</Link></li>
-                <li><Link href="/academy" className="text-gray-600 hover:text-gray-900">YouTuber Academy</Link></li>
-                <li><Link href="/lifeos" className="text-gray-600 hover:text-gray-900">LifeOS</Link></li>
-              </ul>
-            </div>
-          </div>
+          ))}
         </div>
-        
-        {/* Bottom Credits */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center mb-4 md:mb-0">
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
-                <path d="M12 16L11.2929 16.7071L12 17.4142L12.7071 16.7071L12 16ZM13 8C13 7.44772 12.5523 7 12 7C11.4477 7 11 7.44772 11 8L13 8ZM7.29289 12.7071L11.2929 16.7071L12.7071 15.2929L8.70711 11.2929L7.29289 12.7071ZM12.7071 16.7071L16.7071 12.7071L15.2929 11.2929L11.2929 15.2929L12.7071 16.7071ZM13 16L13 8L11 8L11 16L13 16Z" fill="currentColor"/>
-              </svg>
-              <span className="text-gray-500 text-sm">Powered by Rockbase</span>
-            </div>
-            
-            <div className="flex space-x-4">
-              <Link href="/privacy" className="text-gray-500 text-sm hover:text-gray-700">Privacy Policy</Link>
-              <span className="text-gray-300">/</span>
-              <Link href="/cookies" className="text-gray-500 text-sm hover:text-gray-700">Cookie Policy</Link>
-            </div>
+
+        {/* Bottom footer */}
+        <div className="pt-8 border-t border-slate-800 text-center text-slate-400 text-sm">
+          <p>© {new Date().getFullYear()} {siteSettings?.copyrightName || "Ali Abdaal"}. All rights reserved.</p>
+          <div className="flex justify-center space-x-4 mt-2">
+            <a href="/privacy" className="hover:text-white transition">Privacy Policy</a>
+            <span>•</span>
+            <a href="/terms" className="hover:text-white transition">Terms of Service</a>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 // User type definition
 interface User {
   id: number;
-  username: string;
+  email: string;
   isAdmin: boolean;
 }
 
@@ -21,17 +21,13 @@ type AuthContextType = {
   error: Error | null;
   loginMutation: UseMutationResult<User, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
-  registerMutation: UseMutationResult<User, Error, RegisterData>;
 };
 
 // Login data type
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
 };
-
-// Registration data type
-type RegisterData = LoginData & { setupCode?: string };
 
 // Create context
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -64,38 +60,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user"], user);
       toast({
         title: "Login successful",
-        description: `Welcome back, ${user.username}!`,
+        description: `Welcome back, ${user.email}!`,
       });
     },
     onError: (error: Error) => {
       toast({
         title: "Login failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Register mutation
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegisterData) => {
-      const res = await apiRequest("POST", "/api/register", data);
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || "Registration failed");
-      }
-      return await res.json();
-    },
-    onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/user"], user);
-      toast({
-        title: "Registration successful",
-        description: `Welcome, ${user.username}!`,
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Registration failed",
         description: error.message,
         variant: "destructive",
       });
@@ -135,7 +105,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         error,
         loginMutation,
         logoutMutation,
-        registerMutation,
       }}
     >
       {children}
