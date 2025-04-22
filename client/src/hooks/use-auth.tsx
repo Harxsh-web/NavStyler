@@ -35,7 +35,7 @@ function useLoginMutation() {
       const res = await apiRequest("POST", "/api/login", credentials);
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Login failed");
+        throw new Error(errorData.error || "Invalid email or password");
       }
       return await res.json();
     },
@@ -43,7 +43,7 @@ function useLoginMutation() {
       queryClient.setQueryData(["/api/user"], user);
       toast({
         title: "Login successful",
-        description: "Welcome back!",
+        description: "Welcome to the admin dashboard!",
       });
     },
     onError: (error: Error) => {
@@ -61,7 +61,11 @@ function useLogoutMutation() {
   
   return useMutation({
     mutationFn: async () => {
-      await apiRequest("POST", "/api/logout");
+      const res = await apiRequest("POST", "/api/logout");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Logout failed");
+      }
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);
@@ -82,25 +86,54 @@ function useLogoutMutation() {
 
 // Auth provider component
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Mock user data for demo purposes
-  const mockUser = {
-    id: 1,
-    username: "admin",
-    isAdmin: true
-  };
+  const { toast } = useToast();
   
-  const isLoading = false;
-  const error = null;
+  // Fetch the current user data from the server
+  const { 
+    data: user, 
+    isLoading, 
+    error 
+  } = useQuery<User | null, Error>({
+    queryKey: ["/api/user"],
+    queryFn: async () => {
+      try {
+        const res = await apiRequest("GET", "/api/user");
+        if (res.status === 401) {
+          return null;
+        }
+        if (!res.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        return await res.json();
+      } catch (error) {
+        // If we get a 401, that's normal - it just means we're not logged in
+        if (error instanceof Error && error.message.includes("401")) {
+          return null;
+        }
+        // Otherwise, let the error handler deal with it
+        throw error;
+      }
+    },
+    retry: false,
+    onError: (err) => {
+      // Only show toast for unexpected errors, not auth errors
+      if (!err.message.includes("401")) {
+        toast({
+          title: "Error",
+          description: "There was a problem fetching your user data",
+          variant: "destructive",
+        });
+      }
+    }
+  });
   
   const loginMutation = useLoginMutation();
   const logoutMutation = useLogoutMutation();
 
-  // In a real app, we would fetch the user data from the server
-  // For demo, we'll just use the mock user
   const contextValue: AuthContextType = {
-    user: mockUser,
+    user: user || null,
     isLoading,
-    error,
+    error: error || null,
     loginMutation,
     logoutMutation,
   };
