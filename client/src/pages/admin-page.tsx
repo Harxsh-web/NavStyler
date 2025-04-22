@@ -16,7 +16,7 @@ export default function AdminPage() {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/">
-            <a className="text-xl font-bold text-cyan-600">Feel-Good Productivity</a>
+            <span className="text-xl font-bold text-cyan-600 cursor-pointer">Feel-Good Productivity</span>
           </Link>
           
           <div className="flex items-center gap-4">
