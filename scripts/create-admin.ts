@@ -2,6 +2,7 @@ import { db } from '../server/db';
 import { users } from '../shared/schema';
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
+import { eq } from 'drizzle-orm';
 
 const scryptAsync = promisify(scrypt);
 
@@ -13,8 +14,8 @@ async function hashPassword(password: string) {
 
 async function createAdmin() {
   try {
-    // Check if admin user already exists
-    const adminUser = await db.select().from(users).where({ isAdmin: true }).limit(1);
+    // Check if admin user already exists using eq for the where clause
+    const adminUser = await db.select().from(users).where(eq(users.isAdmin, true)).limit(1);
     
     if (adminUser.length > 0) {
       console.log('Admin user already exists.');
@@ -29,6 +30,7 @@ async function createAdmin() {
     
     const [user] = await db.insert(users).values({
       username: email,
+      email: email,
       password: hashedPassword,
       isAdmin: true,
     }).returning();
