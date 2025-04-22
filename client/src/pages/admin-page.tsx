@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
+import { HeroEditor } from "@/components/admin/HeroEditor";
+import { FooterEditor } from "@/components/admin/FooterEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -142,7 +144,10 @@ export default function AdminPage() {
               <h1 className="text-2xl font-bold mb-6">Hero Section Editor</h1>
               <div className="bg-white shadow-sm rounded-lg p-6">
                 <p className="text-gray-600 mb-4">Edit the main hero section of your landing page.</p>
-                {/* Hero section editor form would go here */}
+                {/* Import and use the HeroEditor component */}
+                <div className="mt-6">
+                  <HeroEditor />
+                </div>
               </div>
             </div>
           )}
@@ -152,7 +157,9 @@ export default function AdminPage() {
               <h1 className="text-2xl font-bold mb-6">Footer Editor</h1>
               <div className="bg-white shadow-sm rounded-lg p-6">
                 <p className="text-gray-600 mb-4">Manage footer links, categories, and social media.</p>
-                {/* Footer editor form would go here */}
+                <div className="mt-6">
+                  <FooterEditor />
+                </div>
               </div>
             </div>
           )}
