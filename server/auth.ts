@@ -29,17 +29,17 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
+  // Configure express-session
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || 'keyboard_cat',
+    secret: process.env.SESSION_SECRET || "development-secret-key",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    }
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
   };
 
   app.set("trust proxy", 1);
@@ -47,22 +47,32 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // Configure passport local strategy
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      try {
-        const user = await storage.getUserByUsername(username);
-        if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false);
-        } else {
+    new LocalStrategy(
+      {
+        usernameField: "email", // Use email field instead of username
+        passwordField: "password",
+      },
+      async (email, password, done) => {
+        try {
+          const user = await storage.getUserByUsername(email); // We're using the same function but passing email
+          if (!user || !(await comparePasswords(password, user.password))) {
+            return done(null, false, { message: "Invalid email or password" });
+          }
           return done(null, user);
+        } catch (error) {
+          return done(error);
         }
-      } catch (error) {
-        return done(error);
       }
-    }),
+    )
   );
 
-  passport.serializeUser((user, done) => done(null, user.id));
+  // Serialize and deserialize user
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
   passport.deserializeUser(async (id: number, done) => {
     try {
       const user = await storage.getUser(id);
@@ -73,52 +83,29 @@ export function setupAuth(app: Express) {
   });
 
   // Authentication routes
-  app.post("/api/register", async (req, res, next) => {
-    try {
-      // Check if there's an admin setup code for the first admin
-      const adminSetupCode = process.env.ADMIN_SETUP_CODE;
-      let isAdmin = false;
-      
-      // Only allow admin registration with the correct setup code
-      if (req.body.setupCode && adminSetupCode && req.body.setupCode === adminSetupCode) {
-        isAdmin = true;
-      } else if (req.body.isAdmin) {
-        // Prevent non-authorized users from creating admin accounts
-        return res.status(403).json({ error: "Not authorized to create admin account" });
+  app.post("/api/login", (req, res, next) => {
+    passport.authenticate("local", (err: Error, user: Express.User, info: any) => {
+      if (err) {
+        return res.status(500).json({ error: "Authentication error" });
       }
-
-      const existingUser = await storage.getUserByUsername(req.body.username);
-      if (existingUser) {
-        return res.status(400).json({ error: "Username already exists" });
+      if (!user) {
+        return res.status(401).json({ error: info?.message || "Invalid credentials" });
       }
-
-      const user = await storage.createUser({
-        username: req.body.username,
-        password: await hashPassword(req.body.password),
-        isAdmin,
+      req.login(user, (loginErr) => {
+        if (loginErr) {
+          return res.status(500).json({ error: "Login error" });
+        }
+        return res.status(200).json(user);
       });
-
-      req.login(user, (err) => {
-        if (err) return next(err);
-        // Don't send password back to client
-        const { password, ...userWithoutPassword } = user;
-        res.status(201).json(userWithoutPassword);
-      });
-    } catch (error) {
-      next(error);
-    }
+    })(req, res, next);
   });
 
-  app.post("/api/login", passport.authenticate("local"), (req, res) => {
-    // Don't send password back to client
-    const { password, ...userWithoutPassword } = req.user as SelectUser;
-    res.status(200).json(userWithoutPassword);
-  });
-
-  app.post("/api/logout", (req, res, next) => {
+  app.post("/api/logout", (req, res) => {
     req.logout((err) => {
-      if (err) return next(err);
-      res.sendStatus(200);
+      if (err) {
+        return res.status(500).json({ error: "Logout error" });
+      }
+      res.status(200).json({ message: "Logged out successfully" });
     });
   });
 
@@ -126,24 +113,7 @@ export function setupAuth(app: Express) {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ error: "Not authenticated" });
     }
-    // Don't send password back to client
-    const { password, ...userWithoutPassword } = req.user as SelectUser;
-    res.json(userWithoutPassword);
-  });
-
-  // Admin check middleware
-  app.use("/api/admin/*", (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-    
-    const user = req.user as SelectUser;
-    
-    if (!user.isAdmin) {
-      return res.status(403).json({ error: "Not authorized" });
-    }
-    
-    next();
+    res.status(200).json(req.user);
   });
 }
 
@@ -152,13 +122,13 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ error: "Not authenticated" });
+  res.status(401).json({ error: "Authentication required" });
 }
 
 // Middleware to check if user is admin
 export function isAdmin(req: Request, res: Response, next: NextFunction) {
-  if (req.isAuthenticated() && (req.user as SelectUser).isAdmin) {
+  if (req.isAuthenticated() && req.user.isAdmin) {
     return next();
   }
-  res.status(403).json({ error: "Not authorized" });
+  res.status(403).json({ error: "Admin access required" });
 }

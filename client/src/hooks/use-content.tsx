@@ -1,114 +1,188 @@
-import { useQuery } from "@tanstack/react-query";
-import { getQueryFn } from "@/lib/queryClient";
+import { useQuery, useMutation, QueryClient } from '@tanstack/react-query';
+import { getQueryFn, apiRequest } from '@/lib/queryClient';
 
-// Hero section hook
-export function useHeroSection() {
-  return useQuery({
-    queryKey: ["/api/content/hero"],
-    queryFn: getQueryFn()
-  });
+// Type definitions for footer entities
+export interface FooterCategory {
+  id: number;
+  name: string;
 }
 
-// Featured section hook
-export function useFeaturedSection() {
-  return useQuery({
-    queryKey: ["/api/content/featured"],
-    queryFn: getQueryFn()
-  });
+export interface FooterLink {
+  id: number;
+  text: string;
+  url: string;
+  categoryId: number;
 }
 
-// Quote section hook
-export function useQuoteSection() {
-  return useQuery({
-    queryKey: ["/api/content/quote"],
-    queryFn: getQueryFn()
-  });
+export interface SocialLink {
+  id: number;
+  type: string;
+  url: string;
 }
 
-// Learning points section hook
-export function useLearningPointsSection() {
-  return useQuery({
-    queryKey: ["/api/content/learning-points-section"],
-    queryFn: getQueryFn()
-  });
+export interface SiteSetting {
+  id: number;
+  name: string;
+  value: string;
 }
 
-// Learning points hook
-export function useLearningPoints() {
-  return useQuery({
-    queryKey: ["/api/content/learning-points"],
-    queryFn: getQueryFn()
-  });
-}
-
-// Testimonial section hook
-export function useTestimonialSection() {
-  return useQuery({
-    queryKey: ["/api/content/testimonial-section"],
-    queryFn: getQueryFn()
-  });
-}
-
-// Testimonials hook
-export function useTestimonials() {
-  return useQuery({
-    queryKey: ["/api/content/testimonials"],
-    queryFn: getQueryFn()
-  });
-}
-
-// Book sections hook
-export function useBookSections() {
-  return useQuery({
-    queryKey: ["/api/content/book-sections"],
-    queryFn: getQueryFn()
-  });
-}
-
-// About book section hook
-export function useAboutBookSection() {
-  return useQuery({
-    queryKey: ["/api/content/about-book-section"],
-    queryFn: getQueryFn()
-  });
-}
-
-// Author section hook
-export function useAuthorSection() {
-  return useQuery({
-    queryKey: ["/api/content/author-section"],
-    queryFn: getQueryFn()
-  });
-}
-
-// Footer categories hook
+// Hooks for footer categories
 export function useFooterCategories() {
-  return useQuery({
-    queryKey: ["/api/content/footer-categories"],
-    queryFn: getQueryFn()
+  return useQuery<FooterCategory[], Error>({
+    queryKey: ['/api/content/footer-categories'],
+    queryFn: getQueryFn(),
   });
 }
 
-// Footer links hook
+export function useFooterCategory(id: number) {
+  return useQuery<FooterCategory, Error>({
+    queryKey: ['/api/content/footer-categories', id],
+    queryFn: getQueryFn(),
+    enabled: !!id,
+  });
+}
+
+// Hooks for footer links
 export function useFooterLinks() {
-  return useQuery({
-    queryKey: ["/api/content/footer-links"],
-    queryFn: getQueryFn()
+  return useQuery<FooterLink[], Error>({
+    queryKey: ['/api/content/footer-links'],
+    queryFn: getQueryFn(),
   });
 }
 
-// Social links hook
+export function useFooterLink(id: number) {
+  return useQuery<FooterLink, Error>({
+    queryKey: ['/api/content/footer-links', id],
+    queryFn: getQueryFn(),
+    enabled: !!id,
+  });
+}
+
+// Hooks for social links
 export function useSocialLinks() {
-  return useQuery({
-    queryKey: ["/api/content/social-links"],
-    queryFn: getQueryFn()
+  return useQuery<SocialLink[], Error>({
+    queryKey: ['/api/content/social-links'],
+    queryFn: getQueryFn(),
   });
 }
 
-// Site settings hook
-export function useSiteSettings() {
-  return useQuery({
-    queryKey: ["/api/content/site-settings"],
-    queryFn: getQueryFn()
+export function useSocialLink(id: number) {
+  return useQuery<SocialLink, Error>({
+    queryKey: ['/api/content/social-links', id],
+    queryFn: getQueryFn(),
+    enabled: !!id,
   });
 }
+
+// Hooks for site settings
+export function useSiteSettings() {
+  return useQuery<SiteSetting[], Error>({
+    queryKey: ['/api/content/site-settings'],
+    queryFn: getQueryFn(),
+  });
+}
+
+export function useSiteSetting(name: string) {
+  return useQuery<SiteSetting, Error>({
+    queryKey: ['/api/content/site-settings', name],
+    queryFn: getQueryFn(),
+    enabled: !!name,
+  });
+}
+
+// Content client
+export const contentClient = {
+  // Categories
+  createCategory: async (data: Omit<FooterCategory, 'id'>) => {
+    const res = await apiRequest('POST', '/api/admin/footer-categories', data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to create category');
+    }
+    return await res.json();
+  },
+  
+  updateCategory: async (id: number, data: Partial<Omit<FooterCategory, 'id'>>) => {
+    const res = await apiRequest('PATCH', `/api/admin/footer-categories/${id}`, data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to update category');
+    }
+    return await res.json();
+  },
+  
+  deleteCategory: async (id: number) => {
+    const res = await apiRequest('DELETE', `/api/admin/footer-categories/${id}`);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to delete category');
+    }
+    return id;
+  },
+  
+  // Links
+  createLink: async (data: Omit<FooterLink, 'id'>) => {
+    const res = await apiRequest('POST', '/api/admin/footer-links', data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to create link');
+    }
+    return await res.json();
+  },
+  
+  updateLink: async (id: number, data: Partial<Omit<FooterLink, 'id'>>) => {
+    const res = await apiRequest('PATCH', `/api/admin/footer-links/${id}`, data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to update link');
+    }
+    return await res.json();
+  },
+  
+  deleteLink: async (id: number) => {
+    const res = await apiRequest('DELETE', `/api/admin/footer-links/${id}`);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to delete link');
+    }
+    return id;
+  },
+  
+  // Social links
+  createSocialLink: async (data: Omit<SocialLink, 'id'>) => {
+    const res = await apiRequest('POST', '/api/admin/social-links', data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to create social link');
+    }
+    return await res.json();
+  },
+  
+  updateSocialLink: async (id: number, data: Partial<Omit<SocialLink, 'id'>>) => {
+    const res = await apiRequest('PATCH', `/api/admin/social-links/${id}`, data);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to update social link');
+    }
+    return await res.json();
+  },
+  
+  deleteSocialLink: async (id: number) => {
+    const res = await apiRequest('DELETE', `/api/admin/social-links/${id}`);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to delete social link');
+    }
+    return id;
+  },
+  
+  // Site settings
+  updateSiteSetting: async (name: string, value: string) => {
+    const res = await apiRequest('PUT', `/api/admin/site-settings/${name}`, { value });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to update site setting');
+    }
+    return await res.json();
+  },
+};

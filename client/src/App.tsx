@@ -1,51 +1,35 @@
-import { Switch, Route, useLocation } from "wouter";
-import { queryClient } from "./lib/queryClient";
+import "./index.css";
+import { Switch, Route, Router as RouterWrapper } from "wouter";
+import HomePage from "./pages/home-page";
+import AdminPage from "./pages/admin-page";
+import AuthPage from "./pages/auth-page";
+import NotFound from "./pages/not-found";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Navbar from "@/components/Navbar";
-import Home from "@/pages/Home";
-import AuthPage from "@/pages/auth-page";
-import AdminPage from "@/pages/admin-page";
-import { AuthProvider } from "@/hooks/use-auth";
-import { ProtectedRoute } from "@/lib/protected-route";
+import { queryClient } from "./lib/queryClient";
+import { AuthProvider } from "./hooks/use-auth";
+import { ProtectedRoute } from "./lib/protected-route";
+import { Toaster } from "./components/ui/toaster";
 
 function Router() {
-  const [location] = useLocation();
-  const showNavbar = !location.startsWith("/auth");
-
   return (
-    <>
-      {showNavbar && (
-        <>
-          <Navbar />
-          {/* Spacer to prevent content from being hidden under fixed navbar */}
-          <div className="h-16"></div>
-        </>
-      )}
-      
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/auth" component={AuthPage} />
-        <ProtectedRoute path="/admin" component={AdminPage} adminOnly={true} />
-        <Route component={NotFound} />
-      </Switch>
-    </>
+    <Switch>
+      <Route path="/" component={HomePage} />
+      <Route path="/auth" component={AuthPage} />
+      <ProtectedRoute path="/admin" component={AdminPage} />
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
+        <RouterWrapper>
           <Router />
-        </TooltipProvider>
+        </RouterWrapper>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );
 }
-
-export default App;
