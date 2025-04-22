@@ -333,6 +333,136 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 10 Things This Book Will Teach You Section */}
+      <section className="bg-[#FAF9F6] py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-12">
+            10 Things This Book Will Teach You
+          </h2>
+          
+          {/* Desktop Layout */}
+          <div className="hidden md:block">
+            <div className="flex justify-center mb-12">
+              <div className="w-full max-w-3xl">
+                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-xl">
+                  <iframe 
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                    title="10 Things This Book Will Teach You" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+            
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-8 text-center">Learn How To...</h3>
+              
+              <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">1.</span>
+                  <p className="text-lg">Build your own productivity system that doesn't feel like a grind</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">2.</span>
+                  <p className="text-lg">Make any work (however dull) feel more energizing and enjoyable</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">3.</span>
+                  <p className="text-lg">Stay focused in a world of constant distractions</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">4.</span>
+                  <p className="text-lg">Beat procrastination forever without just relying on motivation and discipline</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">5.</span>
+                  <p className="text-lg">Reduce the stress of your work while staying productive</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">6.</span>
+                  <p className="text-lg">Get clarity on what you really want from your work and your life</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">7.</span>
+                  <p className="text-lg">Stay consistent with what really matters to you over the long term</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">8.</span>
+                  <p className="text-lg">Set meaningful goals that help you feel good while achieving more</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">9.</span>
+                  <p className="text-lg">Recharge your energy through science-backed strategies</p>
+                </div>
+                
+                <div className="flex items-baseline">
+                  <span className="font-bold text-lg mr-3">10.</span>
+                  <p className="text-lg">Find alignment, fulfilment, and enjoyment in all that you do</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="flex justify-center mb-8">
+              <div className="w-full">
+                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                  <iframe 
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                    title="10 Things This Book Will Teach You" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-bold text-[#1A1A1A] mb-6 text-center">Learn How To...</h3>
+            
+            <div className="space-y-5">
+              <div className="flex">
+                <span className="font-bold text-base mr-2">1.</span>
+                <p className="text-base">Build your own productivity system that doesn't feel like a grind</p>
+              </div>
+              
+              <div className="flex">
+                <span className="font-bold text-base mr-2">3.</span>
+                <p className="text-base">Stay focused in a world of constant distractions</p>
+              </div>
+              
+              <div className="flex">
+                <span className="font-bold text-base mr-2">5.</span>
+                <p className="text-base">Reduce the stress of your work while staying productive</p>
+              </div>
+              
+              <div className="flex">
+                <span className="font-bold text-base mr-2">7.</span>
+                <p className="text-base">Stay consistent with what really matters to you over the long term</p>
+              </div>
+              
+              <div className="flex">
+                <span className="font-bold text-base mr-2">9.</span>
+                <p className="text-base">Recharge your energy through science-backed strategies</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Additional Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
