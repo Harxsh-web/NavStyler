@@ -3,67 +3,64 @@ import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
       retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-type FetcherOptions = {
-  on401?: "throw" | "returnNull";
-  searchParams?: Record<string, string>;
-};
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
-export function getQueryFn(options: FetcherOptions = {}) {
-  return async ({ queryKey }: { queryKey: readonly any[] }) => {
-    let url = queryKey[0] as string;
-    
-    // Handle search params if provided
-    if (options.searchParams) {
-      const params = new URLSearchParams();
-      Object.entries(options.searchParams).forEach(([key, value]) => {
-        params.append(key, value);
-      });
-      url += `?${params.toString()}`;
-    }
-    
-    const response = await fetch(url);
-    
-    if (response.status === 401 && options.on401 === "returnNull") {
-      return null;
-    }
-    
-    if (!response.ok) {
-      let errorMessage;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.error || `Request failed with status ${response.status}`;
-      } catch (e) {
-        errorMessage = `Request failed with status ${response.status}`;
-      }
-      throw new Error(errorMessage);
-    }
-    
-    return response.json();
-  };
-}
-
+// Base fetch function for API requests
 export async function apiRequest(
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: HttpMethod,
   url: string,
-  data?: any
+  body?: any,
+  options: RequestInit = {}
 ) {
-  const options: RequestInit = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...options.headers,
   };
 
-  if (data) {
-    options.body = JSON.stringify(data);
+  const config: RequestInit = {
+    method,
+    headers,
+    credentials: "same-origin",
+    ...options,
+  };
+
+  if (body) {
+    config.body = JSON.stringify(body);
   }
 
-  return fetch(url, options);
+  const response = await fetch(url, config);
+  return response;
+}
+
+type GetQueryFnOptions = {
+  on401?: "returnNull" | "throw";
+};
+
+// Query function generator for TanStack Query
+export function getQueryFn(options: GetQueryFnOptions = {}) {
+  return async ({ queryKey }: { queryKey: string[] }) => {
+    const url = queryKey[0];
+    const response = await apiRequest("GET", url);
+
+    if (response.status === 401) {
+      if (options.on401 === "returnNull") {
+        return null;
+      }
+      throw new Error("Unauthorized");
+    }
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || "An error occurred");
+    }
+
+    return response.json();
+  };
 }
