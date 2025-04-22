@@ -463,28 +463,357 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Additional Content */}
+      {/* Testimonials Section */}
+      <section className="bg-white py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3">
+              <svg className="w-8 h-8 text-purple-800" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4 0 .5.1.97.25 1.4l-1.8 1.8c-.46-.8-.7-1.72-.7-2.7 0-3.31 2.69-6 6-6 2.75 0 5.04 1.87 5.76 4.4l-1.75 1.75C14.95 8.4 13.58 6 11.75 6zm4.83 7.72L14.58 16c-.3.3-.75.39-1.14.21-.4-.18-.64-.58-.64-1.01v-4.18l2.06-2.06c.79.38 1.61.82 2.35 1.32-.47 1.17-1.23 2.33-2.38 3.44zM8.42 16c-.3.3-.75.39-1.14.21-.4-.18-.64-.58-.64-1.01v-4.18l4.01-4.01c.31-.31.85-.09.85.36v4.18l-3.08 4.45z" />
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
+              What people are saying...
+            </h2>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden md:grid md:grid-cols-3 gap-8">
+            <div className="bg-[#FAF9F6] p-8 rounded-lg text-center flex flex-col items-center">
+              <div className="w-24 h-24 mb-6 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Julie" 
+                  alt="Dr Julie Smith" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-6 text-[#1A1A1A]">
+                Ali is the absolute master on how to be productive without sacrificing your own happiness. This is the book we've all been waiting for.
+              </p>
+              <div className="mt-auto">
+                <p className="font-bold text-[#1A1A1A]">Dr Julie Smith</p>
+                <p className="text-gray-600 text-sm">Clinical Psychologist</p>
+              </div>
+            </div>
+            
+            <div className="bg-[#FAF9F6] p-8 rounded-lg text-center flex flex-col items-center">
+              <div className="w-24 h-24 mb-6 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Mark" 
+                  alt="Mark Manson" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-6 text-[#1A1A1A]">
+                A much-needed antidote to hustle culture, this book is a reality check for any ambitious person who wants to build sustainable success. It offers the most practical approach to productivity that no one says yet all of us need to hear.
+              </p>
+              <div className="mt-auto">
+                <p className="font-bold text-[#1A1A1A]">Mark Manson</p>
+                <p className="text-gray-600 text-sm">Bestselling author of The Subtle Art of Not Giving a F*ck</p>
+              </div>
+            </div>
+            
+            <div className="bg-[#FAF9F6] p-8 rounded-lg text-center flex flex-col items-center">
+              <div className="w-24 h-24 mb-6 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Doctor" 
+                  alt="Doctor Testimonial" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-6 text-[#1A1A1A]">
+                As a doctor, entrepreneur, and educator, Ali has a unique and practical perspective on productivity. His book is science-backed, filled with real-life stories, and refreshingly joyful. A nuanced guide to productivity that will unlock more honest conversations about our relationship to work.
+              </p>
+              <div className="mt-auto">
+                <p className="font-bold text-[#1A1A1A]">Dr. Sarah Johnson</p>
+                <p className="text-gray-600 text-sm">Medical Director & Health Educator</p>
+              </div>
+            </div>
+
+            <div className="bg-[#FAF9F6] p-8 rounded-lg text-center flex flex-col items-center">
+              <div className="w-24 h-24 mb-6 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Steven" 
+                  alt="Steven Bartlett" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-6 text-[#1A1A1A]">
+                Ali is the master of productivity. Nobody has a talent for distilling complicated ideas into fun, accessible and actionable insights quite like him.
+              </p>
+              <div className="mt-auto">
+                <p className="font-bold text-[#1A1A1A]">Steven Bartlett</p>
+                <p className="text-gray-600 text-sm">BBC's Dragon's Den and host of The Diary of a CEO</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile Layout */}
+          <div className="md:hidden space-y-6">
+            <div className="bg-[#FAF9F6] p-6 rounded-lg text-center flex flex-col items-center">
+              <div className="w-20 h-20 mb-4 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Julie" 
+                  alt="Dr Julie Smith" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-4 text-[#1A1A1A] text-sm">
+                Ali is the absolute master on how to be productive without sacrificing your own happiness. This is the book we've all been waiting for.
+              </p>
+              <div>
+                <p className="font-bold text-[#1A1A1A]">Dr Julie Smith</p>
+                <p className="text-gray-600 text-xs">Clinical Psychologist</p>
+              </div>
+            </div>
+            
+            <div className="bg-[#FAF9F6] p-6 rounded-lg text-center flex flex-col items-center">
+              <div className="w-20 h-20 mb-4 overflow-hidden rounded-full">
+                <img 
+                  src="https://placehold.co/200x200/png?text=Steven" 
+                  alt="Steven Bartlett" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mb-4 text-[#1A1A1A] text-sm">
+                Ali is the master of productivity. Nobody has a talent for distilling complicated ideas into fun, accessible and actionable insights quite like him.
+              </p>
+              <div>
+                <p className="font-bold text-[#1A1A1A]">Steven Bartlett</p>
+                <p className="text-gray-600 text-xs">BBC's Dragon's Den and host of The Diary of a CEO</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About the Book Section */}
+      <section className="bg-[#FAF9F6] py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block mb-3">
+              <svg className="w-8 h-8 text-[#30B8C4]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4V20M18 4V20M6 12H18M12 4V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
+              About
+            </h2>
+            <div className="inline-block relative">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
+                Feel-Good Productivity
+              </h2>
+              <div className="absolute bottom-1 left-0 w-full h-1 bg-[#30B8C4]"></div>
+            </div>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden md:grid md:grid-cols-2 gap-12 items-start">
+            <div className="flex justify-center">
+              <div className="max-w-[300px] rounded-xl overflow-hidden shadow-lg">
+                <div className="bg-yellow-400 p-5 text-center rounded-t-xl">
+                  <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
+                  <h3 className="text-2xl md:text-3xl font-bold">Ali Abdaal</h3>
+                </div>
+                <div className="grid grid-cols-2">
+                  <div className="bg-[#30B8C4] text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                    Feel
+                  </div>
+                  <div className="bg-red-500 text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                    Good
+                  </div>
+                </div>
+                <div className="bg-pink-400 text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                  Productivity
+                </div>
+                <div className="bg-green-500 text-white p-4 rounded-b-xl text-center">
+                  <p className="font-medium text-sm md:text-base">How to Do More of<br/>What Matters to You</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Introduction</h3>
+                <h4 className="text-xl font-semibold text-[#1A1A1A] mb-3">The Art & Science of Feel-Good Productivity</h4>
+                <p className="text-gray-700">
+                  Ali shares his journey from stressed-out doctor to successful entrepreneur, and how he discovered the science of Feel-Good Productivity. You'll understand the psychological and neuroscientific evidence for why positive emotions fuel success, and explore how <em>feeling good</em> in your work can boost your energy, reduce your stress, and enrich your life.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Part 1</h3>
+                <h4 className="text-xl font-semibold text-[#1A1A1A] mb-3">Energise</h4>
+                <p className="text-gray-700">
+                  Ali shares the three fundamental energizers that make us feel good and lead to true productivity. You'll discover the strategies that Nobel laureates and trailblazing founders of multimillion-dollar enterprises use to maintain motivation and outperform expectations, all by finding the fun in their projects.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Part 2</h3>
+                <h4 className="text-xl font-semibold text-[#1A1A1A] mb-3">Unblock</h4>
+                <p className="text-gray-700">
+                  This section outlines a groundbreaking method for beating procrastination that <em>doesn't</em> rely on temporary motivation or painful discipline. You'll learn about the three biggest blockers that run down our feel-good emotions and so derail our productivity – as well as the simple strategies you can use to stay focused and consistent.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Part 3</h3>
+                <h4 className="text-xl font-semibold text-[#1A1A1A] mb-3">Sustain</h4>
+                <p className="text-gray-700">
+                  The final section of the book focuses on sustainable productivity for the long term. You'll learn powerful techniques for maintaining energy, avoiding burnout, and creating systems that help you consistently achieve your goals while enjoying the process.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="flex justify-center mb-8">
+              <div className="max-w-[250px] rounded-xl overflow-hidden shadow-lg">
+                <div className="bg-yellow-400 p-4 text-center rounded-t-xl">
+                  <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
+                  <h3 className="text-xl font-bold">Ali Abdaal</h3>
+                </div>
+                <div className="grid grid-cols-2">
+                  <div className="bg-[#30B8C4] text-white p-4 flex items-center justify-center text-xl font-bold">
+                    Feel
+                  </div>
+                  <div className="bg-red-500 text-white p-4 flex items-center justify-center text-xl font-bold">
+                    Good
+                  </div>
+                </div>
+                <div className="bg-pink-400 text-white p-4 flex items-center justify-center text-xl font-bold">
+                  Productivity
+                </div>
+                <div className="bg-green-500 text-white p-3 rounded-b-xl text-center">
+                  <p className="font-medium text-sm">How to Do More of<br/>What Matters to You</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">Introduction</h3>
+                <h4 className="text-lg font-semibold text-[#1A1A1A] mb-2">The Art & Science of Feel-Good Productivity</h4>
+                <p className="text-gray-700 text-sm">
+                  Ali shares his journey from stressed-out doctor to successful entrepreneur, and how he discovered the science of Feel-Good Productivity. You'll understand the psychological and neuroscientific evidence for why positive emotions fuel success, and explore how <em>feeling good</em> in your work can boost your energy, reduce your stress, and enrich your life.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">Part 1</h3>
+                <h4 className="text-lg font-semibold text-[#1A1A1A] mb-2">Energise</h4>
+                <p className="text-gray-700 text-sm">
+                  Ali shares the three fundamental energizers that make us feel good and lead to true productivity. You'll discover the strategies that Nobel laureates and trailblazing founders of multimillion-dollar enterprises use to maintain motivation and outperform expectations.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">Part 2</h3>
+                <h4 className="text-lg font-semibold text-[#1A1A1A] mb-2">Unblock</h4>
+                <p className="text-gray-700 text-sm">
+                  This section outlines a groundbreaking method for beating procrastination that <em>doesn't</em> rely on temporary motivation or painful discipline. You'll learn about the three biggest blockers that run down our feel-good emotions and derail our productivity.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About The Author Section */}
+      <section className="bg-white py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3">
+              <svg className="w-8 h-8 text-amber-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.85 4.49999C14.85 4.27908 14.721 4.10999 14.5 4.10999H9.5C9.27908 4.10999 9.15 4.27908 9.15 4.49999V6.59999C9.15 6.8209 9.27908 6.99 9.5 6.99H14.5C14.721 6.99 14.85 6.8209 14.85 6.59999V4.49999Z" stroke="currentColor" strokeWidth="0.3"/>
+                <path d="M18.4286 4.49999C18.4286 2.56699 16.8616 0.999989 14.9286 0.999989H9.07143C7.13843 0.999989 5.57143 2.56699 5.57143 4.49999V18.8571L8.33929 16.0893L12 19.75L15.6607 16.0893L18.4286 18.8571V4.49999Z" stroke="currentColor" strokeWidth="1.5"/>
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
+              About The Author
+            </h2>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden md:grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img 
+                  src="https://placehold.co/800x600/png?text=Ali+Abdaal" 
+                  alt="Ali Abdaal" 
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold text-[#1A1A1A]">Ali Abdaal</h3>
+              <div className="space-y-4 text-gray-700">
+                <p>
+                  Ali Abdaal is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                </p>
+                
+                <p>
+                  Ali became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Ali started to document his journey towards living a healthier, happier, more productive life online. In the years since, Ali's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
+                </p>
+                
+                <p>
+                  In 2021, Ali took a break from his medical career to focus on his thriving YouTube channel and other business ventures. Today, he continues to share his insights on productivity, learning, and happiness with his global audience through various platforms.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile Layout */}
+          <div className="md:hidden space-y-6">
+            <div className="rounded-lg overflow-hidden shadow-md">
+              <img 
+                src="https://placehold.co/800x600/png?text=Ali+Abdaal" 
+                alt="Ali Abdaal" 
+                className="w-full h-auto"
+              />
+            </div>
+            
+            <div className="bg-[#FAF9F6] p-6 rounded-lg">
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4 text-center">Ali Abdaal</h3>
+              <div className="space-y-3 text-gray-700 text-sm">
+                <p>
+                  Ali Abdaal is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                </p>
+                
+                <p>
+                  Ali became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Ali started to document his journey towards living a healthier, happier, more productive life online. In the years since, Ali's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Additional Content Cards */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card>
             <CardContent className="pt-6">
-              <h2 className="text-2xl font-semibold mb-2">About the Book</h2>
+              <h2 className="text-2xl font-semibold mb-2">Join the Movement</h2>
               <p className="text-gray-600">
-                Learn about the revolutionary approach to productivity that focuses on
-                feeling good while getting things done. Break free from the traditional
-                productivity advice that leaves you feeling burnt out.
+                Join thousands of readers who are transforming their approach to productivity. 
+                Learn how feeling good and getting things done can go hand in hand, and discover 
+                a more sustainable, enjoyable way to achieve your goals.
               </p>
             </CardContent>
           </Card>
           
           <Card>
             <CardContent className="pt-6">
-              <h2 className="text-2xl font-semibold mb-2">What You'll Learn</h2>
+              <h2 className="text-2xl font-semibold mb-2">Further Resources</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>The Feel-Good Productivity Method</li>
-                <li>How to overcome procrastination</li>
-                <li>Building sustainable productivity habits</li>
-                <li>Balancing work, rest, and play</li>
+                <li>Free productivity assessment tools</li>
+                <li>Companion workbook and exercises</li>
+                <li>Online community of like-minded individuals</li>
+                <li>Regular webinars and Q&A sessions with Ali</li>
               </ul>
             </CardContent>
           </Card>
