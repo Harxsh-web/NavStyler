@@ -100,7 +100,8 @@ export default function Navbar() {
       <MobileMenu isOpen={mobileMenuOpen} onClose={toggleMobileMenu} />
 
       {/* Add some additional styles */}
-      <style jsx>{`
+      <style>
+        {`
         .nav-link {
           position: relative;
         }
@@ -151,7 +152,8 @@ export default function Navbar() {
         .resource-dropdown.active {
           max-height: 1000px;
         }
-      `}</style>
+        `}
+      </style>
     </>
   );
 }

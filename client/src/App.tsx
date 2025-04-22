@@ -23,7 +23,7 @@ function App() {
         <Toaster />
         <Navbar />
         {/* Spacer to prevent content from being hidden under fixed navbar */}
-        <div className="h-20"></div>
+        <div className="h-16"></div>
         <Router />
       </TooltipProvider>
     </QueryClientProvider>
