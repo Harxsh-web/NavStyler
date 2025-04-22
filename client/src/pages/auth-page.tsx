@@ -1,142 +1,111 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Redirect } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-
-// Schema for login form
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function AuthPage() {
-  const { user, isLoading, loginMutation } = useAuth();
+  const { user, loginMutation } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  // Handle form submission
-  const onSubmit = (data: LoginFormValues) => {
-    loginMutation.mutate(data);
+  // If user is already logged in, redirect to main page
+  if (user) {
+    return <Redirect to="/" />;
+  }
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    loginMutation.mutate({ email, password });
   };
   
-  // Redirect if already logged in
-  if (!isLoading && user) {
-    return <Redirect to="/admin" />;
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row shadow-lg rounded-lg overflow-hidden">
-        {/* Form section */}
-        <div className="w-full md:w-1/2 bg-white p-8 flex flex-col justify-center">
-          <Card className="border-0 shadow-none">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-              <CardDescription>
-                Sign in to access the admin dashboard
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    {...form.register("email")}
-                  />
-                  {form.formState.errors.email && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.email.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                  </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    {...form.register("password")}
-                  />
-                  {form.formState.errors.password && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.password.message}
-                    </p>
-                  )}
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={loginMutation.isPending}
-                >
-                  {loginMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    "Sign In"
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-            <CardFooter className="flex flex-col items-center pt-0">
-              <p className="text-sm text-gray-500 mt-4">
-                This area is restricted to administrators only
-              </p>
-            </CardFooter>
-          </Card>
-        </div>
-
-        {/* Hero section */}
-        <div className="hidden md:block md:w-1/2 bg-slate-900 text-white p-8 flex flex-col justify-center">
-          <div className="max-w-md mx-auto">
-            <h1 className="text-3xl font-bold mb-4">
-              Feel-Good Productivity
-            </h1>
-            <p className="text-slate-300 mb-6">
-              Manage your website content with the admin dashboard. 
-              Add and edit content, manage testimonials, and update the footer.
-            </p>
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">Features:</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <div className="h-2 w-2 bg-teal-400 rounded-full mr-2"></div>
-                  <span>Edit site content</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-2 w-2 bg-teal-400 rounded-full mr-2"></div>
-                  <span>Manage testimonials</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-2 w-2 bg-teal-400 rounded-full mr-2"></div>
-                  <span>Update footer links</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-2 w-2 bg-teal-400 rounded-full mr-2"></div>
-                  <span>Configure social media</span>
-                </li>
-              </ul>
+    <div className="min-h-screen flex">
+      {/* Auth Form */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold">Sign In</h1>
+            <p className="text-gray-600 mt-2">Access the admin panel</p>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                placeholder="admin@example.com"
+              />
             </div>
+            
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                placeholder="••••••••"
+              />
+            </div>
+            
+            <button
+              type="submit"
+              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Signing in..." : "Sign In"}
+            </button>
+            
+            <div className="text-center text-sm text-gray-500">
+              <p>Admin credentials:</p>
+              <p>Email: admin@example.com</p>
+              <p>Password: admin123</p>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      {/* Hero Section */}
+      <div className="hidden md:block md:w-1/2 bg-cyan-600">
+        <div className="h-full flex items-center justify-center p-12">
+          <div className="max-w-md text-white">
+            <h2 className="text-3xl font-bold mb-6">
+              Feel-Good Productivity
+            </h2>
+            <p className="text-cyan-100 mb-8">
+              This admin panel allows you to manage content for your book landing page.
+              Edit sections, update information, and customize your site with ease.
+            </p>
+            <ul className="space-y-2">
+              <li className="flex items-center">
+                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Manage hero section content
+              </li>
+              <li className="flex items-center">
+                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Update learning points and testimonials
+              </li>
+              <li className="flex items-center">
+                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Edit footer links and social media
+              </li>
+            </ul>
           </div>
         </div>
       </div>

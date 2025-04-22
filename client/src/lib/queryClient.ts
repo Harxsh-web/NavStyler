@@ -1,74 +1,74 @@
-import { QueryCache, QueryClient } from "@tanstack/react-query";
-import { useToast } from '@/hooks/use-toast';
+import { QueryClient } from "@tanstack/react-query";
+
+export type FetchError = Error & { status?: number; info?: any };
+
+type ApiRequestOptions = {
+  on401?: "throw" | "returnNull";
+};
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
       retry: false,
       staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
     },
   },
-  queryCache: new QueryCache({
-    onError: (error) => {
-      // Could add global error handling here
-      console.error("Query error:", error);
-    },
-  }),
 });
 
-type FetchOptions = {
-  on401?: "throw" | "returnNull";
-};
-
-export function getQueryFn(options: FetchOptions = {}) {
-  return async ({ queryKey }: { queryKey: string[] }) => {
-    const [endpoint, ...params] = queryKey;
-    let url = endpoint;
-    
-    // If there are params and the endpoint ends with a slash, add them
-    if (params.length > 0 && endpoint.endsWith("/")) {
-      url = `${endpoint}${params.join("/")}`;
-    // If there are params and the endpoint doesn't end with a slash, add a slash and params
-    } else if (params.length > 0) {
-      url = `${endpoint}/${params.join("/")}`;
-    }
-
-    const response = await fetch(url);
+export function getQueryFn(options: ApiRequestOptions = {}) {
+  return async function queryFn({ queryKey: [url] }: { queryKey: string[] }) {
+    const response = await fetch(url as string);
 
     if (response.status === 401 && options.on401 === "returnNull") {
       return null;
     }
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+      const error = new Error(
+        `Error fetching data from ${url}: ${response.statusText}`
+      ) as FetchError;
+      error.status = response.status;
+      throw error;
     }
 
     return response.json();
   };
 }
 
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-export async function apiRequest<TData>(
-  method: HttpMethod,
-  endpoint: string,
-  data?: any,
-  options?: RequestInit
-): Promise<Response> {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
-
-  const response = await fetch(endpoint, {
+export async function apiRequest(
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+  url: string,
+  data?: any
+) {
+  const options: RequestInit = {
     method,
-    signal: controller.signal,
     headers: {
       "Content-Type": "application/json",
     },
-    body: data ? JSON.stringify(data) : undefined,
-    ...options,
-  });
+    credentials: "include",
+  };
 
-  clearTimeout(id);
+  if (data !== undefined) {
+    options.body = JSON.stringify(data);
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    const error = new Error(
+      `API error: ${response.status} ${response.statusText}`
+    ) as FetchError;
+    
+    try {
+      error.info = await response.json();
+    } catch {
+      // If the error isn't valid JSON, just continue
+    }
+    
+    error.status = response.status;
+    throw error;
+  }
+
   return response;
 }

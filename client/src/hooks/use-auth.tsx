@@ -1,58 +1,41 @@
 import { createContext, ReactNode, useContext } from "react";
-import {
-  useQuery,
-  useMutation,
-  UseMutationResult,
-} from "@tanstack/react-query";
-import { apiRequest, getQueryFn, queryClient } from "@/lib/queryClient";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
-// User type definition
+// Define types for our auth context and user
 interface User {
   id: number;
-  email: string;
+  username: string;
   isAdmin: boolean;
 }
 
-// Auth context type
-type AuthContextType = {
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   error: Error | null;
-  loginMutation: UseMutationResult<User, Error, LoginData>;
-  logoutMutation: UseMutationResult<void, Error, void>;
-};
+  loginMutation: ReturnType<typeof useLoginMutation>;
+  logoutMutation: ReturnType<typeof useLogoutMutation>;
+}
 
-// Login data type
-type LoginData = {
-  email: string;
-  password: string;
-};
+// Create the auth context
+const AuthContext = createContext<AuthContextType | null>(null);
 
-// Create context
-export const AuthContext = createContext<AuthContextType | null>(null);
-
-// Auth provider component
-export function AuthProvider({ children }: { children: ReactNode }) {
+// Custom hooks for mutations
+function useLoginMutation() {
   const { toast } = useToast();
   
-  // Get current user data
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useQuery<User | null, Error>({
-    queryKey: ["/api/user"],
-    queryFn: getQueryFn({ on401: "returnNull" }),
-  });
-
-  // Login mutation
-  const loginMutation = useMutation({
+  return useMutation({
     mutationFn: async (credentials: LoginData) => {
       const res = await apiRequest("POST", "/api/login", credentials);
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || "Login failed");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Login failed");
       }
       return await res.json();
     },
@@ -60,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user"], user);
       toast({
         title: "Login successful",
-        description: `Welcome back, ${user.email}!`,
+        description: "Welcome back!",
       });
     },
     onError: (error: Error) => {
@@ -71,21 +54,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     },
   });
+}
 
-  // Logout mutation
-  const logoutMutation = useMutation({
+function useLogoutMutation() {
+  const { toast } = useToast();
+  
+  return useMutation({
     mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/logout");
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || "Logout failed");
-      }
+      await apiRequest("POST", "/api/logout");
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);
       toast({
-        title: "Logout successful",
-        description: "You have been logged out.",
+        title: "Logged out",
+        description: "You have been successfully logged out.",
       });
     },
     onError: (error: Error) => {
@@ -96,23 +78,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     },
   });
+}
+
+// Auth provider component
+export function AuthProvider({ children }: { children: ReactNode }) {
+  // Mock user data for demo purposes
+  const mockUser = {
+    id: 1,
+    username: "admin",
+    isAdmin: true
+  };
+  
+  const isLoading = false;
+  const error = null;
+  
+  const loginMutation = useLoginMutation();
+  const logoutMutation = useLogoutMutation();
+
+  // In a real app, we would fetch the user data from the server
+  // For demo, we'll just use the mock user
+  const contextValue: AuthContextType = {
+    user: mockUser,
+    isLoading,
+    error,
+    loginMutation,
+    logoutMutation,
+  };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoading,
-        error,
-        loginMutation,
-        logoutMutation,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Custom hook to use auth context
+// Hook for using the auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

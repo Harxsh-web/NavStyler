@@ -1,120 +1,165 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FooterEditor } from "@/components/admin/FooterEditor";
-import { Loader2, LogOut } from "lucide-react";
+import { Link } from "wouter";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
-  const [activeTab, setActiveTab] = useState("footer");
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const handleLogout = () => {
     logoutMutation.mutate();
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Feel-Good Productivity Admin</h1>
+          <Link href="/">
+            <a className="text-xl font-bold text-cyan-600">Feel-Good Productivity</a>
+          </Link>
+          
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-600">
-              Logged in as <span className="font-medium">{user.email}</span>
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <span className="text-gray-600">
+              Welcome, {user?.username}
+            </span>
+            <button
               onClick={handleLogout}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               disabled={logoutMutation.isPending}
             >
-              {logoutMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </>
-              )}
-            </Button>
+              {logoutMutation.isPending ? "Logging out..." : "Logout"}
+            </button>
           </div>
         </div>
       </header>
-
-      <main className="container mx-auto px-4 py-8">
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Website Content Management</CardTitle>
-            <CardDescription>
-              Edit and manage the content of your website
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs 
-              defaultValue="footer" 
-              value={activeTab} 
-              onValueChange={setActiveTab}
-              className="space-y-4"
+      
+      {/* Main Content */}
+      <div className="flex-grow flex">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white shadow-sm p-4">
+          <h2 className="text-lg font-semibold mb-4">Content Management</h2>
+          <nav className="space-y-1">
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "dashboard" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("dashboard")}
             >
-              <TabsList>
-                <TabsTrigger value="footer">Footer</TabsTrigger>
-                <TabsTrigger value="hero">Hero Section</TabsTrigger>
-                <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-                <TabsTrigger value="learning-points">Learning Points</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="footer" className="space-y-4">
-                <FooterEditor />
-              </TabsContent>
-
-              <TabsContent value="hero" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Hero Section Editor</CardTitle>
-                    <CardDescription>Edit your hero section content</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Hero section editor coming soon...</p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="testimonials" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Testimonials Editor</CardTitle>
-                    <CardDescription>Edit testimonials</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Testimonials editor coming soon...</p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="learning-points" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Learning Points Editor</CardTitle>
-                    <CardDescription>Edit learning points</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Learning points editor coming soon...</p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </main>
+              Dashboard
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "hero" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("hero")}
+            >
+              Hero Section
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "quote" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("quote")}
+            >
+              Quote Section
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "learning" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("learning")}
+            >
+              Learning Points
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "testimonials" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("testimonials")}
+            >
+              Testimonials
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "author" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("author")}
+            >
+              Author Section
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "footer" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("footer")}
+            >
+              Footer
+            </button>
+          </nav>
+        </aside>
+        
+        {/* Content Area */}
+        <main className="flex-grow p-6">
+          {activeTab === "dashboard" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-lg mb-4">Welcome to the Feel-Good Productivity Admin Panel</p>
+                <p className="text-gray-600 mb-6">
+                  Use the sidebar navigation to manage different sections of your landing page.
+                  All changes will be reflected immediately on the live site.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <h3 className="font-semibold mb-2">Hero Section</h3>
+                    <p className="text-sm text-gray-600">Edit the main headline, subtext, and call-to-action.</p>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <h3 className="font-semibold mb-2">Learning Points</h3>
+                    <p className="text-sm text-gray-600">Manage the 10 key learning points from the book.</p>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <h3 className="font-semibold mb-2">Testimonials</h3>
+                    <p className="text-sm text-gray-600">Add or edit customer testimonials and reviews.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "hero" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Hero Section Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the main hero section of your landing page.</p>
+                {/* Hero section editor form would go here */}
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "footer" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Footer Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Manage footer links, categories, and social media.</p>
+                {/* Footer editor form would go here */}
+              </div>
+            </div>
+          )}
+          
+          {/* Other tab content would go here */}
+        </main>
+      </div>
     </div>
   );
 }
