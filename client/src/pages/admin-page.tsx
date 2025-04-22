@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { HeroEditor } from "@/components/admin/HeroEditor";
 import { Redirect } from "wouter";
 import { Loader2, LogOut, Settings, Edit, LayoutDashboard, MessageSquare, Users, BookOpen } from "lucide-react";
 
@@ -203,19 +204,9 @@ export default function AdminPage() {
           </div>
         </TabsContent>
 
-        {/* Placeholder tabs */}
+        {/* Hero Section Editor */}
         <TabsContent value="hero">
-          <Card>
-            <CardHeader>
-              <CardTitle>Hero Section</CardTitle>
-              <CardDescription>Manage the main hero section content</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                This section is a placeholder. The full functionality will be implemented soon.
-              </p>
-            </CardContent>
-          </Card>
+          <HeroEditor />
         </TabsContent>
 
         <TabsContent value="learning">
