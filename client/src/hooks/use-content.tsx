@@ -1,123 +1,114 @@
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Hero, 
-  Featured, 
-  Quote, 
-  LearningPoint, 
-  LearningPointsSection, 
-  Testimonial, 
-  TestimonialSection,
-  BookSection,
-  AboutBookSection,
-  AuthorSection,
-  FooterCategory,
-  FooterLink,
-  SocialLink
-} from "@shared/schema";
-import { getQueryFn } from "../lib/queryClient";
+import { getQueryFn } from "@/lib/queryClient";
 
-// Type for all content combined
-export interface WebsiteContent {
-  hero?: Hero;
-  featured?: Featured;
-  quote?: Quote;
-  learningPointsSection?: LearningPointsSection;
-  learningPoints: LearningPoint[];
-  testimonialSection?: TestimonialSection;
-  testimonials: Testimonial[];
-  mobileTestimonials: Testimonial[];
-  bookSections: BookSection[];
-  aboutBook?: AboutBookSection;
-  author?: AuthorSection;
-  footerCategories: FooterCategory[];
-  footerLinks: FooterLink[];
-  footerLinksByCategory: (FooterCategory & { links: FooterLink[] })[];
-  socialLinks: SocialLink[];
-  siteSettings: Record<string, string>;
-}
-
-// Hook to fetch all content at once
-export function useAllContent() {
-  return useQuery<WebsiteContent, Error>({
-    queryKey: ["/api/content/content"],
-    queryFn: getQueryFn({}),
-  });
-}
-
-// Hooks for individual content sections
+// Hero section hook
 export function useHeroSection() {
-  return useQuery<Hero, Error>({
+  return useQuery({
     queryKey: ["/api/content/hero"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }
 
+// Featured section hook
 export function useFeaturedSection() {
-  return useQuery<Featured, Error>({
+  return useQuery({
     queryKey: ["/api/content/featured"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }
 
+// Quote section hook
 export function useQuoteSection() {
-  return useQuery<Quote, Error>({
+  return useQuery({
     queryKey: ["/api/content/quote"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }
 
+// Learning points section hook
+export function useLearningPointsSection() {
+  return useQuery({
+    queryKey: ["/api/content/learning-points-section"],
+    queryFn: getQueryFn()
+  });
+}
+
+// Learning points hook
 export function useLearningPoints() {
-  return useQuery<{ section: LearningPointsSection, points: LearningPoint[] }, Error>({
+  return useQuery({
     queryKey: ["/api/content/learning-points"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }
 
-export function useTestimonials(mobile?: boolean) {
-  return useQuery<{ section: TestimonialSection, testimonials: Testimonial[] }, Error>({
-    queryKey: ["/api/content/testimonials", mobile ? "mobile" : "all"],
-    queryFn: getQueryFn({ 
-      searchParams: mobile ? { mobile: "true" } : undefined 
-    }),
+// Testimonial section hook
+export function useTestimonialSection() {
+  return useQuery({
+    queryKey: ["/api/content/testimonial-section"],
+    queryFn: getQueryFn()
   });
 }
 
+// Testimonials hook
+export function useTestimonials() {
+  return useQuery({
+    queryKey: ["/api/content/testimonials"],
+    queryFn: getQueryFn()
+  });
+}
+
+// Book sections hook
 export function useBookSections() {
-  return useQuery<BookSection[], Error>({
+  return useQuery({
     queryKey: ["/api/content/book-sections"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }
 
+// About book section hook
 export function useAboutBookSection() {
-  return useQuery<AboutBookSection, Error>({
-    queryKey: ["/api/content/about-book"],
-    queryFn: getQueryFn({}),
+  return useQuery({
+    queryKey: ["/api/content/about-book-section"],
+    queryFn: getQueryFn()
   });
 }
 
+// Author section hook
 export function useAuthorSection() {
-  return useQuery<AuthorSection, Error>({
-    queryKey: ["/api/content/author"],
-    queryFn: getQueryFn({}),
+  return useQuery({
+    queryKey: ["/api/content/author-section"],
+    queryFn: getQueryFn()
   });
 }
 
-export function useFooter() {
-  return useQuery<{
-    categories: FooterCategory[],
-    links: FooterLink[],
-    linksByCategory: (FooterCategory & { links: FooterLink[] })[],
-    socialLinks: SocialLink[]
-  }, Error>({
-    queryKey: ["/api/content/footer"],
-    queryFn: getQueryFn({}),
+// Footer categories hook
+export function useFooterCategories() {
+  return useQuery({
+    queryKey: ["/api/content/footer-categories"],
+    queryFn: getQueryFn()
   });
 }
 
+// Footer links hook
+export function useFooterLinks() {
+  return useQuery({
+    queryKey: ["/api/content/footer-links"],
+    queryFn: getQueryFn()
+  });
+}
+
+// Social links hook
+export function useSocialLinks() {
+  return useQuery({
+    queryKey: ["/api/content/social-links"],
+    queryFn: getQueryFn()
+  });
+}
+
+// Site settings hook
 export function useSiteSettings() {
-  return useQuery<Record<string, string>, Error>({
+  return useQuery({
     queryKey: ["/api/content/site-settings"],
-    queryFn: getQueryFn({}),
+    queryFn: getQueryFn()
   });
 }

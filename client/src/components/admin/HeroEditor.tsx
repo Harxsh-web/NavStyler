@@ -15,11 +15,10 @@ import { useToast } from "@/hooks/use-toast";
 
 const heroSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  subtitle: z.string().min(1, "Subtitle is required"),
-  description: z.string().min(1, "Description is required"),
-  ctaText: z.string().min(1, "CTA text is required"),
-  ctaLink: z.string().url("Must be a valid URL"),
-  imageUrl: z.string().url("Must be a valid URL"),
+  subtitle: z.string().optional(),
+  ctaText: z.string().optional(),
+  ctaLink: z.string().url("Must be a valid URL").optional(),
+  imageUrl: z.string().url("Must be a valid URL").optional(),
 });
 
 type HeroFormValues = z.infer<typeof heroSchema>;
@@ -35,7 +34,6 @@ export function HeroEditor() {
     defaultValues: {
       title: "",
       subtitle: "",
-      description: "",
       ctaText: "",
       ctaLink: "",
       imageUrl: "",
@@ -47,7 +45,6 @@ export function HeroEditor() {
     form.reset({
       title: hero.title || "",
       subtitle: hero.subtitle || "",
-      description: hero.description || "",
       ctaText: hero.ctaText || "",
       ctaLink: hero.ctaLink || "",
       imageUrl: hero.imageUrl || "",
@@ -153,19 +150,7 @@ export function HeroEditor() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Enter description" {...field} rows={4} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -220,7 +205,6 @@ export function HeroEditor() {
                     form.reset({
                       title: hero.title || "",
                       subtitle: hero.subtitle || "",
-                      description: hero.description || "",
                       ctaText: hero.ctaText || "",
                       ctaLink: hero.ctaLink || "",
                       imageUrl: hero.imageUrl || "",
