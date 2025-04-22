@@ -11,6 +11,7 @@ export interface IStorage {
   // User management
   getUser(id: number): Promise<schema.User | undefined>;
   getUserByUsername(username: string): Promise<schema.User | undefined>;
+  getUserByEmail(email: string): Promise<schema.User | undefined>;
   createUser(user: schema.InsertUser): Promise<schema.User>;
   
   // Content management
@@ -111,6 +112,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByUsername(username: string): Promise<schema.User | undefined> {
     const [user] = await db.select().from(schema.users).where(eq(schema.users.username, username));
+    return user;
+  }
+  
+  async getUserByEmail(email: string): Promise<schema.User | undefined> {
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
     return user;
   }
 

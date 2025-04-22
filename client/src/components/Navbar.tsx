@@ -198,10 +198,6 @@ export default function Navbar() {
               <span className="text-gray-700 hover:text-black font-medium cursor-pointer">LifeOS Productivity System</span>
             </Link>
             
-            <Link href="/admin">
-              <span className="text-gray-700 hover:text-black font-medium cursor-pointer">Admin</span>
-            </Link>
-            
             <Link href="/newsletter">
               <Button className="bg-orange-300 hover:bg-orange-400 text-white rounded-full">
                 Join 270k+ Subscribers
@@ -294,12 +290,6 @@ export default function Navbar() {
                 <Link href="/lifeos">
                   <div className="text-gray-800 font-medium py-2 text-lg cursor-pointer">
                     LifeOS Productivity System
-                  </div>
-                </Link>
-                
-                <Link href="/admin">
-                  <div className="text-gray-800 font-medium py-2 text-lg cursor-pointer">
-                    Admin Dashboard
                   </div>
                 </Link>
                 
