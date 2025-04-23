@@ -1,18 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { useRefreshAdminContent } from "@/hooks/use-content";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -27,7 +21,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
+import { AdminCard } from "./AdminCard";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Schema for site settings form
 const siteSettingsSchema = z.object({
@@ -46,11 +42,23 @@ type SiteSettingsFormValues = z.infer<typeof siteSettingsSchema>;
 
 export function SiteSettingsEditor() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("general");
+  const [formInitialized, setFormInitialized] = useState(false);
   
-  // Placeholder for real data fetching and updating
-  const isLoading = false;
+  // Fetch all site settings
+  const { data: siteSettings = [], isLoading } = useQuery({
+    queryKey: ["/api/admin/site-settings"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/site-settings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch site settings");
+      }
+      return await response.json();
+    }
+  });
   
+  // Create form with default values
   const form = useForm<SiteSettingsFormValues>({
     resolver: zodResolver(siteSettingsSchema),
     defaultValues: {
@@ -66,220 +74,303 @@ export function SiteSettingsEditor() {
     },
   });
 
-  const onSubmit = (values: SiteSettingsFormValues) => {
-    // This would be a mutation that sends data to the API
-    console.log("Submitting site settings:", values);
-    
-    toast({
-      title: "Settings saved",
-      description: "Your site settings have been updated successfully.",
-    });
+  // Initialize form with values from database
+  useEffect(() => {
+    if (siteSettings.length > 0 && !formInitialized) {
+      const formValues: Partial<SiteSettingsFormValues> = {};
+      
+      // Process each setting
+      siteSettings.forEach((setting: { name: string, value: string }) => {
+        // Convert boolean strings to actual booleans
+        if (setting.value === 'true' || setting.value === 'false') {
+          (formValues as any)[setting.name] = setting.value === 'true';
+        } else {
+          (formValues as any)[setting.name] = setting.value;
+        }
+      });
+      
+      // Reset form with values from database
+      form.reset({
+        ...form.getValues(), // Keep default values for any missing fields
+        ...formValues // Override with values from database
+      });
+      
+      setFormInitialized(true);
+    }
+  }, [siteSettings, form, formInitialized]);
+
+  // Mutation to update a single site setting
+  const updateSettingMutation = useMutation({
+    mutationFn: async ({ name, value }: { name: string, value: string }) => {
+      const response = await apiRequest("PUT", `/api/admin/site-settings/${name}`, { value });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update setting");
+      }
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update setting",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Handle form submission - save each setting individually
+  const onSubmit = async (values: SiteSettingsFormValues) => {
+    try {
+      // Convert each form value to a setting update
+      const updates = Object.entries(values).map(([name, value]) => {
+        // Convert boolean values to strings for storage
+        const stringValue = typeof value === 'boolean' ? String(value) : value || '';
+        return { name, value: stringValue };
+      });
+      
+      // Save each setting
+      for (const update of updates) {
+        await updateSettingMutation.mutateAsync(update);
+      }
+      
+      toast({
+        title: "Settings saved",
+        description: "Your site settings have been updated successfully.",
+      });
+    } catch (error) {
+      // Error handling is done in the mutation
+    }
   };
 
   if (isLoading) {
     return (
-      <Card>
-        <CardContent className="pt-6 flex justify-center">
+      <AdminCard title="Site Settings">
+        <div className="flex justify-center py-8">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </CardContent>
-      </Card>
+        </div>
+      </AdminCard>
     );
   }
 
+  // Function to refresh site settings
+  const { refreshContent } = useRefreshAdminContent();
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
+    setFormInitialized(false);
+    toast({
+      title: "Settings refreshed",
+      description: "Site settings have been refreshed from the database."
+    });
+  };
+
+  // Function to go to site preview
+  const handlePreview = () => {
+    window.open("/", "_blank");
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Site Settings</CardTitle>
-        <CardDescription>
-          Configure general settings for your website
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-6">
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="appearance">Appearance</TabsTrigger>
-            <TabsTrigger value="preorders">Pre-orders</TabsTrigger>
-            <TabsTrigger value="advanced">Advanced</TabsTrigger>
-          </TabsList>
-          
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <TabsContent value="general" className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="siteName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Site Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter site name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="siteTagline"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tagline</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter site tagline" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        A short phrase that appears beneath the site name
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="contactEmail"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="contact@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="copyrightText"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Copyright Text</FormLabel>
-                      <FormControl>
-                        <Input placeholder="© 2023 Your Name. All rights reserved." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
+    <AdminCard 
+      title="Site Settings" 
+      description="Configure general settings for your website"
+      actions={[
+        { icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, label: "Refresh" }
+      ]}
+    >
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="mb-6">
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="appearance">Appearance</TabsTrigger>
+          <TabsTrigger value="preorders">Pre-orders</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+        </TabsList>
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <TabsContent value="general" className="space-y-6">
+              <FormField
+                control={form.control}
+                name="siteName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Site Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter site name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
-              <TabsContent value="appearance" className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="logoUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Logo URL</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com/logo.png" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter the full URL to your site's logo image
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="faviconUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Favicon URL</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com/favicon.ico" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter the full URL to your site's favicon (browser tab icon)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
+              <FormField
+                control={form.control}
+                name="siteTagline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tagline</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter site tagline" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      A short phrase that appears beneath the site name
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
-              <TabsContent value="preorders" className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="enablePreorders"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between">
-                      <div className="space-y-0.5">
-                        <FormLabel>Enable Pre-orders</FormLabel>
-                        <FormDescription>
-                          Show pre-order links and CTAs on the website
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="preorderUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pre-order URL</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="https://example.com/preorder" 
-                          {...field}
-                          disabled={!form.watch("enablePreorders")} 
-                        />
-                      </FormControl>
+              <FormField
+                control={form.control}
+                name="contactEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="contact@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="copyrightText"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Copyright Text</FormLabel>
+                    <FormControl>
+                      <Input placeholder="© 2023 Your Name. All rights reserved." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            
+            <TabsContent value="appearance" className="space-y-6">
+              <FormField
+                control={form.control}
+                name="logoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Logo URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://example.com/logo.png" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter the full URL to your site's logo image
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="faviconUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Favicon URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://example.com/favicon.ico" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter the full URL to your site's favicon (browser tab icon)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            
+            <TabsContent value="preorders" className="space-y-6">
+              <FormField
+                control={form.control}
+                name="enablePreorders"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <FormLabel>Enable Pre-orders</FormLabel>
                       <FormDescription>
-                        The link where users can pre-order the book
+                        Show pre-order links and CTAs on the website
                       </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
-              <TabsContent value="advanced" className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="maintenanceMode"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between">
-                      <div className="space-y-0.5">
-                        <FormLabel>Maintenance Mode</FormLabel>
-                        <FormDescription>
-                          Enable maintenance mode to show a temporary page to visitors
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
-              
-              <div className="pt-4 border-t border-gray-200">
-                <Button type="submit" className="w-full sm:w-auto">
-                  Save Settings
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </Tabs>
-      </CardContent>
-    </Card>
+              <FormField
+                control={form.control}
+                name="preorderUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pre-order URL</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="https://example.com/preorder" 
+                        {...field}
+                        disabled={!form.watch("enablePreorders")} 
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      The link where users can pre-order the book
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            
+            <TabsContent value="advanced" className="space-y-6">
+              <FormField
+                control={form.control}
+                name="maintenanceMode"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <FormLabel>Maintenance Mode</FormLabel>
+                      <FormDescription>
+                        Enable maintenance mode to show a temporary page to visitors
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            
+            <div className="pt-4 border-t border-gray-200 flex gap-2">
+              <Button type="submit" className="w-full sm:w-auto">
+                Save Settings
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full sm:w-auto"
+                onClick={handlePreview}
+              >
+                Preview Site
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </Tabs>
+    </AdminCard>
   );
 }
