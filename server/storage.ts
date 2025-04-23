@@ -143,11 +143,15 @@ export class DatabaseStorage implements IStorage {
   
   // Articles
   async getArticles(limit: number = 10): Promise<schema.Article[]> {
-    return db.select()
-      .from(schema.article)
-      .where(eq(schema.article.isPublished, true))
-      .orderBy(desc(schema.article.publishedAt))
-      .limit(limit);
+    try {
+      const articles = await db.execute(
+        `SELECT * FROM article WHERE is_published = true ORDER BY published_at DESC LIMIT ${limit}`
+      );
+      return articles.rows;
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      return [];
+    }
   }
   
   async getArticle(id: number): Promise<schema.Article | undefined> {
@@ -184,11 +188,15 @@ export class DatabaseStorage implements IStorage {
   
   // Videos
   async getVideos(limit: number = 10): Promise<schema.Video[]> {
-    return db.select()
-      .from(schema.video)
-      .where(eq(schema.video.isPublished, true))
-      .orderBy(desc(schema.video.publishedAt))
-      .limit(limit);
+    try {
+      const videos = await db.execute(
+        `SELECT * FROM video WHERE is_published = true ORDER BY published_at DESC LIMIT ${limit}`
+      );
+      return videos.rows;
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      return [];
+    }
   }
   
   async getVideo(id: number): Promise<schema.Video | undefined> {

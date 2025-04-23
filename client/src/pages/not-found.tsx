@@ -108,13 +108,13 @@ export default function NotFound() {
                         className="w-full h-full object-cover"
                       />
                       <Badge className="absolute top-2 right-2 bg-red-600">
-                        {video.description ? video.description.slice(0, 10) : "Watch"} 
+                        Watch Video 
                       </Badge>
                     </div>
                   )}
                   <div className="p-4">
                     <a 
-                      href={video.slug ? `/videos/${video.slug}` : "#"} 
+                      href={video.videoUrl || "#"} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="group"
