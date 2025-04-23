@@ -208,7 +208,10 @@ export default function Navbar() {
               </Button>
             </Link>
             
-            <ThemeToggle />
+            <div className="flex items-center space-x-2">
+              <SearchDialog />
+              <ThemeToggle />
+            </div>
           </nav>
           
           {/* Mobile menu button and drawer */}
@@ -305,7 +308,8 @@ export default function Navbar() {
                   </Button>
                 </Link>
                 
-                <div className="flex justify-center py-4">
+                <div className="flex justify-center py-4 space-x-3">
+                  <SearchDialog />
                   <ThemeToggle />
                 </div>
               </div>
