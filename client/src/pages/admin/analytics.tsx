@@ -18,7 +18,14 @@ import {
   Legend,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  ComposedChart,
+  Scatter
 } from 'recharts';
 
 // This would normally come from your analytics API
@@ -140,6 +147,8 @@ export default function AnalyticsPage() {
           <TabsTrigger value="sales">Sales</TabsTrigger>
           <TabsTrigger value="visitors">Visitors</TabsTrigger>
           <TabsTrigger value="distribution">Sales Distribution</TabsTrigger>
+          <TabsTrigger value="comparison">Metrics Comparison</TabsTrigger>
+          <TabsTrigger value="cumulative">Cumulative Trends</TabsTrigger>
         </TabsList>
 
         {data && (
@@ -273,6 +282,96 @@ export default function AnalyticsPage() {
                       <Tooltip formatter={(value) => [value, 'Sales']} />
                       <Legend />
                     </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="comparison" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Metrics Comparison</CardTitle>
+                  <CardDescription>Radar chart comparing key performance metrics</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[500px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={generateRadarData(data)}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="metric" />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                      <Radar
+                        name="Current Period"
+                        dataKey="value"
+                        stroke="#8884d8"
+                        fill="#8884d8"
+                        fillOpacity={0.6}
+                      />
+                      <Radar
+                        name="Previous Period"
+                        dataKey="prevValue"
+                        stroke="#82ca9d"
+                        fill="#82ca9d"
+                        fillOpacity={0.6}
+                      />
+                      <Legend />
+                      <Tooltip />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="cumulative" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Cumulative Trends</CardTitle>
+                  <CardDescription>Stacked area chart showing cumulative growth over time</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[500px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart
+                      data={generateCumulativeData(data)}
+                      margin={{
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 20,
+                      }}
+                    >
+                      <CartesianGrid stroke="#f5f5f5" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Area
+                        type="monotone"
+                        dataKey="pageViews"
+                        stackId="1"
+                        stroke="#8884d8"
+                        fill="#8884d8"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="visitors"
+                        stackId="1"
+                        stroke="#82ca9d"
+                        fill="#82ca9d"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="engagement"
+                        stackId="1"
+                        stroke="#ffc658"
+                        fill="#ffc658"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="sales"
+                        stroke="#ff7300"
+                        activeDot={{ r: 8 }}
+                      />
+                      <Scatter dataKey="sales" fill="red" />
+                    </ComposedChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
