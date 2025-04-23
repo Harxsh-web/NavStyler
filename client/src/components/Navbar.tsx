@@ -12,6 +12,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SearchDialog } from "@/components/SearchDialog";
 
 import { HiOutlineDocument, HiOutlineBookOpen, HiOutlineVideoCamera } from 'react-icons/hi';
 import { BiPodcast } from 'react-icons/bi';
@@ -231,7 +232,7 @@ export default function Navbar() {
               
               <div className="mt-8 space-y-6">
                 <Link href="/my-book">
-                  <div className="text-gray-800 font-medium py-2 text-lg cursor-pointer">
+                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     My Book
                   </div>
                 </Link>
@@ -239,7 +240,7 @@ export default function Navbar() {
                 <div>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-start p-2 font-medium text-lg text-gray-800 hover:bg-gray-100" 
+                    className="w-full justify-start p-2 font-medium text-lg text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" 
                     onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
                   >
                     <span>Free Resources</span>
@@ -287,13 +288,13 @@ export default function Navbar() {
                 </div>
                 
                 <Link href="/youtube-academy">
-                  <div className="text-gray-800 font-medium py-2 text-lg cursor-pointer">
+                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     YouTube Academy
                   </div>
                 </Link>
                 
                 <Link href="/lifeos">
-                  <div className="text-gray-800 font-medium py-2 text-lg cursor-pointer">
+                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     LifeOS Productivity System
                   </div>
                 </Link>
