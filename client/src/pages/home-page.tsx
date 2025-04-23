@@ -303,7 +303,7 @@ export default function HomePage() {
               <div className="flex flex-col md:flex-row items-center gap-10 max-w-4xl mx-auto">
                 <div className="md:w-1/3">
                   <img 
-                    src={authorData?.imageUrl || "https://images.squarespace-cdn.com/content/v1/612d6a724e45b00a001f2501/1650285544747-5YVXL8ZSVBGXFUTK85EN/Ali_Abdaal_Headshots_30.jpg"} 
+                    src={authorData?.imageUrl || "https://randomuser.me/api/portraits/men/44.jpg"} 
                     alt={authorData?.name || "Luke Mikic"} 
                     className="w-full h-auto rounded-lg shadow-md"
                   />
@@ -320,10 +320,10 @@ export default function HomePage() {
                           Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
                         </p>
                         <p>
-                          Ali became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Ali started to document his journey towards living a healthier, happier, more productive life online. In the years since, Ali's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
+                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online. In the years since, Luke's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
                         </p>
                         <p>
-                          In 2021, Ali took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
+                          In 2021, Luke took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
                         </p>
                       </>
                     )}
