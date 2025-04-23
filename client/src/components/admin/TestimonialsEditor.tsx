@@ -42,7 +42,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -269,7 +268,7 @@ export function TestimonialsEditor() {
               </TableHeader>
               <TableBody>
                 {testimonials && testimonials.length > 0 ? (
-                  testimonials.map((testimonial) => (
+                  testimonials.map((testimonial: any) => (
                     <TableRow key={testimonial.id}>
                       <TableCell className="font-medium">
                         {testimonial.author}

@@ -259,7 +259,7 @@ export function LearningPointsEditor() {
               </TableHeader>
               <TableBody>
                 {learningPoints && learningPoints.length > 0 ? (
-                  learningPoints.sort((a, b) => a.order - b.order).map((point) => (
+                  learningPoints.sort((a: any, b: any) => a.order - b.order).map((point: any) => (
                     <TableRow key={point.id}>
                       <TableCell className="text-center">{point.order}</TableCell>
                       <TableCell>{point.title}</TableCell>
