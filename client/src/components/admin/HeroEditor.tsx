@@ -12,13 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 const heroSchema = z.object({
   title: z.string().min(1, "Title is required"),
   subtitle: z.string().optional(),
   ctaText: z.string().optional(),
   ctaLink: z.string().url("Must be a valid URL").optional(),
-  imageUrl: z.string().url("Must be a valid URL").optional(),
+  imageUrl: z.string().optional(), // Allow any string - could be URL or data URL from image upload
 });
 
 type HeroFormValues = z.infer<typeof heroSchema>;
@@ -189,9 +190,33 @@ export function HeroEditor() {
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image URL</FormLabel>
+                  <FormLabel>Hero Image</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com/image.jpg" {...field} />
+                    <div className="space-y-2">
+                      {/* Standard URL input for external URLs */}
+                      <Input 
+                        placeholder="https://example.com/image.jpg" 
+                        {...field} 
+                      />
+                      
+                      {/* Divider with text */}
+                      <div className="relative flex py-2 items-center">
+                        <div className="flex-grow border-t border-gray-200"></div>
+                        <span className="flex-shrink mx-3 text-gray-400 text-sm">or upload image</span>
+                        <div className="flex-grow border-t border-gray-200"></div>
+                      </div>
+                      
+                      {/* Image upload component */}
+                      <ImageUpload 
+                        onImageChange={(imageUrl) => {
+                          if (imageUrl) {
+                            field.onChange(imageUrl);
+                          }
+                        }}
+                        currentImage={field.value}
+                        aspectRatio="wide"
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
