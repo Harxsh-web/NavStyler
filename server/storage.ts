@@ -1,6 +1,6 @@
 import * as schema from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
-import { db } from "./db";
+import { db, query } from "./db";
 import connectPg from "connect-pg-simple";
 import session from "express-session";
 import { pool } from "./db";
@@ -123,7 +123,7 @@ export class DatabaseStorage implements IStorage {
   // User management
   async getUser(id: number): Promise<schema.User | undefined> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
          FROM users WHERE id = $1`,
         [id]
@@ -137,7 +137,7 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByUsername(username: string): Promise<schema.User | undefined> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
          FROM users WHERE username = $1`,
         [username]
@@ -151,7 +151,7 @@ export class DatabaseStorage implements IStorage {
   
   async getUserByEmail(email: string): Promise<schema.User | undefined> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
          FROM users WHERE email = $1`,
         [email]
@@ -165,7 +165,7 @@ export class DatabaseStorage implements IStorage {
 
   async createUser(insertUser: schema.InsertUser): Promise<schema.User> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `INSERT INTO users(username, email, password, is_admin)
          VALUES($1, $2, $3, $4)
          RETURNING id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"`,
