@@ -358,7 +358,10 @@ export function useQuoteSection() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/quote"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/quote"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Invalidate the main content endpoint
       toast({
         title: "Success",
         description: "Quote section updated successfully",
@@ -409,7 +412,10 @@ export function useLearningPointsSection() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Learning points section updated successfully",
@@ -460,7 +466,10 @@ export function useLearningPoints() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Learning point created successfully",
@@ -485,7 +494,10 @@ export function useLearningPoints() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Learning point updated successfully",
@@ -510,7 +522,10 @@ export function useLearningPoints() {
       return true;
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Learning point deleted successfully",
@@ -563,7 +578,10 @@ export function useTestimonialSection() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonial-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Testimonial section updated successfully",
@@ -614,7 +632,10 @@ export function useTestimonials() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Testimonial created successfully",
