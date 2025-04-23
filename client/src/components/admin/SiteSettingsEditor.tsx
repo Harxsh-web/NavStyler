@@ -45,6 +45,7 @@ export function SiteSettingsEditor() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("general");
   const [formInitialized, setFormInitialized] = useState(false);
+  const refreshContentMutation = useRefreshAdminContent();
   
   // Fetch all site settings
   const { data: siteSettings = [], isLoading } = useQuery({
@@ -145,6 +146,21 @@ export function SiteSettingsEditor() {
     }
   };
 
+  // Handle form refresh
+  const handleManualRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
+    setFormInitialized(false);
+    toast({
+      title: "Settings refreshed",
+      description: "Site settings have been refreshed from the database."
+    });
+  };
+
+  // Preview site
+  const handlePreview = () => {
+    window.open("/", "_blank");
+  };
+
   if (isLoading) {
     return (
       <AdminCard title="Site Settings">
@@ -155,30 +171,23 @@ export function SiteSettingsEditor() {
     );
   }
 
-  // Function to refresh site settings
-  const { refreshContent } = useRefreshAdminContent();
-  const handleRefresh = () => {
-    queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
-    setFormInitialized(false);
-    toast({
-      title: "Settings refreshed",
-      description: "Site settings have been refreshed from the database."
-    });
-  };
-
-  // Function to go to site preview
-  const handlePreview = () => {
-    window.open("/", "_blank");
-  };
-
   return (
     <AdminCard 
       title="Site Settings" 
       description="Configure general settings for your website"
-      actions={[
-        { icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, label: "Refresh" }
-      ]}
     >
+      <div className="mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1"
+          onClick={handleManualRefresh}
+        >
+          <RefreshCw className="h-4 w-4" />
+          Refresh Settings
+        </Button>
+      </div>
+
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="general">General</TabsTrigger>

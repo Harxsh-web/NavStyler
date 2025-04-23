@@ -27,6 +27,7 @@ export function useRefreshAdminContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/about-book"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/author"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
       
       // Also trigger the public content refresh
       refreshPublicContent.mutate();
