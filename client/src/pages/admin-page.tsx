@@ -3,6 +3,10 @@ import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
 import { HeroEditor } from "@/components/admin/HeroEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
+import { QuoteEditor } from "@/components/admin/QuoteEditor";
+import { LearningPointsEditor } from "@/components/admin/LearningPointsEditor";
+import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
+import { AuthorEditor } from "@/components/admin/AuthorEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -152,6 +156,54 @@ export default function AdminPage() {
             </div>
           )}
           
+          {activeTab === "quote" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Quote Section Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the quote section displayed on your landing page.</p>
+                <div className="mt-6">
+                  <QuoteEditor />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "learning" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Learning Points Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Manage the key learning points from the book.</p>
+                <div className="mt-6">
+                  <LearningPointsEditor />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "testimonials" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Testimonials Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Manage customer testimonials and reviews.</p>
+                <div className="mt-6">
+                  <TestimonialsEditor />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "author" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Author Section Editor</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the author information displayed on your landing page.</p>
+                <div className="mt-6">
+                  <AuthorEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
           {activeTab === "footer" && (
             <div>
               <h1 className="text-2xl font-bold mb-6">Footer Editor</h1>
@@ -163,8 +215,6 @@ export default function AdminPage() {
               </div>
             </div>
           )}
-          
-          {/* Other tab content would go here */}
         </main>
       </div>
     </div>
