@@ -244,20 +244,27 @@ export function ThemeSettingsComponent() {
     try {
       setIsBusy(true);
       if (isCreating) {
-        await createTheme(values);
+        const createdTheme = await createTheme(values);
         setIsCreating(false);
         setActiveTab('themes');
+        toast({
+          title: 'Success',
+          description: `Theme "${createdTheme.name}" created successfully`,
+        });
       } else if (selectedTheme) {
-        await updateTheme(selectedTheme.id, values);
+        const updatedTheme = await updateTheme(selectedTheme.id, values);
+        if (updatedTheme) {
+          toast({
+            title: 'Success',
+            description: `Theme "${updatedTheme.name}" updated successfully`,
+          });
+        }
       }
-      toast({
-        title: 'Success',
-        description: isCreating ? 'Theme created successfully' : 'Theme updated successfully',
-      });
     } catch (error: any) {
+      console.error('Theme save error:', error);
       toast({
-        title: 'Error',
-        description: error.message || 'Failed to save theme',
+        title: 'Error Saving Theme',
+        description: error.message || 'Failed to save theme. Please try again.',
         variant: 'destructive',
       });
     } finally {

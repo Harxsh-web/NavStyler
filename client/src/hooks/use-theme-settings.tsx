@@ -111,6 +111,10 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
       try {
         const res = await fetch('/api/themes');
         if (!res.ok) {
+          if (res.status === 401 || res.status === 403) {
+            // Not authenticated or not admin - just return empty array
+            return [];
+          }
           throw new Error('Failed to fetch themes');
         }
         return await res.json();
@@ -119,6 +123,8 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
         return [];
       }
     },
+    // Refresh every 60 seconds when active
+    refetchInterval: 60000,
   });
   
   // Create a new theme
