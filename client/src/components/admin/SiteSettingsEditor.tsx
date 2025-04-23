@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { useRefreshAdminContent } from "@/hooks/use-content";
+import { useRefreshAdminContent, useSiteSettings } from "@/hooks/use-content";
 
 import {
   Form,
@@ -47,17 +46,8 @@ export function SiteSettingsEditor() {
   const [formInitialized, setFormInitialized] = useState(false);
   const refreshContentMutation = useRefreshAdminContent();
   
-  // Fetch all site settings
-  const { data: siteSettings = [], isLoading } = useQuery({
-    queryKey: ["/api/admin/site-settings"],
-    queryFn: async () => {
-      const response = await apiRequest("GET", "/api/admin/site-settings");
-      if (!response.ok) {
-        throw new Error("Failed to fetch site settings");
-      }
-      return await response.json();
-    }
-  });
+  // Use our custom hook to manage site settings
+  const { data: siteSettings = [], isLoading, updateSettingMutation } = useSiteSettings();
   
   // Create form with default values
   const form = useForm<SiteSettingsFormValues>({
@@ -99,28 +89,6 @@ export function SiteSettingsEditor() {
       setFormInitialized(true);
     }
   }, [siteSettings, form, formInitialized]);
-
-  // Mutation to update a single site setting
-  const updateSettingMutation = useMutation({
-    mutationFn: async ({ name, value }: { name: string, value: string }) => {
-      const response = await apiRequest("PUT", `/api/admin/site-settings/${name}`, { value });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update setting");
-      }
-      return await response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update setting",
-        variant: "destructive",
-      });
-    }
-  });
 
   // Handle form submission - save each setting individually
   const onSubmit = async (values: SiteSettingsFormValues) => {

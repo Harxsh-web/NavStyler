@@ -67,6 +67,57 @@ export function useFooterContent() {
 }
 
 /**
+ * Hook for managing site settings
+ */
+export function useSiteSettings() {
+  const { toast } = useToast();
+  
+  const { data = [], isLoading, error } = useQuery({
+    queryKey: ["/api/admin/site-settings"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/site-settings");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch site settings");
+      }
+      return await response.json();
+    }
+  });
+
+  const updateSettingMutation = useMutation({
+    mutationFn: async ({ name, value }: { name: string, value: string }) => {
+      const response = await apiRequest("PUT", `/api/admin/site-settings/${name}`, { value });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update setting");
+      }
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
+      toast({
+        title: "Success",
+        description: "Site setting updated successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update site setting",
+        variant: "destructive",
+      });
+    }
+  });
+
+  return {
+    data,
+    isLoading,
+    error,
+    updateSettingMutation
+  };
+}
+
+/**
  * Hook for managing footer categories
  */
 export function useFooterCategories() {
