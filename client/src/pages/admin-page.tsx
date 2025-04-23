@@ -7,6 +7,9 @@ import { QuoteEditor } from "@/components/admin/QuoteEditor";
 import { LearningPointsEditor } from "@/components/admin/LearningPointsEditor";
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
+import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
+import { SeoEditor } from "@/components/admin/SeoEditor";
+import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -108,6 +111,39 @@ export default function AdminPage() {
             >
               Footer
             </button>
+            
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Configuration
+              </h3>
+            </div>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "settings" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("settings")}
+            >
+              Site Settings
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "seo" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("seo")}
+            >
+              SEO & Metadata
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "analytics" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("analytics")}
+            >
+              Analytics
+            </button>
           </nav>
         </aside>
         
@@ -116,27 +152,214 @@ export default function AdminPage() {
           {activeTab === "dashboard" && (
             <div>
               <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-lg mb-4">Welcome to the Feel-Good Productivity Admin Panel</p>
-                <p className="text-gray-600 mb-6">
-                  Use the sidebar navigation to manage different sections of your landing page.
-                  All changes will be reflected immediately on the live site.
+              
+              {/* Welcome Card */}
+              <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 text-white shadow-sm rounded-lg p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Welcome to the Feel-Good Productivity Admin Panel</h2>
+                <p className="opacity-90 mb-4">
+                  Manage your landing page content from this central dashboard. All changes are published immediately.
                 </p>
+                <div className="flex gap-4 mt-4">
+                  <a href="/" target="_blank" rel="noopener noreferrer" className="text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                    View Live Site
+                  </a>
+                  <button onClick={() => setActiveTab("hero")} className="text-cyan-700 bg-white hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                    Edit Hero Section
+                  </button>
+                </div>
+              </div>
+              
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Hero Section</span>
+                    <span className="text-2xl font-bold mt-1">1</span>
+                    <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
+                  </div>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <h3 className="font-semibold mb-2">Hero Section</h3>
-                    <p className="text-sm text-gray-600">Edit the main headline, subtext, and call-to-action.</p>
+                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Learning Points</span>
+                    <span className="text-2xl font-bold mt-1">10</span>
+                    <span className="text-xs text-gray-500 mt-1">Total points configured</span>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Testimonials</span>
+                    <span className="text-2xl font-bold mt-1">5</span>
+                    <span className="text-xs text-gray-500 mt-1">Active testimonials</span>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Author</span>
+                    <span className="text-2xl font-bold mt-1">1</span>
+                    <span className="text-xs text-gray-500 mt-1">Profile configured</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Quick Actions */}
+              <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <button 
+                  onClick={() => setActiveTab("hero")}
+                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                >
+                  <div className="text-left">
+                    <h3 className="font-medium">Edit Hero Section</h3>
+                    <p className="text-sm text-gray-500">Update headlines and CTAs</p>
+                  </div>
+                </button>
+                
+                <button 
+                  onClick={() => setActiveTab("learning")}
+                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                >
+                  <div className="text-left">
+                    <h3 className="font-medium">Manage Learning Points</h3>
+                    <p className="text-sm text-gray-500">Add or edit key learning points</p>
+                  </div>
+                </button>
+                
+                <button 
+                  onClick={() => setActiveTab("testimonials")}
+                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                >
+                  <div className="text-left">
+                    <h3 className="font-medium">Manage Testimonials</h3>
+                    <p className="text-sm text-gray-500">Update customer reviews</p>
+                  </div>
+                </button>
+              </div>
+              
+              {/* Content Overview */}
+              <h2 className="text-lg font-semibold mb-3">Content Overview</h2>
+              <div className="bg-white shadow-sm rounded-lg mb-6 overflow-hidden">
+                <div className="px-6 py-5 border-b border-gray-200">
+                  <p className="text-lg font-medium">Landing Page Content</p>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Hero Section</h3>
+                      <p className="text-sm text-gray-500">Main headline and book promotion</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("hero")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <h3 className="font-semibold mb-2">Learning Points</h3>
-                    <p className="text-sm text-gray-600">Manage the 10 key learning points from the book.</p>
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Quote Section</h3>
+                      <p className="text-sm text-gray-500">Featured quote from a notable person</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("quote")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <h3 className="font-semibold mb-2">Testimonials</h3>
-                    <p className="text-sm text-gray-600">Add or edit customer testimonials and reviews.</p>
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Learning Points</h3>
+                      <p className="text-sm text-gray-500">10 things readers will learn from the book</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("learning")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Testimonials</h3>
+                      <p className="text-sm text-gray-500">Customer reviews and feedback</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("testimonials")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Author Information</h3>
+                      <p className="text-sm text-gray-500">Author bio and social links</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("author")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Footer</h3>
+                      <p className="text-sm text-gray-500">Footer links and categories</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("footer")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Help and Resources */}
+              <h2 className="text-lg font-semibold mb-3">Help & Resources</h2>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="border border-gray-200 rounded-md p-4">
+                    <h3 className="font-medium mb-2">Editing Tips</h3>
+                    <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                      <li>Keep headlines short and compelling</li>
+                      <li>Use high-quality, authentic testimonials</li>
+                      <li>Ensure learning points are clear and concise</li>
+                      <li>Maintain a consistent tone throughout</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border border-gray-200 rounded-md p-4">
+                    <h3 className="font-medium mb-2">Need Help?</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      If you need assistance with editing your content or have technical issues, 
+                      contact our support team.
+                    </p>
+                    <div className="flex space-x-3">
+                      <a 
+                        href="mailto:support@example.com"
+                        className="text-sm text-cyan-700 hover:text-cyan-800 transition-colors"
+                      >
+                        Email Support
+                      </a>
+                      <span className="text-gray-300">|</span>
+                      <a 
+                        href="#"
+                        className="text-sm text-cyan-700 hover:text-cyan-800 transition-colors"
+                      >
+                        View Documentation
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -211,6 +434,42 @@ export default function AdminPage() {
                 <p className="text-gray-600 mb-4">Manage footer links, categories, and social media.</p>
                 <div className="mt-6">
                   <FooterEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "settings" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Site Settings</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Configure general settings for your website.</p>
+                <div className="mt-6">
+                  <SiteSettingsEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "seo" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">SEO & Metadata</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Optimize your site for search engines and social media.</p>
+                <div className="mt-6">
+                  <SeoEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "analytics" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Analytics & Tracking</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Configure analytics tools and tracking codes for your website.</p>
+                <div className="mt-6">
+                  <AnalyticsEditor />
                 </div>
               </div>
             </div>
