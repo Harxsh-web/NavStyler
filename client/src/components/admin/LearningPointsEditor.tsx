@@ -43,6 +43,15 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+
+// Define types for learning points
+interface LearningPoint {
+  id: number;
+  title: string;
+  description: string;
+  iconName?: string;
+  order: number;
+}
 import {
   AlertDialog,
   AlertDialogAction,

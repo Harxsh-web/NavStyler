@@ -43,6 +43,17 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+
+// Define types for testimonials
+interface Testimonial {
+  id: number;
+  author: string;
+  role?: string;
+  company?: string;
+  content: string;
+  rating?: number;
+  avatarUrl?: string;
+}
 import {
   AlertDialog,
   AlertDialogAction,
