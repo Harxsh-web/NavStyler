@@ -106,6 +106,14 @@ export interface IStorage {
   getSiteSetting(name: string): Promise<schema.SiteSetting | undefined>;
   updateSiteSetting(name: string, value: string): Promise<schema.SiteSetting>;
   
+  // Theme settings
+  getThemeSettings(): Promise<schema.ThemeSettings[]>;
+  getThemeSettingsByName(name: string): Promise<schema.ThemeSettings | undefined>;
+  getActiveTheme(): Promise<schema.ThemeSettings | undefined>;
+  createThemeSettings(data: schema.InsertThemeSettings): Promise<schema.ThemeSettings>;
+  updateThemeSettings(id: number, data: Partial<schema.InsertThemeSettings>): Promise<schema.ThemeSettings | undefined>;
+  deleteThemeSettings(id: number): Promise<boolean>;
+  
   // Session store for authentication
   sessionStore: any;
 }
@@ -186,10 +194,11 @@ export class DatabaseStorage implements IStorage {
   // Articles
   async getArticles(limit: number = 10): Promise<schema.Article[]> {
     try {
-      const articles = await db.execute(
-        `SELECT * FROM article WHERE is_published = true ORDER BY published_at DESC LIMIT ${limit}`
+      const articles = await query<schema.Article>(
+        `SELECT * FROM article WHERE is_published = true ORDER BY published_at DESC LIMIT $1`,
+        [limit]
       );
-      return articles.rows;
+      return articles;
     } catch (error) {
       console.error('Error fetching articles:', error);
       return [];
@@ -231,10 +240,11 @@ export class DatabaseStorage implements IStorage {
   // Videos
   async getVideos(limit: number = 10): Promise<schema.Video[]> {
     try {
-      const videos = await db.execute(
-        `SELECT * FROM video WHERE is_published = true ORDER BY published_at DESC LIMIT ${limit}`
+      const videos = await query<schema.Video>(
+        `SELECT * FROM video WHERE is_published = true ORDER BY published_at DESC LIMIT $1`,
+        [limit]
       );
-      return videos.rows;
+      return videos;
     } catch (error) {
       console.error('Error fetching videos:', error);
       return [];
@@ -654,6 +664,85 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return newSetting;
     }
+  }
+  
+  // Theme settings
+  async getThemeSettings(): Promise<schema.ThemeSettings[]> {
+    return db.select().from(schema.themeSettings);
+  }
+  
+  async getThemeSettingsByName(name: string): Promise<schema.ThemeSettings | undefined> {
+    const [theme] = await db.select()
+      .from(schema.themeSettings)
+      .where(eq(schema.themeSettings.name, name));
+    return theme;
+  }
+  
+  async getActiveTheme(): Promise<schema.ThemeSettings | undefined> {
+    try {
+      // Get the active theme (marked as appliesGlobally)
+      const [theme] = await db.select()
+        .from(schema.themeSettings)
+        .where(eq(schema.themeSettings.appliesGlobally, true))
+        .limit(1);
+      
+      // If no active theme exists, create a default one
+      if (!theme) {
+        return this.createThemeSettings({ 
+          name: 'Default', 
+          appliesGlobally: true 
+        } as schema.InsertThemeSettings);
+      }
+      
+      return theme;
+    } catch (error) {
+      console.error('Error getting active theme:', error);
+      return undefined;
+    }
+  }
+  
+  async createThemeSettings(data: schema.InsertThemeSettings): Promise<schema.ThemeSettings> {
+    // If this theme is set as global, make sure to clear any other global themes
+    if (data.appliesGlobally) {
+      await db.update(schema.themeSettings)
+        .set({ appliesGlobally: false })
+        .where(eq(schema.themeSettings.appliesGlobally, true));
+    }
+    
+    const [theme] = await db.insert(schema.themeSettings)
+      .values(data)
+      .returning();
+    return theme;
+  }
+  
+  async updateThemeSettings(id: number, data: Partial<schema.InsertThemeSettings>): Promise<schema.ThemeSettings | undefined> {
+    // If this theme is being set as global, make sure to clear any other global themes
+    if (data.appliesGlobally) {
+      await db.update(schema.themeSettings)
+        .set({ appliesGlobally: false })
+        .where(eq(schema.themeSettings.appliesGlobally, true));
+    }
+    
+    const [updated] = await db.update(schema.themeSettings)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(schema.themeSettings.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deleteThemeSettings(id: number): Promise<boolean> {
+    // Check if this is the only theme or the active global theme
+    const themes = await this.getThemeSettings();
+    const theme = themes.find(t => t.id === id);
+    
+    // Don't allow deletion if it's the only theme or if it's the global theme
+    if (themes.length <= 1 || (theme && theme.appliesGlobally)) {
+      return false;
+    }
+    
+    const result = await db.delete(schema.themeSettings)
+      .where(eq(schema.themeSettings.id, id));
+    return !!result;
   }
 }
 

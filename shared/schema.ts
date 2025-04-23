@@ -312,3 +312,31 @@ export const contentEngagement = pgTable("content_engagement", {
 export type ContentEngagement = typeof contentEngagement.$inferSelect;
 export type InsertContentEngagement = typeof contentEngagement.$inferInsert;
 export const insertContentEngagementSchema = createInsertSchema(contentEngagement);
+
+// Theme Settings
+export const themeSettings = pgTable("theme_settings", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  primaryColor: text("primary_color").default("#4f46e5").notNull(), // Indigo
+  secondaryColor: text("secondary_color").default("#0ea5e9").notNull(), // Sky blue
+  accentColor: text("accent_color").default("#f59e0b").notNull(), // Amber
+  textColor: text("text_color").default("#111827").notNull(), // Near black
+  backgroundColor: text("background_color").default("#ffffff").notNull(), // White
+  fontPrimary: text("font_primary").default("Inter").notNull(),
+  fontSecondary: text("font_secondary").default("Merriweather").notNull(),
+  buttonRadius: text("button_radius").default("0.5rem").notNull(),
+  buttonStyle: text("button_style").default("filled").notNull(), // filled, outline, ghost
+  cardStyle: text("card_style").default("shadow").notNull(), // shadow, border, flat
+  layoutStyle: text("layout_style").default("modern").notNull(), // modern, classic, minimal
+  isDarkMode: boolean("is_dark_mode").default(false).notNull(),
+  isHighContrast: boolean("is_high_contrast").default(false).notNull(),
+  headerStyle: text("header_style").default("default").notNull(), // default, centered, minimal
+  footerStyle: text("footer_style").default("standard").notNull(), // standard, simple, detailed
+  customCss: text("custom_css"),
+  appliesGlobally: boolean("applies_globally").default(true).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ThemeSettings = typeof themeSettings.$inferSelect;
+export type InsertThemeSettings = typeof themeSettings.$inferInsert;
+export const insertThemeSettingsSchema = createInsertSchema(themeSettings);
