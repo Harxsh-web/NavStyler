@@ -72,7 +72,7 @@ export default function AuthPage() {
               
               <Button 
                 type="submit" 
-                className="w-full"
+                className="w-full bg-blue-600 hover:bg-blue-700"
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? (

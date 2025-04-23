@@ -25,7 +25,7 @@ export default function Logo() {
             strokeLinejoin="round"
           />
         </svg>
-        <span className="ml-2 text-xl font-semibold text-[#1A1A1A]">Ali Abdaal</span>
+        <span className="ml-2 text-xl font-semibold text-[#1A1A1A]">Luke Mikic</span>
       </div>
     </Link>
   );

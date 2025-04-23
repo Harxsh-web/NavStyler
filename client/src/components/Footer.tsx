@@ -19,10 +19,10 @@ export default function Footer() {
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
                 <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span className="text-2xl font-bold">Ali Abdaal</span>
+              <span className="text-2xl font-bold">Luke Mikic</span>
             </div>
             <p className="text-gray-500 text-sm">
-              © Ali Abdaal {currentYear}. All rights reserved.
+              © Luke Mikic {currentYear}. All rights reserved.
             </p>
           </div>
           
