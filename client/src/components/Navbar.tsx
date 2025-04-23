@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 import { HiOutlineDocument, HiOutlineBookOpen, HiOutlineVideoCamera } from 'react-icons/hi';
 import { BiPodcast } from 'react-icons/bi';
@@ -206,10 +205,6 @@ export default function Navbar() {
                 Join 270k+ Subscribers
               </Button>
             </Link>
-            
-            <div className="flex items-center">
-              <ThemeToggle />
-            </div>
           </nav>
           
           {/* Mobile menu button and drawer */}
@@ -305,10 +300,6 @@ export default function Navbar() {
                     Join 270k+ Subscribers
                   </Button>
                 </Link>
-                
-                <div className="flex justify-center py-4">
-                  <ThemeToggle />
-                </div>
               </div>
             </SheetContent>
           </Sheet>
