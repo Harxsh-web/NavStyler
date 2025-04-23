@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 import { HiOutlineDocument, HiOutlineBookOpen, HiOutlineVideoCamera } from 'react-icons/hi';
 import { BiPodcast } from 'react-icons/bi';
@@ -115,7 +116,9 @@ export default function Navbar() {
   
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white shadow-sm py-3' : 'bg-gray-50 py-5'
+      scrolled 
+        ? 'bg-white dark:bg-gray-900 shadow-sm py-3' 
+        : 'bg-gray-50 dark:bg-gray-800 py-5'
     }`}>
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex justify-between items-center">
@@ -132,12 +135,12 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/my-book">
-              <span className="text-gray-700 hover:text-black font-medium cursor-pointer">My Book</span>
+              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">My Book</span>
             </Link>
             
             {/* Free Resources Dropdown - Desktop */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center space-x-1 text-gray-700 hover:text-black font-medium focus:outline-none bg-transparent border-none">
+              <DropdownMenuTrigger className="flex items-center space-x-1 text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium focus:outline-none bg-transparent border-none">
                 <span>Free Resources</span>
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
@@ -191,11 +194,11 @@ export default function Navbar() {
             </DropdownMenu>
             
             <Link href="/youtube-academy">
-              <span className="text-gray-700 hover:text-black font-medium cursor-pointer">YouTube Academy</span>
+              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">YouTube Academy</span>
             </Link>
             
             <Link href="/lifeos">
-              <span className="text-gray-700 hover:text-black font-medium cursor-pointer">LifeOS Productivity System</span>
+              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">LifeOS Productivity System</span>
             </Link>
             
             <Link href="/newsletter">
@@ -203,6 +206,8 @@ export default function Navbar() {
                 Join 270k+ Subscribers
               </Button>
             </Link>
+            
+            <ThemeToggle />
           </nav>
           
           {/* Mobile menu button and drawer */}
@@ -212,7 +217,7 @@ export default function Navbar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full pt-12 px-6">
+            <SheetContent className="w-full pt-12 px-6 dark:bg-gray-900">
               <SheetHeader>
                 <SheetTitle className="text-left">
                   <div className="flex items-center">
@@ -298,6 +303,10 @@ export default function Navbar() {
                     Join 270k+ Subscribers
                   </Button>
                 </Link>
+                
+                <div className="flex justify-center py-4">
+                  <ThemeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
