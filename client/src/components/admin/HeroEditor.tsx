@@ -62,6 +62,8 @@ export function HeroEditor() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/hero"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/hero"] });
       toast({
         title: "Success",
