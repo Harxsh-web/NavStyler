@@ -387,8 +387,23 @@ export function ThemeSettingsComponent() {
         </TabsContent>
         
         <TabsContent value="editor">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-semibold">
+              {isCreating ? 'Create New Theme' : `Edit: ${selectedTheme?.name}`}
+            </h3>
+            <Button 
+              type="submit" 
+              form="theme-form"
+              disabled={isBusy} 
+              size="lg"
+              className="bg-primary hover:bg-primary/90"
+            >
+              {isBusy && <RefreshCw className="mr-2 h-4 w-4 animate-spin" />}
+              {isCreating ? 'Create Theme' : 'Save Theme'}
+            </Button>
+          </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form id="theme-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Basic Information</h3>

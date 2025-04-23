@@ -109,7 +109,10 @@ export default function AdminPage() {
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "learning" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
               }`}
-              onClick={() => setActiveTab("learning")}
+              onClick={() => {
+                setActiveTab("learning");
+                if (window.innerWidth < 1024) setShowSidebar(false);
+              }}
             >
               Learning Points
             </button>
@@ -118,7 +121,10 @@ export default function AdminPage() {
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "testimonials" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
               }`}
-              onClick={() => setActiveTab("testimonials")}
+              onClick={() => {
+                setActiveTab("testimonials");
+                if (window.innerWidth < 1024) setShowSidebar(false);
+              }}
             >
               Testimonials
             </button>
