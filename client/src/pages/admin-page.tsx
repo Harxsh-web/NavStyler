@@ -16,6 +16,7 @@ import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -45,17 +46,37 @@ export default function AdminPage() {
         </div>
       </header>
       
+      {/* Mobile Menu Button - Only visible on small screens */}
+      <div className="lg:hidden bg-white border-b border-gray-200 p-2">
+        <button 
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="w-full flex items-center justify-center gap-2 text-gray-600 px-4 py-2 rounded-md border border-gray-200 hover:bg-gray-50"
+        >
+          <span>{showSidebar ? 'Hide Menu' : 'Show Menu'}</span>
+          {showSidebar ? 
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            :
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          }
+        </button>
+      </div>
+
       {/* Main Content */}
-      <div className="flex-grow flex">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-sm p-4">
+      <div className="flex-grow flex flex-col lg:flex-row">
+        {/* Sidebar - responsive with conditional rendering */}
+        <aside 
+          className={`${showSidebar ? 'block' : 'hidden'} lg:block bg-white shadow-sm p-4 w-full lg:w-64 lg:min-h-[calc(100vh-68px)] lg:sticky lg:top-16 overflow-y-auto`}
+        >
           <h2 className="text-lg font-semibold mb-4">Content Management</h2>
           <nav className="space-y-1">
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "dashboard" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
               }`}
-              onClick={() => setActiveTab("dashboard")}
+              onClick={() => {
+                setActiveTab("dashboard");
+                if (window.innerWidth < 1024) setShowSidebar(false);
+              }}
             >
               Dashboard
             </button>
@@ -64,7 +85,10 @@ export default function AdminPage() {
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "hero" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
               }`}
-              onClick={() => setActiveTab("hero")}
+              onClick={() => {
+                setActiveTab("hero");
+                if (window.innerWidth < 1024) setShowSidebar(false);
+              }}
             >
               Hero Section
             </button>
@@ -73,7 +97,10 @@ export default function AdminPage() {
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "quote" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
               }`}
-              onClick={() => setActiveTab("quote")}
+              onClick={() => {
+                setActiveTab("quote");
+                if (window.innerWidth < 1024) setShowSidebar(false);
+              }}
             >
               Quote Section
             </button>
@@ -165,51 +192,51 @@ export default function AdminPage() {
               <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
               
               {/* Welcome Card */}
-              <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 text-white shadow-sm rounded-lg p-6 mb-6">
-                <h2 className="text-xl font-semibold mb-2">Welcome to the Feel-Good Productivity Admin Panel</h2>
-                <p className="opacity-90 mb-4">
+              <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 text-white shadow-sm rounded-lg p-4 sm:p-6 mb-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-2">Welcome to the Feel-Good Productivity Admin Panel</h2>
+                <p className="opacity-90 mb-4 text-sm sm:text-base">
                   Manage your landing page content from this central dashboard. All changes are published immediately.
                 </p>
-                <div className="flex gap-4 mt-4">
-                  <a href="/" target="_blank" rel="noopener noreferrer" className="text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-4">
+                  <a href="/" target="_blank" rel="noopener noreferrer" className="text-center text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                     View Live Site
                   </a>
-                  <button onClick={() => setActiveTab("hero")} className="text-cyan-700 bg-white hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                  <button onClick={() => setActiveTab("hero")} className="text-center text-cyan-700 bg-white hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                     Edit Hero Section
                   </button>
                 </div>
               </div>
               
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Hero Section</span>
-                    <span className="text-2xl font-bold mt-1">1</span>
+                    <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
                     <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
                   </div>
                 </div>
                 
-                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Learning Points</span>
-                    <span className="text-2xl font-bold mt-1">10</span>
-                    <span className="text-xs text-gray-500 mt-1">Total points configured</span>
+                    <span className="text-xl sm:text-2xl font-bold mt-1">10</span>
+                    <span className="text-xs text-gray-500 mt-1">Total points</span>
                   </div>
                 </div>
                 
-                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Testimonials</span>
-                    <span className="text-2xl font-bold mt-1">5</span>
+                    <span className="text-xl sm:text-2xl font-bold mt-1">5</span>
                     <span className="text-xs text-gray-500 mt-1">Active testimonials</span>
                   </div>
                 </div>
                 
-                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Author</span>
-                    <span className="text-2xl font-bold mt-1">1</span>
+                    <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
                     <span className="text-xs text-gray-500 mt-1">Profile configured</span>
                   </div>
                 </div>
@@ -217,7 +244,7 @@ export default function AdminPage() {
               
               {/* Quick Actions */}
               <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <button 
                   onClick={() => setActiveTab("hero")}
                   className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
@@ -338,8 +365,8 @@ export default function AdminPage() {
               
               {/* Help and Resources */}
               <h2 className="text-lg font-semibold mb-3">Help & Resources</h2>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div className="border border-gray-200 rounded-md p-4">
                     <h3 className="font-medium mb-2">Editing Tips</h3>
                     <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
