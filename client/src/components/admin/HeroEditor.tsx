@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useHeroSection } from "@/hooks/use-content";
+import { useHeroSection, useRefreshAdminContent } from "@/hooks/use-content";
 import { apiRequest } from "@/lib/queryClient";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -9,10 +9,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { AdminCard } from "./AdminCard";
 
 const heroSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -84,45 +84,39 @@ export function HeroEditor() {
     updateHeroMutation.mutate(values);
   };
 
+  // Get refresh mutation
+  const refreshContentMutation = useRefreshAdminContent();
+
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Hero Section</CardTitle>
-        </CardHeader>
-        <CardContent className="flex justify-center py-8">
+      <AdminCard title="Hero Section">
+        <div className="flex justify-center py-8">
           <Loader2 className="h-8 w-8 animate-spin" />
-        </CardContent>
-      </Card>
+        </div>
+      </AdminCard>
     );
   }
 
   if (error) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Hero Section</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-destructive">Error loading hero section: {error.message}</p>
-          <Button 
-            variant="outline" 
-            onClick={() => queryClient.invalidateQueries({ queryKey: ["/api/content/hero"] })}
-            className="mt-4"
-          >
-            Retry
-          </Button>
-        </CardContent>
-      </Card>
+      <AdminCard title="Hero Section">
+        <p className="text-destructive">Error loading hero section: {error.message}</p>
+        <Button 
+          variant="outline" 
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["/api/content/hero"] })}
+          className="mt-4"
+        >
+          Retry
+        </Button>
+      </AdminCard>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Edit Hero Section</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <AdminCard 
+      title="Edit Hero Section"
+      description="Update the hero section displayed at the top of the homepage"
+    >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
@@ -241,6 +235,37 @@ export function HeroEditor() {
               >
                 Reset
               </Button>
+              
+              {/* Save and Preview button - saves changes then opens the homepage */}
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={updateHeroMutation.isPending}
+                onClick={() => {
+                  const values = form.getValues();
+                  updateHeroMutation.mutate(values, {
+                    onSuccess: () => {
+                      refreshContentMutation.mutate();
+                      // Open homepage in new tab
+                      setTimeout(() => window.open('/', '_blank'), 500);
+                    }
+                  });
+                }}
+              >
+                {updateHeroMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Save & Preview
+                  </>
+                )}
+              </Button>
+              
+              {/* Regular Save button */}
               <Button
                 type="submit"
                 disabled={updateHeroMutation.isPending}
@@ -257,7 +282,6 @@ export function HeroEditor() {
             </div>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+    </AdminCard>
   );
 }

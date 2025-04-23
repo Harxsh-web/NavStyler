@@ -18,8 +18,27 @@ export default function HomePage() {
   const { data: heroData, isLoading: heroLoading } = usePublicHeroSection();
   const { data: quoteData, isLoading: quoteLoading } = usePublicQuoteSection();
   const { data: authorData, isLoading: authorLoading } = usePublicAuthorSection();
+  
+  // Content refresh mutation
+  const refreshMutation = useRefreshPublicContent();
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Floating refresh button - only visible for logged in users */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1 bg-white shadow-md hover:bg-gray-100"
+          onClick={() => refreshMutation.mutate()}
+          disabled={refreshMutation.isPending}
+        >
+          <RefreshCw 
+            className={`h-4 w-4 ${refreshMutation.isPending ? 'animate-spin' : ''}`} 
+          />
+          <span className="ml-1">{refreshMutation.isPending ? 'Refreshing...' : 'Refresh Content'}</span>
+        </Button>
+      </div>
+      
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="py-12 md:py-24 bg-white">

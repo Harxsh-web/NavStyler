@@ -1,6 +1,50 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useRefreshPublicContent } from "@/hooks/use-public-content";
+
+/**
+ * Hook for refreshing content in admin components
+ * This ensures that both admin state and public content are refreshed
+ */
+export function useRefreshAdminContent() {
+  const { toast } = useToast();
+  // Get the public content refresh mutation
+  const refreshPublicContent = useRefreshPublicContent();
+  
+  return useMutation({
+    mutationFn: async () => {
+      // This is just a function to trigger refresh
+      return true;
+    },
+    onSuccess: () => {
+      // Invalidate all admin content queries
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/hero"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/quote"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/learning-points"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonial-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/about-book"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/author"] });
+      
+      // Also trigger the public content refresh
+      refreshPublicContent.mutate();
+      
+      toast({
+        title: "Content refreshed",
+        description: "All content has been refreshed from the database.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error refreshing content",
+        description: error instanceof Error ? error.message : "Failed to refresh content",
+        variant: "destructive",
+      });
+    },
+  });
+}
 
 /**
  * Hook for managing footer-related content
