@@ -30,7 +30,7 @@ export default function Home() {
               <div className="max-w-[350px] rounded-xl overflow-hidden shadow-lg">
                 <div className="bg-yellow-400 p-5 text-center rounded-t-xl">
                   <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
-                  <h3 className="text-2xl md:text-3xl font-bold">Ali Abdaal</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold">Luke Mikic</h3>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="bg-[#30B8C4] text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
@@ -71,7 +71,7 @@ export default function Home() {
               <div className="rounded-xl overflow-hidden shadow-lg">
                 <div className="bg-yellow-400 p-4 text-center rounded-t-xl">
                   <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
-                  <h3 className="text-2xl font-bold">Ali Abdaal</h3>
+                  <h3 className="text-2xl font-bold">Luke Mikic</h3>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="bg-[#30B8C4] text-white p-4 flex items-center justify-center text-xl font-bold">
@@ -303,7 +303,7 @@ export default function Home() {
               </p>
               
               <p>
-                In <em>Feel-Good Productivity</em>, Dr Ali Abdaal uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
+                In <em>Feel-Good Productivity</em>, Luke Mikic uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
               </p>
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function Home() {
               </p>
               
               <p>
-                In <em>Feel-Good Productivity</em>, Dr Ali Abdaal uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
+                In <em>Feel-Good Productivity</em>, Luke Mikic uncovers an easier, science-backed path to success. He demonstrates that the secret to productivity isn't grind, it's <em>feeling good</em>. And he reveals how to make your projects feel so enjoyable that productivity takes care of itself.
               </p>
             </div>
           </div>
@@ -613,7 +613,7 @@ export default function Home() {
               <div className="max-w-[300px] rounded-xl overflow-hidden shadow-lg">
                 <div className="bg-yellow-400 p-5 text-center rounded-t-xl">
                   <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
-                  <h3 className="text-2xl md:text-3xl font-bold">Ali Abdaal</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold">Luke Mikic</h3>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="bg-[#30B8C4] text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
@@ -673,7 +673,7 @@ export default function Home() {
               <div className="max-w-[250px] rounded-xl overflow-hidden shadow-lg">
                 <div className="bg-yellow-400 p-4 text-center rounded-t-xl">
                   <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
-                  <h3 className="text-xl font-bold">Ali Abdaal</h3>
+                  <h3 className="text-xl font-bold">Luke Mikic</h3>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="bg-[#30B8C4] text-white p-4 flex items-center justify-center text-xl font-bold">
@@ -742,17 +742,17 @@ export default function Home() {
               <div className="rounded-xl overflow-hidden shadow-lg">
                 <img 
                   src="https://placehold.co/800x600/png?text=Ali+Abdaal" 
-                  alt="Ali Abdaal" 
+                  alt="Luke Mikic" 
                   className="w-full h-auto"
                 />
               </div>
             </div>
             
             <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-[#1A1A1A]">Ali Abdaal</h3>
+              <h3 className="text-3xl font-bold text-[#1A1A1A]">Luke Mikic</h3>
               <div className="space-y-4 text-gray-700">
                 <p>
-                  Ali Abdaal is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                  Luke Mikicis a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
                 </p>
                 
                 <p>
@@ -771,16 +771,16 @@ export default function Home() {
             <div className="rounded-lg overflow-hidden shadow-md">
               <img 
                 src="https://placehold.co/800x600/png?text=Ali+Abdaal" 
-                alt="Ali Abdaal" 
+                alt="Luke Mikic" 
                 className="w-full h-auto"
               />
             </div>
             
             <div className="bg-[#FAF9F6] p-6 rounded-lg">
-              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4 text-center">Ali Abdaal</h3>
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4 text-center">Luke Mikic</h3>
               <div className="space-y-3 text-gray-700 text-sm">
                 <p>
-                  Ali Abdaal is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                  Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
                 </p>
                 
                 <p>

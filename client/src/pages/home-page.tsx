@@ -62,7 +62,7 @@ export default function HomePage() {
                   <span className="absolute bottom-1 left-0 w-full h-1.5 bg-yellow-300"></span>
                 </span> you feel about what you're doing."
               </p>
-              <cite className="text-gray-600 text-lg font-normal">— Dr. Ali Abdaal</cite>
+              <cite className="text-gray-600 text-lg font-normal">— Luke Mikic</cite>
             </blockquote>
           </div>
         </section>
@@ -215,7 +215,7 @@ export default function HomePage() {
                 <h3 className="text-2xl font-bold mb-5">Introduction</h3>
                 <h4 className="text-xl font-semibold mb-3">The Art & Science of Feel-Good Productivity</h4>
                 <p className="text-gray-700 mb-6">
-                  Ali shares his journey from stressed-out doctor to successful entrepreneur, and how he discovered the science of Feel-Good Productivity. You'll understand the psychological and neuroscientific evidence for why positive emotions fuel success, and explore how <span className="italic">feeling good</span> in your work can boost your energy, reduce your stress, and enrich your life.
+                  Luke shares his journey from stressed-out doctor to successful entrepreneur, and how he discovered the science of Feel-Good Productivity. You'll understand the psychological and neuroscientific evidence for why positive emotions fuel success, and explore how <span className="italic">feeling good</span> in your work can boost your energy, reduce your stress, and enrich your life.
                 </p>
                 
                 <h3 className="text-2xl font-bold mb-5">Part 1</h3>
@@ -252,15 +252,15 @@ export default function HomePage() {
               <div className="md:w-1/3">
                 <img 
                   src="https://images.squarespace-cdn.com/content/v1/612d6a724e45b00a001f2501/1650285544747-5YVXL8ZSVBGXFUTK85EN/Ali_Abdaal_Headshots_30.jpg" 
-                  alt="Ali Abdaal" 
+                  alt="Luke Mikic" 
                   className="w-full h-auto rounded-lg shadow-md"
                 />
               </div>
               
               <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold mb-4">Ali Abdaal</h3>
+                <h3 className="text-2xl font-bold mb-4">Luke Mikic</h3>
                 <p className="text-gray-700 mb-4">
-                  Ali Abdaal is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                  Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
                 </p>
                 <p className="text-gray-700 mb-4">
                   Ali became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Ali started to document his journey towards living a healthier, happier, more productive life online. In the years since, Ali's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
