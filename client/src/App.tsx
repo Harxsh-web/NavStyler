@@ -13,6 +13,7 @@ import { ProtectedRoute } from "@/lib/protected-route";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "@/components/PageTransition";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
@@ -78,11 +79,13 @@ export default function App() {
     <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Navbar />
-          <div className="pt-20">
-            <Router />
-          </div>
-          <Toaster />
+          <ThemeSettingsProvider>
+            <Navbar />
+            <div className="pt-20">
+              <Router />
+            </div>
+            <Toaster />
+          </ThemeSettingsProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

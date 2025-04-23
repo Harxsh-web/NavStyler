@@ -194,11 +194,11 @@ export class DatabaseStorage implements IStorage {
   // Articles
   async getArticles(limit: number = 10): Promise<schema.Article[]> {
     try {
-      const articles = await query<schema.Article>(
+      const result = await query(
         `SELECT * FROM article WHERE is_published = true ORDER BY published_at DESC LIMIT $1`,
         [limit]
       );
-      return articles;
+      return result.rows as schema.Article[];
     } catch (error) {
       console.error('Error fetching articles:', error);
       return [];
@@ -240,11 +240,11 @@ export class DatabaseStorage implements IStorage {
   // Videos
   async getVideos(limit: number = 10): Promise<schema.Video[]> {
     try {
-      const videos = await query<schema.Video>(
+      const result = await query(
         `SELECT * FROM video WHERE is_published = true ORDER BY published_at DESC LIMIT $1`,
         [limit]
       );
-      return videos;
+      return result.rows as schema.Video[];
     } catch (error) {
       console.error('Error fetching videos:', error);
       return [];
