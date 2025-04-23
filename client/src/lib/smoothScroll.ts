@@ -32,9 +32,13 @@ export function smoothScrollTo(
     if (startTime === null) startTime = currentTime;
     const timeElapsed = currentTime - startTime;
     const progress = Math.min(timeElapsed / duration, 1);
-    const easeInOut = progress => progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+    
+    // Define easing function with proper type annotation
+    const easeInOut = (p: number): number => {
+      return p < 0.5
+        ? 2 * p * p
+        : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    };
     
     window.scrollTo(0, startPosition + distance * easeInOut(progress));
     

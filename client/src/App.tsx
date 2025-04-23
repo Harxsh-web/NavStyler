@@ -17,6 +17,7 @@ import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "@/components/PageTransition";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
+import { useEffect } from "react";
 
 function Router() {
   // Get current location for AnimatePresence
@@ -74,6 +75,28 @@ export default function App() {
     offset: 80, // Adjust based on your navbar height
     behavior: 'smooth'
   });
+
+  // Add effect to handle initial hash in URL for smooth scrolling
+  useEffect(() => {
+    // Check if URL has a hash on initial load
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      
+      // Use a small timeout to ensure DOM is fully loaded
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          // Using our custom smooth scroll with a slightly larger offset for fixed header
+          import('@/lib/smoothScroll').then(({ smoothScrollTo }) => {
+            smoothScrollTo(id, { 
+              offset: 100,
+              duration: 800 
+            });
+          });
+        }
+      }, 300);
+    }
+  }, []);
 
   return (
     <ThemeProvider defaultTheme="light">

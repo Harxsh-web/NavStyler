@@ -1,0 +1,30 @@
+import { useEffect } from 'react';
+import { setupSmoothScrolling } from '@/lib/smoothScroll';
+
+interface SmoothScrollOptions {
+  offset?: number;
+  behavior?: ScrollBehavior;
+}
+
+/**
+ * Hook to enable smooth scrolling for anchor links
+ * This combines both CSS-based smooth scrolling and our custom implementation
+ */
+export function useSmoothScroll(options: SmoothScrollOptions = {}) {
+  useEffect(() => {
+    // Set up CSS-based smooth scrolling if specified
+    if (options.behavior === 'smooth') {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    // Set up our custom JS-based smooth scrolling
+    setupSmoothScrolling();
+
+    // Clean up
+    return () => {
+      document.documentElement.style.scrollBehavior = '';
+    };
+  }, [options.behavior]);
+}
+
+export default useSmoothScroll;
