@@ -267,10 +267,18 @@ export function ThemeSettingsComponent() {
   
   return (
     <AdminCard title="Theme Settings" description="Customize the appearance of your site">
+      <div className="mb-4 bg-muted p-2 rounded text-sm text-muted-foreground">
+        <p>To save your theme changes, go to the <strong>Theme Editor</strong> tab and click the <strong>Save Theme</strong> button at the bottom of the form.</p>
+      </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="themes">Available Themes</TabsTrigger>
-          <TabsTrigger value="editor">Theme Editor</TabsTrigger>
+          <TabsTrigger value="editor" className="bg-primary/10 relative">
+            Theme Editor
+            {(isCreating || selectedTheme) && (
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-primary"></span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
         
@@ -826,10 +834,13 @@ export function ThemeSettingsComponent() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isBusy}>
+                <Button type="submit" disabled={isBusy} className="bg-primary hover:bg-primary/90">
                   {isBusy && <RefreshCw className="mr-2 h-4 w-4 animate-spin" />}
-                  {isCreating ? 'Create Theme' : 'Update Theme'}
+                  {isCreating ? 'Create Theme' : 'Save Theme'}
                 </Button>
+              </div>
+              <div className="mt-2 text-center text-sm text-muted-foreground">
+                Click "Save Theme" to apply your changes
               </div>
             </form>
           </Form>
