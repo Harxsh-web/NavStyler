@@ -848,21 +848,27 @@ export function ThemeSettingsComponent() {
                 />
               </div>
               
-              <div className="flex justify-end gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-4 pt-8 pb-4">
                 <Button 
                   type="button" 
                   variant="outline" 
                   onClick={() => setActiveTab('themes')}
+                  className="w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isBusy} className="bg-primary hover:bg-primary/90">
-                  {isBusy && <RefreshCw className="mr-2 h-4 w-4 animate-spin" />}
+                <Button 
+                  type="submit" 
+                  disabled={isBusy} 
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto text-lg py-6 font-semibold shadow-lg"
+                >
+                  {isBusy && <RefreshCw className="mr-2 h-5 w-5 animate-spin" />}
                   {isCreating ? 'Create Theme' : 'Save Theme'}
                 </Button>
               </div>
-              <div className="mt-2 text-center text-sm text-muted-foreground">
-                Click "Save Theme" to apply your changes
+              <div className="mt-4 text-center text-sm font-medium bg-amber-50 border border-amber-200 p-4 rounded-md">
+                <strong>Important:</strong> You must click "Save Theme" to apply and save your changes
               </div>
             </form>
           </Form>
