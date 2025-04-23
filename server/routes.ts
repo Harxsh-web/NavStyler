@@ -5,6 +5,7 @@ import { adminRouter } from "./adminRoutes";
 import { contentRouter } from "./contentRoutes";
 import analyticsRouter from "./analyticsRoutes";
 import stripeRouter from "./stripeRoutes";
+import themeRouter from "./themeRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -21,6 +22,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Stripe payment routes
   app.use("/api", stripeRouter);
+  
+  // Theme routes
+  app.use("/api/themes", themeRouter);
   
   // Initialize database
   await initializeDatabase();
