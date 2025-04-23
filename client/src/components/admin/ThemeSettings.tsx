@@ -76,7 +76,8 @@ const ThemeFormSchema = z.object({
 
 type ThemeFormValues = z.infer<typeof ThemeFormSchema>;
 
-export function ThemeSettings() {
+// Renamed to avoid naming conflict with the ThemeSettings interface
+export function ThemeSettingsComponent() {
   const { toast } = useToast();
   const { 
     themes, 

@@ -10,6 +10,8 @@ import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
 import { SeoEditor } from "@/components/admin/SeoEditor";
 import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
+import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
+import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -143,6 +145,15 @@ export default function AdminPage() {
               onClick={() => setActiveTab("analytics")}
             >
               Analytics
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "themes" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("themes")}
+            >
+              Theme Settings
             </button>
           </nav>
         </aside>
@@ -473,6 +484,18 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+          )}
+          
+          {activeTab === "themes" && (
+            <ThemeSettingsProvider>
+              <div>
+                <h1 className="text-2xl font-bold mb-6">Theme Settings</h1>
+                <p className="text-gray-600 mb-4">Customize the appearance of your website by managing themes.</p>
+                <div className="mt-6">
+                  <ThemeSettingsComponent />
+                </div>
+              </div>
+            </ThemeSettingsProvider>
           )}
         </main>
       </div>
