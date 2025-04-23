@@ -214,3 +214,49 @@ contentRouter.get("/site-settings", async (req, res, next) => {
     next(error);
   }
 });
+
+// Articles routes
+contentRouter.get("/articles", async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const articles = await storage.getArticles(limit);
+    res.json(articles);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/articles/:slug", async (req, res, next) => {
+  try {
+    const article = await storage.getArticleBySlug(req.params.slug);
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+    res.json(article);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Videos routes
+contentRouter.get("/videos", async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const videos = await storage.getVideos(limit);
+    res.json(videos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/videos/:slug", async (req, res, next) => {
+  try {
+    const video = await storage.getVideoBySlug(req.params.slug);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+    res.json(video);
+  } catch (error) {
+    next(error);
+  }
+});

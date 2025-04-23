@@ -531,3 +531,121 @@ adminRouter.put("/site-settings/:name", async (req, res, next) => {
     next(error);
   }
 });
+
+// Articles management
+adminRouter.get("/articles", async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+    const articles = await storage.getArticles(limit);
+    res.json(articles);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.get("/articles/:id", async (req, res, next) => {
+  try {
+    const articleId = parseInt(req.params.id);
+    const article = await storage.getArticle(articleId);
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+    res.json(article);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.post("/articles", validateRequest(schema.insertArticleSchema), async (req, res, next) => {
+  try {
+    const article = await storage.createArticle(req.validatedBody);
+    res.status(201).json(article);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put("/articles/:id", validateRequest(schema.insertArticleSchema.partial()), async (req, res, next) => {
+  try {
+    const articleId = parseInt(req.params.id);
+    const article = await storage.updateArticle(articleId, req.validatedBody);
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+    res.json(article);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.delete("/articles/:id", async (req, res, next) => {
+  try {
+    const articleId = parseInt(req.params.id);
+    const success = await storage.deleteArticle(articleId);
+    if (!success) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Videos management
+adminRouter.get("/videos", async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+    const videos = await storage.getVideos(limit);
+    res.json(videos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.get("/videos/:id", async (req, res, next) => {
+  try {
+    const videoId = parseInt(req.params.id);
+    const video = await storage.getVideo(videoId);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+    res.json(video);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.post("/videos", validateRequest(schema.insertVideoSchema), async (req, res, next) => {
+  try {
+    const video = await storage.createVideo(req.validatedBody);
+    res.status(201).json(video);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put("/videos/:id", validateRequest(schema.insertVideoSchema.partial()), async (req, res, next) => {
+  try {
+    const videoId = parseInt(req.params.id);
+    const video = await storage.updateVideo(videoId, req.validatedBody);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+    res.json(video);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.delete("/videos/:id", async (req, res, next) => {
+  try {
+    const videoId = parseInt(req.params.id);
+    const success = await storage.deleteVideo(videoId);
+    if (!success) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
