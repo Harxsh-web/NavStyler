@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -14,7 +14,7 @@ type ThemeProviderState = {
 };
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "light",
   setTheme: () => null,
 };
 
@@ -31,42 +31,46 @@ function useTheme() {
   return context;
 }
 
-// ThemeProvider component
+// ThemeProvider component that always forces light theme
 function ThemeProvider({
   children,
-  defaultTheme = "light", // Set default theme to light
   storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
-  // No need for state as we're always using light theme
   
-  // Force light theme on all pages
+  // Apply light theme immediately and on mount
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    // Apply light theme to the document
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
     
-    const root = window.document.documentElement;
-    root.classList.remove("dark");
-    root.classList.add("light");
-    
-    // Store the theme preference
+    // Store light theme in localStorage
     try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(storageKey, "light");
-      }
+      localStorage.setItem(storageKey, "light");
     } catch (error) {
       console.error("Error setting localStorage:", error);
     }
+    
+    // Force light theme on media change
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+    };
+    
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [storageKey]);
 
-  // Always provide light theme regardless of what's requested
-  const value = {
-    theme: "light" as Theme,
+  // Our context value never changes - always light theme
+  const value: ThemeProviderState = {
+    theme: "light",
     setTheme: () => {
-      // Do nothing - we always use light theme
+      // Always set to light theme regardless of input
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
       try {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(storageKey, "light");
-        }
+        localStorage.setItem(storageKey, "light");
       } catch (error) {
         console.error("Error setting localStorage:", error);
       }
