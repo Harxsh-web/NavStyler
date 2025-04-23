@@ -5,6 +5,8 @@ import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
+import CheckoutPage from "@/pages/checkout";
+import PaymentSuccessPage from "@/pages/payment-success";
 import Navbar from "@/components/Navbar";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -36,6 +38,21 @@ function Router() {
             <AdminPage />
           </PageTransition>
         )} />
+        <Route path="/checkout">
+          <PageTransition>
+            <CheckoutPage />
+          </PageTransition>
+        </Route>
+        <Route path="/payment-success">
+          <PageTransition>
+            <PaymentSuccessPage />
+          </PageTransition>
+        </Route>
+        <Route path="/admin/analytics">
+          <PageTransition>
+            <ProtectedRoute component={import('@/pages/admin/analytics').then(m => m.default)} />
+          </PageTransition>
+        </Route>
         <Route>
           <PageTransition>
             <NotFound />

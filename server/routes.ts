@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { adminRouter } from "./adminRoutes";
 import { contentRouter } from "./contentRoutes";
+import analyticsRouter from "./analyticsRoutes";
+import stripeRouter from "./stripeRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -13,6 +15,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Admin routes - restricted access
   app.use("/api/admin", adminRouter);
+  
+  // Analytics routes - admin only
+  app.use("/api/analytics", analyticsRouter);
+  
+  // Stripe payment routes
+  app.use("/api", stripeRouter);
   
   // Initialize database
   await initializeDatabase();
