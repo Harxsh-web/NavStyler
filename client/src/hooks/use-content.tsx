@@ -660,7 +660,10 @@ export function useTestimonials() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Testimonial updated successfully",
@@ -685,7 +688,10 @@ export function useTestimonials() {
       return true;
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Testimonial deleted successfully",
@@ -738,7 +744,10 @@ export function useAuthorSection() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/author"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/author"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Author section updated successfully",
@@ -789,7 +798,10 @@ export function useHeroSection() {
       return await res.json();
     },
     onSuccess: () => {
+      // Invalidate both admin and public content endpoints
       queryClient.invalidateQueries({ queryKey: ["/api/admin/hero"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/hero"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
       toast({
         title: "Success",
         description: "Hero section updated successfully",
