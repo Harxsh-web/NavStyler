@@ -38,7 +38,7 @@ import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { PlusCircle, Trash2, Check, RefreshCw, Copy, Paintbrush } from 'lucide-react';
+import { PlusCircle, Trash2, Check, RefreshCw, Copy, Paintbrush, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useThemeSettings, ThemeSettings } from '@/hooks/use-theme-settings';
 import { AdminCard } from './AdminCard';
@@ -387,8 +387,8 @@ export function ThemeSettingsComponent() {
         </TabsContent>
         
         <TabsContent value="editor">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold">
+          <div className="sticky top-0 z-10 bg-white flex justify-between items-center py-4 mb-6 border-b">
+            <h3 className="text-xl font-semibold">
               {isCreating ? 'Create New Theme' : `Edit: ${selectedTheme?.name}`}
             </h3>
             <Button 
@@ -396,10 +396,10 @@ export function ThemeSettingsComponent() {
               form="theme-form"
               disabled={isBusy} 
               size="lg"
-              className="bg-primary hover:bg-primary/90"
+              className="bg-green-600 hover:bg-green-700 text-white shadow-lg px-6 animate-pulse"
             >
               {isBusy && <RefreshCw className="mr-2 h-4 w-4 animate-spin" />}
-              {isCreating ? 'Create Theme' : 'Save Theme'}
+              <span className="font-semibold">{isCreating ? 'Create Theme' : 'Save Theme'}</span>
             </Button>
           </div>
           <Form {...form}>
@@ -867,8 +867,29 @@ export function ThemeSettingsComponent() {
                   {isCreating ? 'Create Theme' : 'Save Theme'}
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm font-medium bg-amber-50 border border-amber-200 p-4 rounded-md">
-                <strong>Important:</strong> You must click "Save Theme" to apply and save your changes
+              <div className="mt-8 flex flex-col space-y-4">
+                <div className="p-4 bg-amber-50 border border-amber-200 rounded-md">
+                  <h4 className="text-base font-bold mb-2 flex items-center">
+                    <AlertCircle className="h-5 w-5 mr-2 text-amber-600" />
+                    Important Notice
+                  </h4>
+                  <p className="text-sm">
+                    Click the <span className="bg-green-600 text-white px-2 py-1 rounded-sm font-medium">green Save Theme</span> button at the top or bottom of this form to apply and save your changes. Changes won't take effect until saved.
+                  </p>
+                </div>
+                
+                {selectedTheme && (
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-md">
+                    <h4 className="text-base font-medium mb-1">Currently Editing:</h4>
+                    <div className="flex items-center">
+                      <div className="w-5 h-5 rounded-full mr-2" style={{ backgroundColor: selectedTheme.primaryColor }}></div>
+                      <p className="font-semibold">{selectedTheme.name}</p>
+                      {selectedTheme.appliesGlobally && (
+                        <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Active Theme</span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </form>
           </Form>
