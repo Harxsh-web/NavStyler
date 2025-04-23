@@ -114,10 +114,10 @@ export default function Navbar() {
   ];
   
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white dark:bg-gray-900 ${
       scrolled 
-        ? 'bg-white dark:bg-gray-900 shadow-sm py-3' 
-        : 'bg-gray-50 dark:bg-gray-800 py-5'
+        ? 'shadow-sm py-3' 
+        : 'py-5'
     }`}>
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex justify-between items-center">
@@ -214,7 +214,7 @@ export default function Navbar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full pt-12 px-6 dark:bg-gray-900">
+            <SheetContent className="w-full pt-12 px-6 bg-white dark:bg-gray-900">
               <SheetHeader>
                 <SheetTitle className="text-left">
                   <div className="flex items-center">
