@@ -206,7 +206,7 @@ export default function HomePage() {
                   />
                 </div>
                 <p className="text-gray-800 text-lg text-center mb-4">
-                  Ali is the absolute master on how to be productive without sacrificing your own happiness. This is the book we've all been waiting for.
+                  Luke is the absolute master on how to be productive without sacrificing your own happiness. This is the book we've all been waiting for.
                 </p>
                 <div className="text-center">
                   <h4 className="font-semibold text-lg">Dr Julie Smith</h4>
@@ -223,7 +223,7 @@ export default function HomePage() {
                   />
                 </div>
                 <p className="text-gray-800 text-lg text-center mb-4">
-                  Ali is the master of productivity. Nobody has a talent for distilling complicated ideas into fun, accessible and actionable insights quite like him.
+                  Luke is the master of productivity. Nobody has a talent for distilling complicated ideas into fun, accessible and actionable insights quite like him.
                 </p>
                 <div className="text-center">
                   <h4 className="font-semibold text-lg">Steven Bartlett</h4>
@@ -268,7 +268,7 @@ export default function HomePage() {
                 <h3 className="text-2xl font-bold mb-5">Part 1</h3>
                 <h4 className="text-xl font-semibold mb-3">Energise</h4>
                 <p className="text-gray-700 mb-6">
-                  Ali shares the three fundamental energizers that make us feel good and lead to true productivity. You'll discover the strategies that Nobel laureates and trailblazing founders of multimillion-dollar enterprises use to maintain motivation and outperform expectations, all by finding the fun in their projects.
+                  Luke shares the three fundamental energizers that make us feel good and lead to true productivity. You'll discover the strategies that Nobel laureates and trailblazing founders of multimillion-dollar enterprises use to maintain motivation and outperform expectations, all by finding the fun in their projects.
                 </p>
                 
                 <h3 className="text-2xl font-bold mb-5">Part 2</h3>
