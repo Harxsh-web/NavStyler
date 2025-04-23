@@ -1,5 +1,5 @@
 import * as schema from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { db } from "./db";
 import connectPg from "connect-pg-simple";
 import session from "express-session";
@@ -13,6 +13,22 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<schema.User | undefined>;
   getUserByEmail(email: string): Promise<schema.User | undefined>;
   createUser(user: schema.InsertUser): Promise<schema.User>;
+  
+  // Articles
+  getArticles(limit?: number): Promise<schema.Article[]>;
+  getArticle(id: number): Promise<schema.Article | undefined>;
+  getArticleBySlug(slug: string): Promise<schema.Article | undefined>;
+  createArticle(data: schema.InsertArticle): Promise<schema.Article>;
+  updateArticle(id: number, data: Partial<schema.InsertArticle>): Promise<schema.Article | undefined>;
+  deleteArticle(id: number): Promise<boolean>;
+  
+  // Videos
+  getVideos(limit?: number): Promise<schema.Video[]>;
+  getVideo(id: number): Promise<schema.Video | undefined>;
+  getVideoBySlug(slug: string): Promise<schema.Video | undefined>;
+  createVideo(data: schema.InsertVideo): Promise<schema.Video>;
+  updateVideo(id: number, data: Partial<schema.InsertVideo>): Promise<schema.Video | undefined>;
+  deleteVideo(id: number): Promise<boolean>;
   
   // Content management
   // Hero section
@@ -123,6 +139,88 @@ export class DatabaseStorage implements IStorage {
   async createUser(insertUser: schema.InsertUser): Promise<schema.User> {
     const [user] = await db.insert(schema.users).values(insertUser).returning();
     return user;
+  }
+  
+  // Articles
+  async getArticles(limit: number = 10): Promise<schema.Article[]> {
+    return db.select()
+      .from(schema.article)
+      .where(eq(schema.article.isPublished, true))
+      .orderBy(desc(schema.article.publishedAt))
+      .limit(limit);
+  }
+  
+  async getArticle(id: number): Promise<schema.Article | undefined> {
+    const [article] = await db.select()
+      .from(schema.article)
+      .where(eq(schema.article.id, id));
+    return article;
+  }
+  
+  async getArticleBySlug(slug: string): Promise<schema.Article | undefined> {
+    const [article] = await db.select()
+      .from(schema.article)
+      .where(eq(schema.article.slug, slug));
+    return article;
+  }
+  
+  async createArticle(data: schema.InsertArticle): Promise<schema.Article> {
+    const [article] = await db.insert(schema.article).values(data).returning();
+    return article;
+  }
+  
+  async updateArticle(id: number, data: Partial<schema.InsertArticle>): Promise<schema.Article | undefined> {
+    const [updated] = await db.update(schema.article)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(schema.article.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deleteArticle(id: number): Promise<boolean> {
+    const result = await db.delete(schema.article).where(eq(schema.article.id, id));
+    return !!result;
+  }
+  
+  // Videos
+  async getVideos(limit: number = 10): Promise<schema.Video[]> {
+    return db.select()
+      .from(schema.video)
+      .where(eq(schema.video.isPublished, true))
+      .orderBy(desc(schema.video.publishedAt))
+      .limit(limit);
+  }
+  
+  async getVideo(id: number): Promise<schema.Video | undefined> {
+    const [video] = await db.select()
+      .from(schema.video)
+      .where(eq(schema.video.id, id));
+    return video;
+  }
+  
+  async getVideoBySlug(slug: string): Promise<schema.Video | undefined> {
+    const [video] = await db.select()
+      .from(schema.video)
+      .where(eq(schema.video.slug, slug));
+    return video;
+  }
+  
+  async createVideo(data: schema.InsertVideo): Promise<schema.Video> {
+    const [video] = await db.insert(schema.video).values(data).returning();
+    return video;
+  }
+  
+  async updateVideo(id: number, data: Partial<schema.InsertVideo>): Promise<schema.Video | undefined> {
+    const [updated] = await db.update(schema.video)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(schema.video.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deleteVideo(id: number): Promise<boolean> {
+    const result = await db.delete(schema.video).where(eq(schema.video.id, id));
+    return !!result;
   }
 
   // Hero section

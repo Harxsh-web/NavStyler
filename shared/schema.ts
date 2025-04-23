@@ -141,6 +141,33 @@ export const siteSetting = pgTable("site_setting", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Articles
+export const article = pgTable("article", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  imageUrl: text("image_url"),
+  backgroundColor: text("background_color").default("#60D1FA"),
+  isPublished: boolean("is_published").default(true).notNull(),
+  publishedAt: timestamp("published_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Videos
+export const video = pgTable("video", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  thumbnailUrl: text("thumbnail_url"),
+  videoUrl: text("video_url").notNull(),
+  isPublished: boolean("is_published").default(true).notNull(),
+  publishedAt: timestamp("published_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Schema for inserting users
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -233,6 +260,18 @@ export const insertSiteSettingSchema = createInsertSchema(siteSetting).omit({
   updatedAt: true,
 });
 
+// Schema for inserting articles
+export const insertArticleSchema = createInsertSchema(article).omit({
+  id: true,
+  updatedAt: true,
+});
+
+// Schema for inserting videos
+export const insertVideoSchema = createInsertSchema(video).omit({
+  id: true,
+  updatedAt: true,
+});
+
 // Export types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -278,3 +317,9 @@ export type SocialLink = typeof socialLink.$inferSelect;
 
 export type InsertSiteSetting = z.infer<typeof insertSiteSettingSchema>;
 export type SiteSetting = typeof siteSetting.$inferSelect;
+
+export type InsertArticle = z.infer<typeof insertArticleSchema>;
+export type Article = typeof article.$inferSelect;
+
+export type InsertVideo = z.infer<typeof insertVideoSchema>;
+export type Video = typeof video.$inferSelect;
