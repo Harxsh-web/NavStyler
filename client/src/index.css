@@ -48,6 +48,10 @@
   }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   * {
     @apply border-border;
   }
@@ -68,6 +72,11 @@
                 fill var(--theme-transition-duration) ease-in-out,
                 stroke var(--theme-transition-duration) ease-in-out,
                 box-shadow var(--theme-transition-duration) ease-in-out;
+  }
+  
+  /* Smooth scrolling anchor offset adjustments for fixed headers */
+  [id] {
+    scroll-margin-top: 100px;
   }
 }
 

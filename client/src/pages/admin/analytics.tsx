@@ -142,13 +142,19 @@ export default function AnalyticsPage() {
       )}
 
       <Tabs defaultValue="pageViews" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="pageViews">Page Views</TabsTrigger>
-          <TabsTrigger value="sales">Sales</TabsTrigger>
-          <TabsTrigger value="visitors">Visitors</TabsTrigger>
-          <TabsTrigger value="distribution">Sales Distribution</TabsTrigger>
-          <TabsTrigger value="comparison">Metrics Comparison</TabsTrigger>
-          <TabsTrigger value="cumulative">Cumulative Trends</TabsTrigger>
+        <TabsList className="flex-wrap w-full justify-start bg-muted/50 p-1 h-auto">
+          <TabsTrigger value="pageViews" className="text-xs sm:text-sm flex-grow md:flex-grow-0">Page Views</TabsTrigger>
+          <TabsTrigger value="sales" className="text-xs sm:text-sm flex-grow md:flex-grow-0">Sales</TabsTrigger>
+          <TabsTrigger value="visitors" className="text-xs sm:text-sm flex-grow md:flex-grow-0">Visitors</TabsTrigger>
+          <TabsTrigger value="distribution" className="text-xs sm:text-sm flex-grow md:flex-grow-0">
+            <span className="hidden sm:inline">Sales </span>Distribution
+          </TabsTrigger>
+          <TabsTrigger value="comparison" className="text-xs sm:text-sm flex-grow md:flex-grow-0">
+            <span className="hidden sm:inline">Metrics </span>Comparison
+          </TabsTrigger>
+          <TabsTrigger value="cumulative" className="text-xs sm:text-sm flex-grow md:flex-grow-0">
+            <span className="hidden sm:inline">Cumulative </span>Trends
+          </TabsTrigger>
         </TabsList>
 
         {data && (
