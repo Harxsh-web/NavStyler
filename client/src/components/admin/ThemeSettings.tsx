@@ -278,15 +278,17 @@ export function ThemeSettingsComponent() {
         <p>To save your theme changes, go to the <strong>Theme Editor</strong> tab and click the <strong>Save Theme</strong> button at the bottom of the form.</p>
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="themes">Available Themes</TabsTrigger>
-          <TabsTrigger value="editor" className="bg-primary/10 relative">
-            Theme Editor
+        <TabsList className="mb-4 flex-wrap w-full">
+          <TabsTrigger value="themes" className="flex-1 text-xs sm:text-sm md:text-base">
+            <span className="hidden sm:inline">Available</span> Themes
+          </TabsTrigger>
+          <TabsTrigger value="editor" className="flex-1 text-xs sm:text-sm md:text-base bg-primary/10 relative">
+            <span className="hidden sm:inline">Theme</span> Editor
             {(isCreating || selectedTheme) && (
               <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-primary"></span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="preview" className="flex-1 text-xs sm:text-sm md:text-base">Preview</TabsTrigger>
         </TabsList>
         
         <TabsContent value="themes">
@@ -903,93 +905,116 @@ export function ThemeSettingsComponent() {
               <div className="space-y-8">
                 <div>
                   <h4 className="text-lg font-semibold mb-2">Colors</h4>
-                  <div className="grid grid-cols-5 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                     <div>
-                      <Label className="mb-1 block">Primary</Label>
+                      <Label className="mb-1 block text-xs sm:text-sm">Primary</Label>
                       <div 
-                        className="h-12 rounded-md" 
+                        className="h-10 sm:h-12 rounded-md" 
                         style={{ backgroundColor: form.watch('primaryColor') }}
                       />
+                      <p className="text-xs mt-1 text-center font-mono">{form.watch('primaryColor')}</p>
                     </div>
                     <div>
-                      <Label className="mb-1 block">Secondary</Label>
+                      <Label className="mb-1 block text-xs sm:text-sm">Secondary</Label>
                       <div 
-                        className="h-12 rounded-md" 
+                        className="h-10 sm:h-12 rounded-md" 
                         style={{ backgroundColor: form.watch('secondaryColor') }}
                       />
+                      <p className="text-xs mt-1 text-center font-mono">{form.watch('secondaryColor')}</p>
                     </div>
                     <div>
-                      <Label className="mb-1 block">Accent</Label>
+                      <Label className="mb-1 block text-xs sm:text-sm">Accent</Label>
                       <div 
-                        className="h-12 rounded-md" 
+                        className="h-10 sm:h-12 rounded-md" 
                         style={{ backgroundColor: form.watch('accentColor') }}
                       />
+                      <p className="text-xs mt-1 text-center font-mono">{form.watch('accentColor')}</p>
                     </div>
                     <div>
-                      <Label className="mb-1 block">Text</Label>
+                      <Label className="mb-1 block text-xs sm:text-sm">Text</Label>
                       <div 
-                        className="h-12 rounded-md" 
+                        className="h-10 sm:h-12 rounded-md" 
                         style={{ backgroundColor: form.watch('textColor') }}
                       />
+                      <p className="text-xs mt-1 text-center font-mono">{form.watch('textColor')}</p>
                     </div>
                     <div>
-                      <Label className="mb-1 block">Background</Label>
+                      <Label className="mb-1 block text-xs sm:text-sm">Background</Label>
                       <div 
-                        className="h-12 rounded-md border" 
+                        className="h-10 sm:h-12 rounded-md border" 
                         style={{ backgroundColor: form.watch('backgroundColor') }}
                       />
+                      <p className="text-xs mt-1 text-center font-mono">{form.watch('backgroundColor')}</p>
                     </div>
                   </div>
                 </div>
                 
                 <div>
                   <h4 className="text-lg font-semibold mb-2">Typography</h4>
-                  <div className="grid grid-cols-2 gap-8">
-                    <div>
-                      <Label className="mb-1 block">Primary Font ({form.watch('fontPrimary')})</Label>
-                      <p className="text-xl" style={{ fontFamily: form.watch('fontPrimary') }}>
-                        The quick brown fox jumps over the lazy dog.
-                      </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                    <div className="mb-4 md:mb-0">
+                      <Label className="mb-1 block text-xs sm:text-sm">
+                        Primary Font: <span className="font-medium">{form.watch('fontPrimary')}</span>
+                      </Label>
+                      <div className="bg-white p-3 rounded border">
+                        <p className="text-base sm:text-lg md:text-xl" style={{ fontFamily: form.watch('fontPrimary') }}>
+                          The quick brown fox jumps over the lazy dog.
+                        </p>
+                        <p className="text-xs sm:text-sm mt-2" style={{ fontFamily: form.watch('fontPrimary') }}>
+                          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />
+                          abcdefghijklmnopqrstuvwxyz<br />
+                          0123456789
+                        </p>
+                      </div>
                     </div>
                     <div>
-                      <Label className="mb-1 block">Secondary Font ({form.watch('fontSecondary')})</Label>
-                      <p className="text-xl" style={{ fontFamily: form.watch('fontSecondary') }}>
-                        The quick brown fox jumps over the lazy dog.
-                      </p>
+                      <Label className="mb-1 block text-xs sm:text-sm">
+                        Secondary Font: <span className="font-medium">{form.watch('fontSecondary')}</span>
+                      </Label>
+                      <div className="bg-white p-3 rounded border">
+                        <p className="text-base sm:text-lg md:text-xl" style={{ fontFamily: form.watch('fontSecondary') }}>
+                          The quick brown fox jumps over the lazy dog.
+                        </p>
+                        <p className="text-xs sm:text-sm mt-2" style={{ fontFamily: form.watch('fontSecondary') }}>
+                          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />
+                          abcdefghijklmnopqrstuvwxyz<br />
+                          0123456789
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
                 <div>
                   <h4 className="text-lg font-semibold mb-2">UI Elements</h4>
-                  <div className="grid grid-cols-3 gap-8">
-                    <div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                    <div className="mb-4 sm:mb-0">
                       <Label className="mb-3 block">Buttons ({form.watch('buttonStyle')})</Label>
-                      <div className="flex space-x-2">
-                        <Button variant="default">Primary</Button>
-                        <Button variant="secondary">Secondary</Button>
-                        <Button variant="outline">Outline</Button>
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="default" size="sm" className="mb-1">Primary</Button>
+                        <Button variant="secondary" size="sm" className="mb-1">Secondary</Button>
+                        <Button variant="outline" size="sm" className="mb-1">Outline</Button>
                       </div>
                     </div>
-                    <div>
+                    <div className="mb-4 sm:mb-0">
                       <Label className="mb-3 block">Card ({form.watch('cardStyle')})</Label>
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Card Title</CardTitle>
-                          <CardDescription>Card description goes here</CardDescription>
+                      <Card className="overflow-hidden">
+                        <CardHeader className="p-3">
+                          <CardTitle className="text-base">Card Title</CardTitle>
+                          <CardDescription className="text-xs">Card description</CardDescription>
                         </CardHeader>
-                        <CardContent>
-                          <p>Card content</p>
+                        <CardContent className="p-3 pt-0">
+                          <p className="text-sm">Card content</p>
                         </CardContent>
                       </Card>
                     </div>
                     <div>
                       <Label className="mb-3 block">Form Controls</Label>
                       <div className="space-y-2">
-                        <Input placeholder="Text input" />
+                        <Input placeholder="Text input" className="text-sm" />
                         <div className="flex items-center space-x-2">
                           <Switch id="preview-switch" />
-                          <Label htmlFor="preview-switch">Toggle</Label>
+                          <Label htmlFor="preview-switch" className="text-sm">Toggle</Label>
                         </div>
                       </div>
                     </div>
