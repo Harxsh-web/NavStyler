@@ -12,7 +12,6 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SearchDialog } from "@/components/SearchDialog";
 
 import { HiOutlineDocument, HiOutlineBookOpen, HiOutlineVideoCamera } from 'react-icons/hi';
 import { BiPodcast } from 'react-icons/bi';
@@ -208,8 +207,7 @@ export default function Navbar() {
               </Button>
             </Link>
             
-            <div className="flex items-center space-x-2">
-              <SearchDialog />
+            <div className="flex items-center">
               <ThemeToggle />
             </div>
           </nav>
@@ -308,8 +306,7 @@ export default function Navbar() {
                   </Button>
                 </Link>
                 
-                <div className="flex justify-center py-4 space-x-3">
-                  <SearchDialog />
+                <div className="flex justify-center py-4">
                   <ThemeToggle />
                 </div>
               </div>

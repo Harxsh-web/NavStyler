@@ -34,56 +34,42 @@ function useTheme() {
 // ThemeProvider component
 function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "light", // Set default theme to light
   storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  // No need for state as we're always using light theme
   
-  // Initialize theme from localStorage
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        const storedTheme = localStorage.getItem(storageKey);
-        if (storedTheme) {
-          setTheme(storedTheme as Theme);
-        }
-      }
-    } catch (error) {
-      console.error("Error accessing localStorage:", error);
-    }
-  }, [storageKey]);
-
+  // Force light theme on all pages
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
     const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
+    root.classList.remove("dark");
+    root.classList.add("light");
+    
+    // Store the theme preference
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(storageKey, "light");
+      }
+    } catch (error) {
+      console.error("Error setting localStorage:", error);
     }
+  }, [storageKey]);
 
-    root.classList.add(theme);
-  }, [theme]);
-
+  // Always provide light theme regardless of what's requested
   const value = {
-    theme,
-    setTheme: (theme: Theme) => {
+    theme: "light" as Theme,
+    setTheme: () => {
+      // Do nothing - we always use light theme
       try {
         if (typeof window !== 'undefined') {
-          localStorage.setItem(storageKey, theme);
+          localStorage.setItem(storageKey, "light");
         }
       } catch (error) {
         console.error("Error setting localStorage:", error);
       }
-      setTheme(theme);
     },
   };
 
