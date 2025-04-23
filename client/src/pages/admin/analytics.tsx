@@ -483,3 +483,83 @@ function generateTimeSeriesData(days: number) {
     return data;
   };
 }
+
+// Function to generate radar chart data
+function generateRadarData(data: AnalyticsData) {
+  // Convert different metrics to a scale of 0-100 for comparison
+  const maxPageViews = Math.max(...data.pageViews.map(d => d.value));
+  const maxSales = Math.max(...data.sales.map(d => d.value));
+  const maxVisitors = Math.max(...data.visitors.map(d => d.value));
+  const maxEngagement = Math.max(...data.contentEngagement.map(d => d.value));
+  
+  // Calculate average values for current and previous periods
+  const halfIndex = Math.floor(data.pageViews.length / 2);
+  const currentPageViews = data.pageViews.slice(halfIndex).reduce((sum, item) => sum + item.value, 0) / (data.pageViews.length - halfIndex);
+  const prevPageViews = data.pageViews.slice(0, halfIndex).reduce((sum, item) => sum + item.value, 0) / halfIndex;
+  
+  const currentSales = data.sales.slice(halfIndex).reduce((sum, item) => sum + item.value, 0) / (data.sales.length - halfIndex);
+  const prevSales = data.sales.slice(0, halfIndex).reduce((sum, item) => sum + item.value, 0) / halfIndex;
+  
+  const currentVisitors = data.visitors.slice(halfIndex).reduce((sum, item) => sum + item.value, 0) / (data.visitors.length - halfIndex);
+  const prevVisitors = data.visitors.slice(0, halfIndex).reduce((sum, item) => sum + item.value, 0) / halfIndex;
+  
+  const currentEngagement = data.contentEngagement.slice(halfIndex).reduce((sum, item) => sum + item.value, 0) / (data.contentEngagement.length - halfIndex);
+  const prevEngagement = data.contentEngagement.slice(0, halfIndex).reduce((sum, item) => sum + item.value, 0) / halfIndex;
+  
+  // Create normalized data points (0-100 scale)
+  return [
+    {
+      metric: 'Page Views',
+      value: maxPageViews > 0 ? (currentPageViews / maxPageViews) * 100 : 0,
+      prevValue: maxPageViews > 0 ? (prevPageViews / maxPageViews) * 100 : 0,
+    },
+    {
+      metric: 'Sales',
+      value: maxSales > 0 ? (currentSales / maxSales) * 100 : 0,
+      prevValue: maxSales > 0 ? (prevSales / maxSales) * 100 : 0,
+    },
+    {
+      metric: 'Visitors',
+      value: maxVisitors > 0 ? (currentVisitors / maxVisitors) * 100 : 0,
+      prevValue: maxVisitors > 0 ? (prevVisitors / maxVisitors) * 100 : 0,
+    },
+    {
+      metric: 'Engagement',
+      value: maxEngagement > 0 ? (currentEngagement / maxEngagement) * 100 : 0,
+      prevValue: maxEngagement > 0 ? (prevEngagement / maxEngagement) * 100 : 0,
+    },
+    {
+      metric: 'Book Sales',
+      value: data.bookSales.length > 0 ? 80 : 0, // Just a sample value for demo
+      prevValue: data.bookSales.length > 0 ? 60 : 0, // Just a sample value for demo
+    },
+  ];
+}
+
+// Function to generate cumulative data
+function generateCumulativeData(data: AnalyticsData) {
+  const cumulativeData = [];
+  let pageViewsSum = 0;
+  let visitorsSum = 0;
+  let engagementSum = 0;
+  
+  // Create evenly spaced data points
+  const stepSize = Math.max(1, Math.floor(data.pageViews.length / 10)); // Limit to about 10 points
+  
+  for (let i = 0; i < data.pageViews.length; i += stepSize) {
+    const date = data.pageViews[i].date;
+    pageViewsSum += data.pageViews[i].value;
+    visitorsSum += data.visitors[i].value;
+    engagementSum += data.contentEngagement[i].value;
+    
+    cumulativeData.push({
+      date,
+      pageViews: Math.round(pageViewsSum / 100), // Scale down to make it fit on chart
+      visitors: Math.round(visitorsSum / 10),
+      engagement: Math.round(engagementSum / 10),
+      sales: data.sales[i].value * 10 // Scale up to make it visible
+    });
+  }
+  
+  return cumulativeData;
+}
