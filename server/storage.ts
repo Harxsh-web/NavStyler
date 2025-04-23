@@ -122,23 +122,65 @@ export class DatabaseStorage implements IStorage {
 
   // User management
   async getUser(id: number): Promise<schema.User | undefined> {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.id, id));
-    return user;
+    try {
+      const result = await db.execute(
+        `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
+         FROM users WHERE id = $1`,
+        [id]
+      );
+      return result.rows[0] as schema.User | undefined;
+    } catch (error) {
+      console.error('Error in getUser:', error);
+      return undefined;
+    }
   }
 
   async getUserByUsername(username: string): Promise<schema.User | undefined> {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.username, username));
-    return user;
+    try {
+      const result = await db.execute(
+        `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
+         FROM users WHERE username = $1`,
+        [username]
+      );
+      return result.rows[0] as schema.User | undefined;
+    } catch (error) {
+      console.error('Error in getUserByUsername:', error);
+      return undefined;
+    }
   }
   
   async getUserByEmail(email: string): Promise<schema.User | undefined> {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
-    return user;
+    try {
+      const result = await db.execute(
+        `SELECT id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"
+         FROM users WHERE email = $1`,
+        [email]
+      );
+      return result.rows[0] as schema.User | undefined;
+    } catch (error) {
+      console.error('Error in getUserByEmail:', error);
+      return undefined;
+    }
   }
 
   async createUser(insertUser: schema.InsertUser): Promise<schema.User> {
-    const [user] = await db.insert(schema.users).values(insertUser).returning();
-    return user;
+    try {
+      const result = await db.execute(
+        `INSERT INTO users(username, email, password, is_admin)
+         VALUES($1, $2, $3, $4)
+         RETURNING id, username, email, password, is_admin as "isAdmin", created_at as "createdAt"`,
+        [
+          insertUser.username,
+          insertUser.email,
+          insertUser.password,
+          insertUser.isAdmin || false
+        ]
+      );
+      return result.rows[0] as schema.User;
+    } catch (error) {
+      console.error('Error in createUser:', error);
+      throw error;
+    }
   }
   
   // Articles
@@ -233,8 +275,17 @@ export class DatabaseStorage implements IStorage {
 
   // Hero section
   async getHeroSection(): Promise<schema.Hero | undefined> {
-    const [hero] = await db.select().from(schema.heroSection).limit(1);
-    return hero;
+    try {
+      const result = await db.execute(
+        `SELECT id, title, subtitle, cta_text as "buttonText", cta_link as "buttonUrl", 
+         image_url as "imageUrl", updated_at as "updatedAt"
+         FROM hero_section LIMIT 1`
+      );
+      return result.rows[0] as schema.Hero | undefined;
+    } catch (error) {
+      console.error('Error in getHeroSection:', error);
+      return undefined;
+    }
   }
 
   async updateHeroSection(data: Partial<schema.InsertHero>): Promise<schema.Hero> {
@@ -277,8 +328,16 @@ export class DatabaseStorage implements IStorage {
 
   // Quote section
   async getQuoteSection(): Promise<schema.Quote | undefined> {
-    const [quote] = await db.select().from(schema.quoteSection).limit(1);
-    return quote;
+    try {
+      const result = await db.execute(
+        `SELECT id, heading, content as "quoteText", updated_at as "updatedAt"
+         FROM quote_section LIMIT 1`
+      );
+      return result.rows[0] as schema.Quote | undefined;
+    } catch (error) {
+      console.error('Error in getQuoteSection:', error);
+      return undefined;
+    }
   }
 
   async updateQuoteSection(data: Partial<schema.InsertQuote>): Promise<schema.Quote> {
@@ -449,8 +508,17 @@ export class DatabaseStorage implements IStorage {
 
   // Author section
   async getAuthorSection(): Promise<schema.AuthorSection | undefined> {
-    const [author] = await db.select().from(schema.authorSection).limit(1);
-    return author;
+    try {
+      const result = await db.execute(
+        `SELECT id, author_name as "name", bio, bio_short as "bioShort", 
+         image_url as "imageUrl", title, updated_at as "updatedAt"
+         FROM author_section LIMIT 1`
+      );
+      return result.rows[0] as schema.AuthorSection | undefined;
+    } catch (error) {
+      console.error('Error in getAuthorSection:', error);
+      return undefined;
+    }
   }
 
   async updateAuthorSection(data: Partial<schema.InsertAuthorSection>): Promise<schema.AuthorSection> {
@@ -527,7 +595,16 @@ export class DatabaseStorage implements IStorage {
 
   // Social links
   async getSocialLinks(): Promise<schema.SocialLink[]> {
-    return db.select().from(schema.socialLink).where(eq(schema.socialLink.active, true));
+    try {
+      const result = await db.execute(
+        `SELECT id, platform, url, icon, order_index as "orderIndex", updated_at as "updatedAt" 
+         FROM social_link`
+      );
+      return result.rows as schema.SocialLink[];
+    } catch (error) {
+      console.error('Error in getSocialLinks:', error);
+      return [];
+    }
   }
 
   async getSocialLink(id: number): Promise<schema.SocialLink | undefined> {
