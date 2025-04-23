@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import AdminPage from "@/pages/admin-page";
+import NotFound from "@/pages/not-found";
 import Navbar from "@/components/Navbar";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -37,13 +38,7 @@ function Router() {
         )} />
         <Route>
           <PageTransition>
-            <div className="flex min-h-screen items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
-                <p className="mb-8">The page you're looking for doesn't exist.</p>
-                <a href="/" className="text-blue-600 hover:underline">Return to Home</a>
-              </div>
-            </div>
+            <NotFound />
           </PageTransition>
         </Route>
       </Switch>

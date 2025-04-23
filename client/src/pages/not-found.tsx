@@ -57,7 +57,7 @@ export default function NotFound() {
               articles.map((article) => (
                 <div key={article.id} className="border border-border rounded-lg p-5 hover:shadow-md transition">
                   <a 
-                    href={article.url || "#"} 
+                    href={article.slug ? `/articles/${article.slug}` : "#"} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="group"
@@ -69,7 +69,7 @@ export default function NotFound() {
                       <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
                     </div>
                     <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
-                      {article.description}
+                      {article.excerpt || "No excerpt available"}
                     </p>
                     <div className="flex items-center text-xs text-muted-foreground">
                       <Calendar className="h-3 w-3 mr-1" />
@@ -80,7 +80,7 @@ export default function NotFound() {
                       )}
                       <span className="mx-2">•</span>
                       <Clock className="h-3 w-3 mr-1" />
-                      <span>{article.readTimeMinutes} min read</span>
+                      <span>5 min read</span>
                     </div>
                   </a>
                 </div>
@@ -108,13 +108,13 @@ export default function NotFound() {
                         className="w-full h-full object-cover"
                       />
                       <Badge className="absolute top-2 right-2 bg-red-600">
-                        {video.durationMinutes} min
+                        {video.description ? video.description.slice(0, 10) : "Watch"} 
                       </Badge>
                     </div>
                   )}
                   <div className="p-4">
                     <a 
-                      href={video.url || "#"} 
+                      href={video.slug ? `/videos/${video.slug}` : "#"} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="group"
