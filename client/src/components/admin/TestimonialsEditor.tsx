@@ -248,7 +248,7 @@ export function TestimonialsEditor() {
 
               <Button
                 type="submit"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700"
                 disabled={updateSectionMutation.isPending}
               >
                 {updateSectionMutation.isPending ? (
@@ -365,7 +365,7 @@ export function TestimonialsEditor() {
 
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
             <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Testimonial
               </Button>
@@ -539,6 +539,7 @@ export function TestimonialsEditor() {
                     <Button
                       type="submit"
                       disabled={createTestimonialMutation.isPending}
+                      className="bg-blue-600 text-white hover:bg-blue-700"
                     >
                       {createTestimonialMutation.isPending ? (
                         <>
@@ -725,6 +726,7 @@ export function TestimonialsEditor() {
                     <Button
                       type="submit"
                       disabled={updateTestimonialMutation.isPending}
+                      className="bg-blue-600 text-white hover:bg-blue-700"
                     >
                       {updateTestimonialMutation.isPending ? (
                         <>

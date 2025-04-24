@@ -23,9 +23,9 @@ export function AdminCard({ title, description, children }: AdminCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <Button 
-            variant="outline" 
+            variant="default" 
             size="sm" 
-            className="gap-1"
+            className="gap-1 bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => refreshContentMutation.mutate()}
             disabled={refreshContentMutation.isPending}
           >
@@ -33,9 +33,9 @@ export function AdminCard({ title, description, children }: AdminCardProps) {
             Refresh
           </Button>
           <Button 
-            variant="outline" 
+            variant="default" 
             size="sm" 
-            className="gap-1"
+            className="gap-1 bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => window.open('/', '_blank')}
           >
             <ExternalLink className="h-4 w-4" />
