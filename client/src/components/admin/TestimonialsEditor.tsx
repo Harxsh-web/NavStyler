@@ -47,14 +47,13 @@ import {
 // Define types for testimonials
 interface Testimonial {
   id: number;
-  author: string;
-  role?: string;
-  company?: string;
-  content: string;
-  rating?: number;
-  avatarUrl?: string;
+  name: string;
+  title?: string;
+  quote: string;
+  imageUrl?: string;
   videoUrl?: string;
-  mediaType?: 'image' | 'video';
+  mediaType: 'image' | 'video';
+  showMobile: boolean;
 }
 import {
   AlertDialog,
@@ -76,14 +75,13 @@ const sectionSchema = z.object({
 
 // Schema for testimonial
 const testimonialSchema = z.object({
-  author: z.string().min(1, "Author name is required"),
-  role: z.string().optional(),
-  company: z.string().optional(),
-  content: z.string().min(1, "Testimonial content is required"),
-  rating: z.number().int().min(1).max(5).optional(),
+  name: z.string().min(1, "Name is required"),
+  title: z.string().optional(),
+  quote: z.string().min(1, "Testimonial quote is required"),
   mediaType: z.enum(['image', 'video']).default('image'),
-  avatarUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   videoUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  showMobile: z.boolean().default(true),
 });
 
 type SectionFormValues = z.infer<typeof sectionSchema>;
@@ -123,14 +121,13 @@ export function TestimonialsEditor() {
   const testimonialForm = useForm<TestimonialFormValues>({
     resolver: zodResolver(testimonialSchema),
     defaultValues: {
-      author: "",
-      role: "",
-      company: "",
-      content: "",
-      rating: 5,
+      name: "",
+      title: "",
+      quote: "",
       mediaType: "image",
-      avatarUrl: "",
+      imageUrl: "",
       videoUrl: "",
+      showMobile: true,
     },
   });
 
@@ -152,14 +149,13 @@ export function TestimonialsEditor() {
       onSuccess: () => {
         setShowAddDialog(false);
         testimonialForm.reset({
-          author: "",
-          role: "",
-          company: "",
-          content: "",
-          rating: 5,
+          name: "",
+          title: "",
+          quote: "",
           mediaType: "image",
-          avatarUrl: "",
+          imageUrl: "",
           videoUrl: "",
+          showMobile: true,
         });
       }
     });
@@ -182,14 +178,13 @@ export function TestimonialsEditor() {
   const handleEdit = (testimonial: any) => {
     setSelectedTestimonial(testimonial);
     testimonialForm.reset({
-      author: testimonial.author || "",
-      role: testimonial.role || "",
-      company: testimonial.company || "",
-      content: testimonial.content || "",
-      rating: testimonial.rating || 5,
+      name: testimonial.name || "",
+      title: testimonial.title || "",
+      quote: testimonial.quote || "",
       mediaType: testimonial.mediaType || "image",
-      avatarUrl: testimonial.avatarUrl || "",
+      imageUrl: testimonial.imageUrl || "",
       videoUrl: testimonial.videoUrl || "",
+      showMobile: testimonial.showMobile !== false,
     });
     setShowEditDialog(true);
   };
@@ -281,9 +276,9 @@ export function TestimonialsEditor() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Author</TableHead>
-                  <TableHead>Content Preview</TableHead>
-                  <TableHead className="w-28 text-center">Rating</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Quote Preview</TableHead>
                   <TableHead className="w-24 text-center">Media Type</TableHead>
                   <TableHead className="w-48 text-right">Actions</TableHead>
                 </TableRow>
@@ -293,24 +288,13 @@ export function TestimonialsEditor() {
                   testimonials.map((testimonial: any) => (
                     <TableRow key={testimonial.id}>
                       <TableCell className="font-medium">
-                        {testimonial.author}
-                        {(testimonial.role || testimonial.company) && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            {testimonial.role}
-                            {testimonial.role && testimonial.company && ", "}
-                            {testimonial.company}
-                          </div>
-                        )}
+                        {testimonial.name}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {testimonial.title}
                       </TableCell>
                       <TableCell className="max-w-xs truncate">
-                        {testimonial.content}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center">
-                          {Array.from({ length: testimonial.rating || 5 }).map((_, index) => (
-                            <Star key={index} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
+                        {testimonial.quote}
                       </TableCell>
                       <TableCell className="text-center">
                         {testimonial.mediaType === 'video' ? (
@@ -349,7 +333,7 @@ export function TestimonialsEditor() {
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  This will permanently delete the testimonial from {testimonial.author}.
+                                  This will permanently delete the testimonial from {testimonial.name}.
                                   This action cannot be undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
