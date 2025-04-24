@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Edit, Trash2, Star, Video, Image } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Star, Video, ImageIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -320,7 +320,7 @@ export function TestimonialsEditor() {
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <Image className="h-3 w-3 mr-1" />
+                            <ImageIcon className="h-3 w-3 mr-1" />
                             Image
                           </span>
                         )}
@@ -370,7 +370,7 @@ export function TestimonialsEditor() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground py-6">
+                    <TableCell colSpan={5} className="text-center text-muted-foreground py-6">
                       No testimonials found. Add your first one.
                     </TableCell>
                   </TableRow>
