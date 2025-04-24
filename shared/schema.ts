@@ -147,6 +147,8 @@ export const testimonial = pgTable("testimonial", {
   authorRole: text("author_role"),
   authorCompany: text("author_company"),
   authorImageUrl: text("author_image_url"),
+  videoUrl: text("video_url"),
+  mediaType: text("media_type").default("image").notNull(), // 'image', 'video'
   rating: integer("rating").default(5),
   showMobile: boolean("show_mobile").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
