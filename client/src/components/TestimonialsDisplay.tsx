@@ -65,14 +65,14 @@ export default function TestimonialsDisplay() {
                 {testimonial.videoUrl && testimonial.videoUrl.includes('youtube.com') ? (
                   <iframe
                     src={testimonial.videoUrl.replace('watch?v=', 'embed/')}
-                    title={`Testimonial by ${testimonial.author}`}
+                    title={`Testimonial by ${testimonial.name}`}
                     allowFullScreen
                     className="w-full h-full border-0"
                   ></iframe>
                 ) : testimonial.videoUrl && testimonial.videoUrl.includes('youtu.be') ? (
                   <iframe
                     src={`https://www.youtube.com/embed/${testimonial.videoUrl.split('/').pop()}`}
-                    title={`Testimonial by ${testimonial.author}`}
+                    title={`Testimonial by ${testimonial.name}`}
                     allowFullScreen
                     className="w-full h-full border-0"
                   ></iframe>
@@ -90,8 +90,8 @@ export default function TestimonialsDisplay() {
               </div>
             ) : (
               <img 
-                src={testimonial.avatarUrl || "https://placehold.co/100x100?text=No+Image"} 
-                alt={testimonial.author} 
+                src={testimonial.imageUrl || "https://placehold.co/100x100?text=No+Image"} 
+                alt={testimonial.name} 
                 className="w-24 h-24 rounded-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -101,23 +101,12 @@ export default function TestimonialsDisplay() {
             )}
           </div>
           <p className="text-gray-800 text-lg text-center mb-4">
-            {testimonial.content}
+            {testimonial.quote}
           </p>
           <div className="text-center">
-            <h4 className="font-semibold text-lg">{testimonial.author}</h4>
-            <p className="text-gray-500">
-              {testimonial.role}
-              {testimonial.role && testimonial.company && ", "}
-              {testimonial.company}
-            </p>
-            {testimonial.rating && (
-              <div className="flex items-center justify-center mt-2">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
-                  </svg>
-                ))}
-              </div>
+            <h4 className="font-semibold text-lg">{testimonial.name}</h4>
+            {testimonial.title && (
+              <p className="text-gray-500">{testimonial.title}</p>
             )}
           </div>
         </div>

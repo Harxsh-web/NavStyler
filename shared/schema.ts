@@ -130,8 +130,6 @@ export const insertLearningPointSchema = createInsertSchema(learningPoint);
 export const testimonialSection = pgTable("testimonial_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  subtitle: text("subtitle"),
-  backgroundColor: text("background_color"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -142,14 +140,12 @@ export const insertTestimonialSectionSchema = createInsertSchema(testimonialSect
 // Testimonials
 export const testimonial = pgTable("testimonial", {
   id: serial("id").primaryKey(),
-  text: text("text").notNull(),
-  authorName: text("author_name").notNull(),
-  authorRole: text("author_role"),
-  authorCompany: text("author_company"),
-  authorImageUrl: text("author_image_url"),
+  quote: text("quote").notNull(),
+  name: text("name").notNull(),
+  title: text("title"), // Job title or role
+  imageUrl: text("image_url"),
   videoUrl: text("video_url"),
   mediaType: text("media_type").default("image").notNull(), // 'image', 'video'
-  rating: integer("rating").default(5),
   showMobile: boolean("show_mobile").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

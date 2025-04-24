@@ -124,10 +124,7 @@ contentRouter.get("/learning-points", async (req, res, next) => {
 
 contentRouter.get("/testimonials", async (req, res, next) => {
   try {
-    const [section, testimonials] = await Promise.all([
-      storage.getTestimonialSection(),
-      storage.getTestimonials()
-    ]);
+    const testimonials = await storage.getTestimonials();
     
     // Filter for mobile if requested
     let filteredTestimonials = testimonials;
@@ -135,10 +132,7 @@ contentRouter.get("/testimonials", async (req, res, next) => {
       filteredTestimonials = testimonials.filter(t => t.showMobile);
     }
     
-    res.json({
-      section: section || {},
-      testimonials: filteredTestimonials
-    });
+    res.json(filteredTestimonials);
   } catch (error) {
     next(error);
   }
