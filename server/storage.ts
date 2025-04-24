@@ -456,7 +456,7 @@ export class DatabaseStorage implements IStorage {
 
   async getTestimonial(id: number): Promise<schema.Testimonial | undefined> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
          show_mobile as "showMobile", updated_at as "updatedAt"
@@ -566,7 +566,7 @@ export class DatabaseStorage implements IStorage {
   // Author section
   async getAuthorSection(): Promise<schema.AuthorSection | undefined> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, author_name as "name", bio, bio_short as "bioShort", 
          image_url as "imageUrl", title, updated_at as "updatedAt"
          FROM author_section LIMIT 1`
@@ -653,7 +653,7 @@ export class DatabaseStorage implements IStorage {
   // Social links
   async getSocialLinks(): Promise<schema.SocialLink[]> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, platform, url, icon, order_index as "orderIndex", updated_at as "updatedAt" 
          FROM social_link`
       );
