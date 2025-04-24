@@ -155,11 +155,19 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     }
     
     const updatedTheme = await res.json();
-    queryClient.invalidateQueries({ queryKey: ['/api/themes'] });
     
-    // If this is the active theme, also invalidate that query
+    // Update the theme list in the cache
+    queryClient.setQueryData(['/api/themes'], (oldData: ThemeSettings[] | undefined) => {
+      if (!oldData) return [updatedTheme];
+      return oldData.map(t => t.id === updatedTheme.id ? updatedTheme : t);
+    });
+    
+    // If this is the active theme, update it immediately
     if (updatedTheme.appliesGlobally) {
-      queryClient.invalidateQueries({ queryKey: ['/api/themes/active'] });
+      queryClient.setQueryData(['/api/themes/active'], updatedTheme);
+      
+      // Update the CSS variables immediately
+      updateCssVariables(updatedTheme);
     }
     
     toast({
@@ -199,8 +207,14 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     }
     
     const updatedTheme = await res.json();
+    
+    // Clear the cache and set the updated theme directly
+    queryClient.setQueryData(['/api/themes/active'], updatedTheme);
     queryClient.invalidateQueries({ queryKey: ['/api/themes'] });
-    queryClient.invalidateQueries({ queryKey: ['/api/themes/active'] });
+    
+    // Update the local state immediately
+    setTheme(updatedTheme);
+    updateCssVariables(updatedTheme);
     
     toast({
       title: 'Theme activated',
