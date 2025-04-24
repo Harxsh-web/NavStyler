@@ -466,19 +466,89 @@ export function TestimonialsEditor() {
                     )}
                   />
                   
-                  <FormField
-                    control={testimonialForm.control}
-                    name="avatarUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Avatar URL (optional)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="https://example.com/avatar.jpg" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="border rounded-md p-4 bg-gray-50">
+                    <h3 className="text-sm font-medium mb-3">Media Type</h3>
+                    <FormField
+                      control={testimonialForm.control}
+                      name="mediaType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                id="image-type"
+                                checked={field.value === 'image'}
+                                onChange={() => field.onChange('image')}
+                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <label htmlFor="image-type" className="text-sm font-medium text-gray-700">
+                                Image
+                              </label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                id="video-type"
+                                checked={field.value === 'video'}
+                                onChange={() => field.onChange('video')}
+                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <label htmlFor="video-type" className="text-sm font-medium text-gray-700">
+                                Video
+                              </label>
+                            </div>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  {testimonialForm.watch('mediaType') === 'image' && (
+                    <FormField
+                      control={testimonialForm.control}
+                      name="avatarUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Avatar Image URL</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://example.com/avatar.jpg" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          {field.value && (
+                            <div className="mt-2">
+                              <img 
+                                src={field.value} 
+                                alt="Avatar preview" 
+                                className="h-16 w-16 object-cover rounded-full border" 
+                                onError={(e) => e.currentTarget.src = 'https://placehold.co/100x100?text=Invalid+URL'}
+                              />
+                            </div>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                  
+                  {testimonialForm.watch('mediaType') === 'video' && (
+                    <FormField
+                      control={testimonialForm.control}
+                      name="videoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Video URL</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://example.com/video.mp4 or YouTube link" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Enter a direct video URL or YouTube/Vimeo embed link
+                          </p>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   
                   <DialogFooter>
                     <Button
@@ -595,19 +665,89 @@ export function TestimonialsEditor() {
                     )}
                   />
                   
-                  <FormField
-                    control={testimonialForm.control}
-                    name="avatarUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Avatar URL (optional)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="https://example.com/avatar.jpg" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="border rounded-md p-4 bg-gray-50">
+                    <h3 className="text-sm font-medium mb-3">Media Type</h3>
+                    <FormField
+                      control={testimonialForm.control}
+                      name="mediaType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                id="edit-image-type"
+                                checked={field.value === 'image'}
+                                onChange={() => field.onChange('image')}
+                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <label htmlFor="edit-image-type" className="text-sm font-medium text-gray-700">
+                                Image
+                              </label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                id="edit-video-type"
+                                checked={field.value === 'video'}
+                                onChange={() => field.onChange('video')}
+                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <label htmlFor="edit-video-type" className="text-sm font-medium text-gray-700">
+                                Video
+                              </label>
+                            </div>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  {testimonialForm.watch('mediaType') === 'image' && (
+                    <FormField
+                      control={testimonialForm.control}
+                      name="avatarUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Avatar Image URL</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://example.com/avatar.jpg" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          {field.value && (
+                            <div className="mt-2">
+                              <img 
+                                src={field.value} 
+                                alt="Avatar preview" 
+                                className="h-16 w-16 object-cover rounded-full border" 
+                                onError={(e) => e.currentTarget.src = 'https://placehold.co/100x100?text=Invalid+URL'}
+                              />
+                            </div>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                  
+                  {testimonialForm.watch('mediaType') === 'video' && (
+                    <FormField
+                      control={testimonialForm.control}
+                      name="videoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Video URL</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://example.com/video.mp4 or YouTube link" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Enter a direct video URL or YouTube/Vimeo embed link
+                          </p>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   
                   <DialogFooter>
                     <Button
