@@ -72,11 +72,28 @@ themeRouter.patch('/:id', isAuthenticated, isAdmin, async (req, res) => {
     // Validate the update data
     const validatedData = insertThemeSettingsSchema.partial().parse(req.body);
     
-    // Update the theme
+    console.log(`Updating theme ID ${id} with data:`, validatedData);
+    
+    // Get the current theme first
+    const themes = await storage.getThemeSettings();
+    const theme = themes.find(t => t.id === id);
+    
+    if (!theme) {
+      return res.status(404).json({ error: 'Theme not found' });
+    }
+    
+    // Update the theme with merged data
     const updated = await storage.updateThemeSettings(id, validatedData);
     
     if (!updated) {
-      return res.status(404).json({ error: 'Theme not found' });
+      return res.status(404).json({ error: 'Theme update failed' });
+    }
+    
+    console.log('Theme updated successfully:', updated);
+    
+    // If this is the active theme, add some delay before responding to ensure database writes are complete
+    if (updated.appliesGlobally) {
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     
     res.json(updated);
@@ -122,7 +139,36 @@ themeRouter.post('/:id/set-active', isAuthenticated, isAdmin, async (req, res) =
       return res.status(404).json({ error: 'Theme not found' });
     }
     
-    const updated = await storage.updateThemeSettings(id, { appliesGlobally: true });
+    console.log(`Setting theme ID ${id} as active...`);
+    
+    // Make theme active by setting appliesGlobally to true
+    const updated = await storage.updateThemeSettings(id, { 
+      appliesGlobally: true,
+      // Include all the original theme properties to ensure nothing is lost
+      name: theme.name,
+      primaryColor: theme.primaryColor,
+      secondaryColor: theme.secondaryColor,
+      accentColor: theme.accentColor,
+      textColor: theme.textColor,
+      backgroundColor: theme.backgroundColor,
+      fontPrimary: theme.fontPrimary,
+      fontSecondary: theme.fontSecondary,
+      buttonRadius: theme.buttonRadius,
+      buttonStyle: theme.buttonStyle,
+      cardStyle: theme.cardStyle,
+      layoutStyle: theme.layoutStyle,
+      isDarkMode: theme.isDarkMode,
+      isHighContrast: theme.isHighContrast,
+      headerStyle: theme.headerStyle,
+      footerStyle: theme.footerStyle,
+      customCss: theme.customCss
+    });
+    
+    if (!updated) {
+      return res.status(500).json({ error: 'Failed to update theme' });
+    }
+    
+    console.log('Theme activated successfully:', updated);
     res.json(updated);
   } catch (error: any) {
     console.error('Error setting active theme:', error);

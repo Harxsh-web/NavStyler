@@ -763,18 +763,43 @@ export class DatabaseStorage implements IStorage {
   }
   
   async updateThemeSettings(id: number, data: Partial<schema.InsertThemeSettings>): Promise<schema.ThemeSettings | undefined> {
-    // If this theme is being set as global, make sure to clear any other global themes
-    if (data.appliesGlobally) {
-      await db.update(schema.themeSettings)
-        .set({ appliesGlobally: false })
-        .where(eq(schema.themeSettings.appliesGlobally, true));
+    try {
+      // If this theme is being set as global, make sure to clear any other global themes
+      if (data.appliesGlobally) {
+        await db.update(schema.themeSettings)
+          .set({ appliesGlobally: false })
+          .where(eq(schema.themeSettings.appliesGlobally, true));
+      }
+      
+      // For making sure we're keeping any existing properties intact
+      const [existingTheme] = await db.select()
+        .from(schema.themeSettings)
+        .where(eq(schema.themeSettings.id, id));
+      
+      if (!existingTheme) {
+        console.error(`Theme not found with id ${id}`);
+        return undefined;
+      }
+      
+      // Merge existing with updates (keeping nulls where needed)
+      const mergedData = {
+        ...existingTheme,
+        ...data,
+        updatedAt: new Date()
+      };
+      
+      // Execute update
+      const [updated] = await db.update(schema.themeSettings)
+        .set(mergedData)
+        .where(eq(schema.themeSettings.id, id))
+        .returning();
+      
+      console.log('Theme updated successfully:', updated);
+      return updated;
+    } catch (error) {
+      console.error('Error updating theme settings:', error);
+      return undefined;
     }
-    
-    const [updated] = await db.update(schema.themeSettings)
-      .set({ ...data, updatedAt: new Date() })
-      .where(eq(schema.themeSettings.id, id))
-      .returning();
-    return updated;
   }
   
   async deleteThemeSettings(id: number): Promise<boolean> {

@@ -81,7 +81,12 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
   const [cssVariables, setCssVariables] = useState<Record<string, string>>({});
   
   // Fetch the active theme
-  const { data: theme, error, isLoading } = useQuery<ThemeSettings | null, Error>({
+  const { 
+    data: theme, 
+    error, 
+    isLoading,
+    refetch: refetchTheme
+  } = useQuery<ThemeSettings | null, Error>({
     queryKey: ['/api/themes/active'],
     queryFn: async () => {
       try {
@@ -98,23 +103,21 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
         return null;
       }
     },
+    staleTime: 0, // Always refetch the theme when requested
   });
   
-  // Fetch all themes (for admin)
+  // Fetch all themes (for admin panel)
   const { 
     data: themes = [], 
     error: themesError, 
-    isLoading: themesLoading 
+    isLoading: themesLoading,
+    refetch: refetchThemes
   } = useQuery<ThemeSettings[], Error>({
     queryKey: ['/api/themes'],
     queryFn: async () => {
       try {
         const res = await fetch('/api/themes');
         if (!res.ok) {
-          if (res.status === 401 || res.status === 403) {
-            // Not authenticated or not admin - just return empty array
-            return [];
-          }
           throw new Error('Failed to fetch themes');
         }
         return await res.json();
@@ -123,8 +126,7 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
         return [];
       }
     },
-    // Refresh every 60 seconds when active
-    refetchInterval: 60000,
+    staleTime: 0, // Always refetch themes when requested
   });
   
   // Create a new theme
@@ -136,7 +138,16 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     }
     
     const newTheme = await res.json();
-    queryClient.invalidateQueries({ queryKey: ['/api/themes'] });
+    
+    // If this is set as the active theme, update our data immediately
+    if (newTheme.appliesGlobally) {
+      queryClient.setQueryData(['/api/themes/active'], newTheme);
+      updateCssVariables(newTheme);
+      refetchTheme();
+    }
+    
+    // Update theme list
+    refetchThemes();
     
     toast({
       title: 'Theme created',
@@ -156,19 +167,17 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     
     const updatedTheme = await res.json();
     
-    // Update the theme list in the cache
-    queryClient.setQueryData(['/api/themes'], (oldData: ThemeSettings[] | undefined) => {
-      if (!oldData) return [updatedTheme];
-      return oldData.map(t => t.id === updatedTheme.id ? updatedTheme : t);
-    });
-    
     // If this is the active theme, update it immediately
     if (updatedTheme.appliesGlobally) {
       queryClient.setQueryData(['/api/themes/active'], updatedTheme);
-      
-      // Update the CSS variables immediately
       updateCssVariables(updatedTheme);
+      
+      // Force refetch to ensure we have the latest data
+      refetchTheme();
     }
+    
+    // Update theme list
+    refetchThemes();
     
     toast({
       title: 'Theme updated',
@@ -188,7 +197,8 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
       }
     }
     
-    queryClient.invalidateQueries({ queryKey: ['/api/themes'] });
+    // Force refetch of all themes
+    refetchThemes();
     
     toast({
       title: 'Theme deleted',
@@ -208,13 +218,13 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     
     const updatedTheme = await res.json();
     
-    // Clear the cache and set the updated theme directly
+    // Update theme data immediately
     queryClient.setQueryData(['/api/themes/active'], updatedTheme);
-    queryClient.invalidateQueries({ queryKey: ['/api/themes'] });
-    
-    // Update the local state immediately
-    setTheme(updatedTheme);
     updateCssVariables(updatedTheme);
+    
+    // Force refetch to ensure we have the latest data
+    refetchTheme();
+    refetchThemes();
     
     toast({
       title: 'Theme activated',
@@ -241,6 +251,9 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
       root.style.setProperty(property, value);
     });
     
+    // Store CSS variables in localStorage for immediate reload support
+    localStorage.setItem('theme-css-variables', JSON.stringify(cssVariables));
+    
     return () => {
       // Clean up when unmounting (not really needed for root variables)
       Object.keys(cssVariables).forEach(property => {
@@ -248,6 +261,23 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
       });
     };
   }, [cssVariables]);
+  
+  // Load cached CSS variables on initial load for faster visual display
+  useEffect(() => {
+    const cachedVariables = localStorage.getItem('theme-css-variables');
+    if (cachedVariables) {
+      try {
+        const variables = JSON.parse(cachedVariables);
+        const root = document.documentElement;
+        
+        Object.entries(variables).forEach(([property, value]) => {
+          root.style.setProperty(property, value as string);
+        });
+      } catch (err) {
+        console.error('Error parsing cached theme variables:', err);
+      }
+    }
+  }, []);
   
   // Convert theme settings to CSS variables
   const updateCssVariables = (theme: ThemeSettings) => {
