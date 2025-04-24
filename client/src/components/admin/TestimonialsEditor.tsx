@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Edit, Trash2, Star } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Star, Video, Image } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -284,6 +284,7 @@ export function TestimonialsEditor() {
                   <TableHead>Author</TableHead>
                   <TableHead>Content Preview</TableHead>
                   <TableHead className="w-28 text-center">Rating</TableHead>
+                  <TableHead className="w-24 text-center">Media Type</TableHead>
                   <TableHead className="w-48 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -310,6 +311,19 @@ export function TestimonialsEditor() {
                             <Star key={index} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {testimonial.mediaType === 'video' ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <Video className="h-3 w-3 mr-1" />
+                            Video
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <Image className="h-3 w-3 mr-1" />
+                            Image
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
