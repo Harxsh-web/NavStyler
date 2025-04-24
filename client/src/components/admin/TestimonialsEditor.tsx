@@ -53,6 +53,8 @@ interface Testimonial {
   content: string;
   rating?: number;
   avatarUrl?: string;
+  videoUrl?: string;
+  mediaType?: 'image' | 'video';
 }
 import {
   AlertDialog,
@@ -79,7 +81,9 @@ const testimonialSchema = z.object({
   company: z.string().optional(),
   content: z.string().min(1, "Testimonial content is required"),
   rating: z.number().int().min(1).max(5).optional(),
+  mediaType: z.enum(['image', 'video']).default('image'),
   avatarUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  videoUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 });
 
 type SectionFormValues = z.infer<typeof sectionSchema>;
@@ -124,7 +128,9 @@ export function TestimonialsEditor() {
       company: "",
       content: "",
       rating: 5,
+      mediaType: "image",
       avatarUrl: "",
+      videoUrl: "",
     },
   });
 
@@ -151,7 +157,9 @@ export function TestimonialsEditor() {
           company: "",
           content: "",
           rating: 5,
+          mediaType: "image",
           avatarUrl: "",
+          videoUrl: "",
         });
       }
     });
@@ -179,7 +187,9 @@ export function TestimonialsEditor() {
       company: testimonial.company || "",
       content: testimonial.content || "",
       rating: testimonial.rating || 5,
+      mediaType: testimonial.mediaType || "image",
       avatarUrl: testimonial.avatarUrl || "",
+      videoUrl: testimonial.videoUrl || "",
     });
     setShowEditDialog(true);
   };
