@@ -58,7 +58,7 @@ const defaultTheme: ThemeSettings = {
   secondaryColor: '#0ea5e9', 
   accentColor: '#f59e0b',
   textColor: '#111827',
-  backgroundColor: '#ffffff',
+  backgroundColor: '#e6f1fe', // Changed from white to light blue
   fontPrimary: 'Inter',
   fontSecondary: 'Merriweather',
   buttonRadius: '0.5rem',
@@ -270,29 +270,47 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
         const variables = JSON.parse(cachedVariables);
         const root = document.documentElement;
         
+        // Apply cached variables for immediate display
         Object.entries(variables).forEach(([property, value]) => {
           root.style.setProperty(property, value as string);
         });
+        
+        // Special handling for background color - ensure it's blue if not specifically set
+        if (!variables['--background'] || variables['--background'] === '#ffffff') {
+          root.style.setProperty('--background', '#e6f1fe');
+          // Update the cache to persist this change
+          const updatedVariables = {...variables, '--background': '#e6f1fe'};
+          localStorage.setItem('theme-css-variables', JSON.stringify(updatedVariables));
+        }
       } catch (err) {
         console.error('Error parsing cached theme variables:', err);
+        // On error, clear the cache to prevent persistent issues
+        localStorage.removeItem('theme-css-variables');
       }
     }
   }, []);
   
   // Convert theme settings to CSS variables
   const updateCssVariables = (theme: ThemeSettings) => {
+    // Clear the localStorage cache to prevent stale values
+    localStorage.removeItem('theme-css-variables');
+    
+    // Ensure background color is always blue, never white
+    const backgroundColor = theme.backgroundColor === '#ffffff' ? '#e6f1fe' : theme.backgroundColor;
+    
     const variables: Record<string, string> = {
       '--primary': theme.primaryColor,
       '--secondary': theme.secondaryColor,
       '--accent': theme.accentColor,
       '--text': theme.textColor,
-      '--background': theme.backgroundColor,
+      '--background': backgroundColor,
       '--font-primary': theme.fontPrimary,
       '--font-secondary': theme.fontSecondary,
       '--button-radius': theme.buttonRadius,
       '--card-style': theme.cardStyle,
     };
     
+    console.log('Updating theme with background color:', backgroundColor);
     setCssVariables(variables);
   };
   
