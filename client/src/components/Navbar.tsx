@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import { ChevronDown, X, Menu } from 'lucide-react';
+import { TransitionLink } from './TransitionLink';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -122,20 +123,20 @@ export default function Navbar() {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/">
+          <TransitionLink href="/" transitionType="fade">
             <div className="flex items-center cursor-pointer">
               <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
                 <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <span className="text-xl font-bold">Luke Mikic</span>
             </div>
-          </Link>
+          </TransitionLink>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/my-book">
+            <TransitionLink href="/my-book" transitionType="slide-left">
               <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">My Book</span>
-            </Link>
+            </TransitionLink>
             
             {/* Free Resources Dropdown - Desktop */}
             <DropdownMenu>
@@ -149,14 +150,14 @@ export default function Navbar() {
                   <div className="space-y-2 mt-2">
                     {resourcesByType.map((resource, index) => (
                       <DropdownMenuItem key={`type-${index}`} asChild className="p-0">
-                        <Link href={resource.href}>
+                        <TransitionLink href={resource.href} transitionType="slide-left">
                           <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
                             <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
                               {resource.icon}
                             </span>
                             <span>{resource.label}</span>
                           </div>
-                        </Link>
+                        </TransitionLink>
                       </DropdownMenuItem>
                     ))}
                   </div>
@@ -167,44 +168,44 @@ export default function Navbar() {
                   <div className="space-y-2 mt-2">
                     {resourcesByTopic.map((resource, index) => (
                       <DropdownMenuItem key={`topic-${index}`} asChild className="p-0">
-                        <Link href={resource.href}>
+                        <TransitionLink href={resource.href} transitionType="slide-left">
                           <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
                             <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
                               {resource.icon}
                             </span>
                             <span>{resource.label}</span>
                           </div>
-                        </Link>
+                        </TransitionLink>
                       </DropdownMenuItem>
                     ))}
                   </div>
                   
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem asChild className="p-0">
-                    <Link href="/all-categories">
+                    <TransitionLink href="/all-categories" transitionType="slide-up">
                       <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
                         <span className="font-medium">all categories</span>
                         <span className="ml-1">→</span>
                       </div>
-                    </Link>
+                    </TransitionLink>
                   </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <Link href="/youtube-academy">
+            <TransitionLink href="/youtube-academy" transitionType="slide-left">
               <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">YouTube Academy</span>
-            </Link>
+            </TransitionLink>
             
-            <Link href="/lifeos">
+            <TransitionLink href="/lifeos" transitionType="slide-up">
               <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">LifeOS Productivity System</span>
-            </Link>
+            </TransitionLink>
             
-            <Link href="/newsletter">
+            <TransitionLink href="/newsletter" transitionType="scale">
               <Button className="bg-orange-300 hover:bg-orange-400 text-white rounded-full">
                 Join 270k+ Subscribers
               </Button>
-            </Link>
+            </TransitionLink>
           </nav>
           
           {/* Mobile menu button and drawer */}
@@ -227,11 +228,11 @@ export default function Navbar() {
               </SheetHeader>
               
               <div className="mt-8 space-y-6">
-                <Link href="/my-book">
+                <TransitionLink href="/my-book" transitionType="slide-left">
                   <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     My Book
                   </div>
-                </Link>
+                </TransitionLink>
                 
                 <div>
                   <Button 

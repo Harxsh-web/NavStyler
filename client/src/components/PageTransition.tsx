@@ -36,9 +36,20 @@ export function PageTransition({
   let determinedTransitionType = transitionType;
   
   if (!determinedTransitionType) {
-    // If we're going backwards in navigation, the context will provide a reversed transition
-    determinedTransitionType = determineTransitionType(location);
-    console.log(`Transitioning to ${location} with type ${determinedTransitionType} (${transitionDirection})`);
+    // First, check if a transition type was specified via the TransitionLink component
+    const bodyTransitionType = document.body.dataset.transitionType as TransitionType | undefined;
+    
+    if (bodyTransitionType) {
+      determinedTransitionType = bodyTransitionType;
+      // Clear the data attribute after using it
+      delete document.body.dataset.transitionType;
+    } else {
+      // If we're going backwards in navigation, the context will provide a reversed transition
+      determinedTransitionType = determineTransitionType(location);
+    }
+    
+    // Log transition for debugging
+    console.log(`Transitioning to ${location} with type ${determinedTransitionType} (${transitionDirection || 'direct'})`);
   }
   
   // Define animation variants for different transition types

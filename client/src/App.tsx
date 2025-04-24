@@ -24,45 +24,46 @@ function Router() {
   // Get current location for AnimatePresence
   const [location] = useLocation();
   
-  // Define the transition for each route
+  // Now we're using the transition context to automatically determine transitions
+  // based on navigation pattern, but we can still override with explicit types if needed
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Switch key={location}>
         <Route path="/">
-          <PageTransition transitionType="fade">
+          <PageTransition>
             <HomePage />
           </PageTransition>
         </Route>
         <Route path="/auth">
-          <PageTransition transitionType="slide-up">
+          <PageTransition>
             <AuthPage />
           </PageTransition>
         </Route>
         <ProtectedRoute path="/admin" component={() => (
-          <PageTransition transitionType="slide-left">
+          <PageTransition>
             <AdminPage />
           </PageTransition>
         )} />
         <Route path="/checkout">
-          <PageTransition transitionType="slide-left">
+          <PageTransition>
             <CheckoutPage />
           </PageTransition>
         </Route>
         <Route path="/payment-success">
-          <PageTransition transitionType="scale">
+          <PageTransition>
             <PaymentSuccessPage />
           </PageTransition>
         </Route>
         <ProtectedRoute 
           path="/admin/analytics" 
           component={() => (
-            <PageTransition transitionType="slide-left">
+            <PageTransition>
               <AnalyticsPage />
             </PageTransition>
           )}
         />
         <Route>
-          <PageTransition transitionType="fade">
+          <PageTransition>
             <NotFound />
           </PageTransition>
         </Route>
