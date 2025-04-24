@@ -192,7 +192,7 @@ export default function AdminPage() {
         </aside>
         
         {/* Content Area */}
-        <main className="flex-grow p-6">
+        <main className="flex-grow p-6" data-admin-section>
           {activeTab === "dashboard" && (
             <div>
               <h1 className="text-2xl font-bold mb-6">Dashboard</h1>

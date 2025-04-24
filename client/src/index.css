@@ -86,5 +86,20 @@
   [id] {
     scroll-margin-top: 100px;
   }
+  
+  /* Admin button styling */
+  .admin-primary-button {
+    background-color: #2563eb !important; /* blue-600 */
+    color: white !important;
+  }
+  
+  .admin-primary-button:hover:not(:disabled) {
+    background-color: #1d4ed8 !important; /* blue-700 */
+  }
+  
+  /* Apply admin button styling to all regular buttons in admin sections */
+  [data-admin-section] button:not([variant="outline"]):not([variant="link"]):not([variant="ghost"]):not([variant="destructive"]) {
+    @apply admin-primary-button;
+  }
 }
 
