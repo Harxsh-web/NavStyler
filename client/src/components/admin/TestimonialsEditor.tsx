@@ -17,6 +17,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Edit, Trash2, Star, Video, ImageIcon } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Video, ImageIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -43,6 +44,18 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Switch } from "@/components/ui/switch";
 
 // Define types for testimonials
 interface Testimonial {
@@ -55,17 +68,6 @@ interface Testimonial {
   mediaType: 'image' | 'video';
   showMobile: boolean;
 }
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 // Schema for section title
 const sectionSchema = z.object({
@@ -105,7 +107,7 @@ export function TestimonialsEditor() {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   // Form for section title
@@ -175,7 +177,7 @@ export function TestimonialsEditor() {
     }
   };
 
-  const handleEdit = (testimonial: any) => {
+  const handleEdit = (testimonial: Testimonial) => {
     setSelectedTestimonial(testimonial);
     testimonialForm.reset({
       name: testimonial.name || "",
@@ -285,7 +287,7 @@ export function TestimonialsEditor() {
               </TableHeader>
               <TableBody>
                 {testimonials && testimonials.length > 0 ? (
-                  testimonials.map((testimonial: any) => (
+                  testimonials.map((testimonial: Testimonial) => (
                     <TableRow key={testimonial.id}>
                       <TableCell className="font-medium">
                         {testimonial.name}
@@ -383,10 +385,10 @@ export function TestimonialsEditor() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={testimonialForm.control}
-                      name="author"
+                      name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Author Name</FormLabel>
+                          <FormLabel>Name</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter name" {...field} />
                           </FormControl>
@@ -397,48 +399,12 @@ export function TestimonialsEditor() {
                     
                     <FormField
                       control={testimonialForm.control}
-                      name="rating"
+                      name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Rating (1-5)</FormLabel>
+                          <FormLabel>Title (optional)</FormLabel>
                           <FormControl>
-                            <Input 
-                              type="number" 
-                              min={1} 
-                              max={5}
-                              {...field}
-                              onChange={(e) => field.onChange(parseInt(e.target.value || "5"))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={testimonialForm.control}
-                      name="role"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Role (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., CEO, Student, etc." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={testimonialForm.control}
-                      name="company"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Company/Organization (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter company name" {...field} />
+                            <Input placeholder="e.g., CEO, Clinical Psychologist" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -448,13 +414,13 @@ export function TestimonialsEditor() {
                   
                   <FormField
                     control={testimonialForm.control}
-                    name="content"
+                    name="quote"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Testimonial Content</FormLabel>
+                        <FormLabel>Testimonial Quote</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Enter testimonial text" 
+                            placeholder="Enter testimonial quote" 
                             className="min-h-32"
                             {...field} 
                           />
@@ -506,19 +472,19 @@ export function TestimonialsEditor() {
                   {testimonialForm.watch('mediaType') === 'image' && (
                     <FormField
                       control={testimonialForm.control}
-                      name="avatarUrl"
+                      name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Avatar Image URL</FormLabel>
+                          <FormLabel>Image URL</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/avatar.jpg" {...field} />
+                            <Input placeholder="https://example.com/image.jpg" {...field} />
                           </FormControl>
                           <FormMessage />
                           {field.value && (
                             <div className="mt-2">
                               <img 
                                 src={field.value} 
-                                alt="Avatar preview" 
+                                alt="Image preview" 
                                 className="h-16 w-16 object-cover rounded-full border" 
                                 onError={(e) => e.currentTarget.src = 'https://placehold.co/100x100?text=Invalid+URL'}
                               />
@@ -537,7 +503,7 @@ export function TestimonialsEditor() {
                         <FormItem>
                           <FormLabel>Video URL</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/video.mp4 or YouTube link" {...field} />
+                            <Input placeholder="https://youtube.com/watch?v=..." {...field} />
                           </FormControl>
                           <FormMessage />
                           <p className="text-xs text-muted-foreground mt-1">
@@ -547,6 +513,29 @@ export function TestimonialsEditor() {
                       )}
                     />
                   )}
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="showMobile"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            Show on Mobile
+                          </FormLabel>
+                          <FormDescription>
+                            Displayed on mobile devices when enabled
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   
                   <DialogFooter>
                     <Button
@@ -582,10 +571,10 @@ export function TestimonialsEditor() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={testimonialForm.control}
-                      name="author"
+                      name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Author Name</FormLabel>
+                          <FormLabel>Name</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter name" {...field} />
                           </FormControl>
@@ -596,48 +585,12 @@ export function TestimonialsEditor() {
                     
                     <FormField
                       control={testimonialForm.control}
-                      name="rating"
+                      name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Rating (1-5)</FormLabel>
+                          <FormLabel>Title (optional)</FormLabel>
                           <FormControl>
-                            <Input 
-                              type="number" 
-                              min={1} 
-                              max={5}
-                              {...field}
-                              onChange={(e) => field.onChange(parseInt(e.target.value || "5"))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={testimonialForm.control}
-                      name="role"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Role (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., CEO, Student, etc." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={testimonialForm.control}
-                      name="company"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Company/Organization (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter company name" {...field} />
+                            <Input placeholder="e.g., CEO, Clinical Psychologist" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -647,13 +600,13 @@ export function TestimonialsEditor() {
                   
                   <FormField
                     control={testimonialForm.control}
-                    name="content"
+                    name="quote"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Testimonial Content</FormLabel>
+                        <FormLabel>Testimonial Quote</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Enter testimonial text" 
+                            placeholder="Enter testimonial quote" 
                             className="min-h-32"
                             {...field} 
                           />
@@ -705,19 +658,19 @@ export function TestimonialsEditor() {
                   {testimonialForm.watch('mediaType') === 'image' && (
                     <FormField
                       control={testimonialForm.control}
-                      name="avatarUrl"
+                      name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Avatar Image URL</FormLabel>
+                          <FormLabel>Image URL</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/avatar.jpg" {...field} />
+                            <Input placeholder="https://example.com/image.jpg" {...field} />
                           </FormControl>
                           <FormMessage />
                           {field.value && (
                             <div className="mt-2">
                               <img 
                                 src={field.value} 
-                                alt="Avatar preview" 
+                                alt="Image preview" 
                                 className="h-16 w-16 object-cover rounded-full border" 
                                 onError={(e) => e.currentTarget.src = 'https://placehold.co/100x100?text=Invalid+URL'}
                               />
@@ -736,7 +689,7 @@ export function TestimonialsEditor() {
                         <FormItem>
                           <FormLabel>Video URL</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/video.mp4 or YouTube link" {...field} />
+                            <Input placeholder="https://youtube.com/watch?v=..." {...field} />
                           </FormControl>
                           <FormMessage />
                           <p className="text-xs text-muted-foreground mt-1">
@@ -746,6 +699,29 @@ export function TestimonialsEditor() {
                       )}
                     />
                   )}
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="showMobile"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            Show on Mobile
+                          </FormLabel>
+                          <FormDescription>
+                            Displayed on mobile devices when enabled
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   
                   <DialogFooter>
                     <Button
