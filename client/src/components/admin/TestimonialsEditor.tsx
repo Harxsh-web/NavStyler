@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTestimonials, useTestimonialSection } from "@/hooks/use-content";
 import { useToast } from "@/hooks/use-toast";
 
@@ -17,7 +16,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -523,9 +521,9 @@ export function TestimonialsEditor() {
                           <FormLabel className="text-base">
                             Show on Mobile
                           </FormLabel>
-                          <FormDescription>
+                          <div className="text-[0.8rem] text-muted-foreground">
                             Displayed on mobile devices when enabled
-                          </FormDescription>
+                          </div>
                         </div>
                         <FormControl>
                           <Switch
@@ -709,9 +707,9 @@ export function TestimonialsEditor() {
                           <FormLabel className="text-base">
                             Show on Mobile
                           </FormLabel>
-                          <FormDescription>
+                          <div className="text-[0.8rem] text-muted-foreground">
                             Displayed on mobile devices when enabled
-                          </FormDescription>
+                          </div>
                         </div>
                         <FormControl>
                           <Switch
