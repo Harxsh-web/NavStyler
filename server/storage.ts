@@ -440,22 +440,69 @@ export class DatabaseStorage implements IStorage {
 
   // Testimonials
   async getTestimonials(): Promise<schema.Testimonial[]> {
-    return db.select().from(schema.testimonial);
+    try {
+      const result = await db.execute(
+        `SELECT id, quote, name, title, image_url as "imageUrl", 
+         video_url as "videoUrl", media_type as "mediaType", 
+         show_mobile as "showMobile", updated_at as "updatedAt"
+         FROM testimonial`
+      );
+      return result.rows as schema.Testimonial[];
+    } catch (error) {
+      console.error('Error in getTestimonials:', error);
+      return [];
+    }
   }
 
   async getTestimonial(id: number): Promise<schema.Testimonial | undefined> {
-    const [testimonial] = await db.select().from(schema.testimonial).where(eq(schema.testimonial.id, id));
-    return testimonial;
+    try {
+      const result = await db.execute(
+        `SELECT id, quote, name, title, image_url as "imageUrl", 
+         video_url as "videoUrl", media_type as "mediaType", 
+         show_mobile as "showMobile", updated_at as "updatedAt"
+         FROM testimonial WHERE id = $1`,
+        [id]
+      );
+      return result.rows[0] as schema.Testimonial | undefined;
+    } catch (error) {
+      console.error(`Error in getTestimonial(${id}):`, error);
+      return undefined;
+    }
   }
 
   async createTestimonial(data: schema.InsertTestimonial): Promise<schema.Testimonial> {
-    const [testimonial] = await db.insert(schema.testimonial).values(data).returning();
+    // Map the data to the correct column names
+    const dbData: any = {
+      name: data.name,
+      quote: data.quote,
+      title: data.title,
+      image_url: data.imageUrl,
+      video_url: data.videoUrl,
+      media_type: data.mediaType,
+      show_mobile: data.showMobile,
+      updated_at: new Date()
+    };
+    
+    const [testimonial] = await db.insert(schema.testimonial).values(dbData).returning();
     return testimonial;
   }
 
   async updateTestimonial(id: number, data: Partial<schema.InsertTestimonial>): Promise<schema.Testimonial | undefined> {
+    // Map the data to the correct column names
+    const dbData: any = {
+      updated_at: new Date()
+    };
+    
+    if (data.name !== undefined) dbData.name = data.name;
+    if (data.quote !== undefined) dbData.quote = data.quote;
+    if (data.title !== undefined) dbData.title = data.title;
+    if (data.imageUrl !== undefined) dbData.image_url = data.imageUrl;
+    if (data.videoUrl !== undefined) dbData.video_url = data.videoUrl;
+    if (data.mediaType !== undefined) dbData.media_type = data.mediaType;
+    if (data.showMobile !== undefined) dbData.show_mobile = data.showMobile;
+    
     const [updated] = await db.update(schema.testimonial)
-      .set({ ...data, updatedAt: new Date() })
+      .set(dbData)
       .where(eq(schema.testimonial.id, id))
       .returning();
     return updated;

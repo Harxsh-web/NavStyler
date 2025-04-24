@@ -65,9 +65,8 @@ export function usePublicTestimonials() {
       if (!response.ok) {
         return [];
       }
-      const data = await response.json();
-      // Return just the testimonials array if it exists, or an empty array otherwise
-      return data.testimonials || [];
+      // API now returns the testimonials array directly
+      return await response.json();
     },
     staleTime: 5 * 60 * 1000,
   });
