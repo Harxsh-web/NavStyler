@@ -249,58 +249,58 @@ export default function Navbar() {
                       <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
                       <div className="space-y-3">
                         {resourcesByType.map((resource, index) => (
-                          <Link key={`mobile-type-${index}`} href={resource.href}>
+                          <TransitionLink key={`mobile-type-${index}`} href={resource.href} transitionType="slide-left">
                             <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
                               <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
                                 {resource.icon}
                               </span>
                               <span>{resource.label}</span>
                             </div>
-                          </Link>
+                          </TransitionLink>
                         ))}
                       </div>
                       
                       <h3 className="text-sm font-semibold text-gray-500 mb-3 mt-6">Browse by topic:</h3>
                       <div className="space-y-3">
                         {resourcesByTopic.map((resource, index) => (
-                          <Link key={`mobile-topic-${index}`} href={resource.href}>
+                          <TransitionLink key={`mobile-topic-${index}`} href={resource.href} transitionType="slide-left">
                             <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
                               <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
                                 {resource.icon}
                               </span>
                               <span>{resource.label}</span>
                             </div>
-                          </Link>
+                          </TransitionLink>
                         ))}
                       </div>
                       
-                      <Link href="/all-categories">
+                      <TransitionLink href="/all-categories" transitionType="slide-up">
                         <div className="flex items-center text-gray-700 hover:text-black mt-3 cursor-pointer">
                           <span className="font-medium">all categories</span>
                           <span className="ml-1">→</span>
                         </div>
-                      </Link>
+                      </TransitionLink>
                     </div>
                   )}
                 </div>
                 
-                <Link href="/youtube-academy">
+                <TransitionLink href="/youtube-academy" transitionType="slide-left">
                   <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     YouTube Academy
                   </div>
-                </Link>
+                </TransitionLink>
                 
-                <Link href="/lifeos">
+                <TransitionLink href="/lifeos" transitionType="slide-up">
                   <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
                     LifeOS Productivity System
                   </div>
-                </Link>
+                </TransitionLink>
                 
-                <Link href="/newsletter">
+                <TransitionLink href="/newsletter" transitionType="scale">
                   <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                     Join 270k+ Subscribers
                   </Button>
-                </Link>
+                </TransitionLink>
               </div>
             </SheetContent>
           </Sheet>
