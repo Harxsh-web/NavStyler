@@ -16,6 +16,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "@/components/PageTransition";
+import { PageTransitionProvider } from "@/hooks/use-page-transition";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { useEffect } from "react";
 
@@ -23,44 +24,45 @@ function Router() {
   // Get current location for AnimatePresence
   const [location] = useLocation();
   
+  // Define the transition for each route
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Switch key={location}>
         <Route path="/">
-          <PageTransition>
+          <PageTransition transitionType="fade">
             <HomePage />
           </PageTransition>
         </Route>
         <Route path="/auth">
-          <PageTransition>
+          <PageTransition transitionType="slide-up">
             <AuthPage />
           </PageTransition>
         </Route>
         <ProtectedRoute path="/admin" component={() => (
-          <PageTransition>
+          <PageTransition transitionType="slide-left">
             <AdminPage />
           </PageTransition>
         )} />
         <Route path="/checkout">
-          <PageTransition>
+          <PageTransition transitionType="slide-left">
             <CheckoutPage />
           </PageTransition>
         </Route>
         <Route path="/payment-success">
-          <PageTransition>
+          <PageTransition transitionType="scale">
             <PaymentSuccessPage />
           </PageTransition>
         </Route>
         <ProtectedRoute 
           path="/admin/analytics" 
           component={() => (
-            <PageTransition>
+            <PageTransition transitionType="slide-left">
               <AnalyticsPage />
             </PageTransition>
           )}
         />
         <Route>
-          <PageTransition>
+          <PageTransition transitionType="fade">
             <NotFound />
           </PageTransition>
         </Route>
@@ -103,11 +105,13 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ThemeSettingsProvider>
-            <Navbar />
-            <div className="pt-20">
-              <Router />
-            </div>
-            <Toaster />
+            <PageTransitionProvider>
+              <Navbar />
+              <div className="pt-20">
+                <Router />
+              </div>
+              <Toaster />
+            </PageTransitionProvider>
           </ThemeSettingsProvider>
         </AuthProvider>
       </QueryClientProvider>
