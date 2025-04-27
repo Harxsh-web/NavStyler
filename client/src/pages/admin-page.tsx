@@ -309,18 +309,7 @@ export default function AdminPage() {
                     </button>
                   </div>
                   
-                  <div className="px-6 py-4 flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium">Learning Points</h3>
-                      <p className="text-sm text-gray-500">10 things readers will learn from the book</p>
-                    </div>
-                    <button 
-                      onClick={() => setActiveTab("learning")}
-                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </div>
+
                   
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
@@ -398,8 +387,8 @@ export default function AdminPage() {
                     <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
                       <li>Keep headlines short and compelling</li>
                       <li>Use high-quality, authentic testimonials</li>
-                      <li>Ensure learning points are clear and concise</li>
                       <li>Maintain a consistent tone throughout</li>
+                      <li>Preview changes before publishing</li>
                     </ul>
                   </div>
                   
@@ -455,17 +444,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {activeTab === "learning" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Learning Points Editor</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-gray-600 mb-4">Manage the key learning points from the book.</p>
-                <div className="mt-6">
-                  <LearningPointsEditor />
-                </div>
-              </div>
-            </div>
-          )}
+
 
           {activeTab === "testimonials" && (
             <div>
