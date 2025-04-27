@@ -289,3 +289,23 @@ contentRouter.get("/guarantee-section", async (req, res, next) => {
     next(error);
   }
 });
+
+// Scholarship section route
+contentRouter.get("/scholarship", async (req, res, next) => {
+  try {
+    const scholarshipSection = await storage.getScholarshipSection();
+    res.json(scholarshipSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+// YouTube Framework section route
+contentRouter.get("/youtube-framework", async (req, res, next) => {
+  try {
+    const youtubeFrameworkSection = await storage.getYoutubeFrameworkSection();
+    res.json(youtubeFrameworkSection || {});
+  } catch (error) {
+    next(error);
+  }
+});

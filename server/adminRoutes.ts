@@ -716,3 +716,49 @@ adminRouter.delete("/bonus-items/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+// Scholarship Section
+adminRouter.get("/scholarship", async (req, res, next) => {
+  try {
+    const scholarshipSection = await storage.getScholarshipSection();
+    res.json(scholarshipSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put(
+  "/scholarship",
+  validateRequest(schema.insertScholarshipSectionSchema.partial()),
+  async (req, res, next) => {
+    try {
+      const updatedSection = await storage.updateScholarshipSection(req.validatedBody);
+      res.json(updatedSection);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// YouTube Framework Section
+adminRouter.get("/youtube-framework", async (req, res, next) => {
+  try {
+    const youtubeFrameworkSection = await storage.getYoutubeFrameworkSection();
+    res.json(youtubeFrameworkSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put(
+  "/youtube-framework",
+  validateRequest(schema.insertYoutubeFrameworkSectionSchema.partial()),
+  async (req, res, next) => {
+    try {
+      const updatedSection = await storage.updateYoutubeFrameworkSection(req.validatedBody);
+      res.json(updatedSection);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
