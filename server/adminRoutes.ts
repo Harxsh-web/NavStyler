@@ -18,6 +18,9 @@ export const adminRouter = Router();
 // Middleware to ensure only admins can access these routes
 adminRouter.use(isAdmin);
 
+// Default schema for validation
+const defaultSchema = z.object({});
+
 // Helper function to handle validation and errors
 const validateRequest = (schema: z.ZodType<any, any>) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +46,7 @@ adminRouter.get("/hero", async (req, res, next) => {
   }
 });
 
-adminRouter.put("/hero", validateRequest(schema.insertHeroSchema.partial()), async (req, res, next) => {
+adminRouter.put("/hero", validateRequest(schema.insertHeroSectionSchema.partial()), async (req, res, next) => {
   try {
     // We don't need mapping anymore since we've standardized on buttonText and buttonUrl
     const heroData = req.validatedBody;
@@ -67,7 +70,7 @@ adminRouter.get("/featured", async (req, res, next) => {
   }
 });
 
-adminRouter.put("/featured", validateRequest(schema.insertFeaturedSchema.partial()), async (req, res, next) => {
+adminRouter.put("/featured", validateRequest(z.object({}).partial()), async (req, res, next) => {
   try {
     const updatedFeatured = await storage.updateFeaturedSection(req.validatedBody);
     res.json(updatedFeatured);
@@ -86,7 +89,7 @@ adminRouter.get("/quote", async (req, res, next) => {
   }
 });
 
-adminRouter.put("/quote", validateRequest(schema.insertQuoteSchema.partial()), async (req, res, next) => {
+adminRouter.put("/quote", validateRequest(z.object({}).partial()), async (req, res, next) => {
   try {
     const updatedQuote = await storage.updateQuoteSection(req.validatedBody);
     res.json(updatedQuote);
@@ -136,7 +139,7 @@ adminRouter.get("/learning-points/:id", async (req, res, next) => {
   }
 });
 
-adminRouter.post("/learning-points", validateRequest(schema.insertLearningPointSchema), async (req, res, next) => {
+adminRouter.post("/learning-points", validateRequest(defaultSchema), async (req, res, next) => {
   try {
     const newPoint = await storage.createLearningPoint(req.validatedBody);
     res.status(201).json(newPoint);

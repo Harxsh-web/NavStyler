@@ -1,360 +1,416 @@
-import { sql } from "drizzle-orm";
-import { text, integer, boolean, timestamp, pgTable, serial, primaryKey, varchar, jsonb, date, numeric } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { pgTable, serial, text, integer, boolean, timestamp, uniqueIndex, varchar, json } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-// Users
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
-  isAdmin: boolean("is_admin").default(false).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  // For Stripe integration
-  stripeCustomerId: text("stripe_customer_id"),
-  stripeSubscriptionId: text("stripe_subscription_id"),
-});
+// ----- User Schema -----
+export const users = pgTable(
+  "users",
+  {
+    id: serial("id").primaryKey(),
+    username: text("username").notNull(),
+    email: text("email").notNull(),
+    password: text("password").notNull(),
+    isAdmin: boolean("is_admin").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    stripeCustomerId: text("stripe_customer_id"),
+    stripeSubscriptionId: text("stripe_subscription_id"),
+  },
+  (users) => {
+    return {
+      usernameIdx: uniqueIndex("username_idx").on(users.username),
+      emailIdx: uniqueIndex("email_idx").on(users.email),
+    };
+  }
+);
 
-export type User = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
 export const insertUserSchema = createInsertSchema(users);
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type User = typeof users.$inferSelect;
 
-// Articles
-export const article = pgTable("article", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
-  excerpt: text("excerpt"),
-  content: text("content").notNull(),
-  imageUrl: text("image_url"),
-  backgroundColor: text("background_color"),
-  isPublished: boolean("is_published").default(false).notNull(),
-  publishedAt: timestamp("published_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Article = typeof article.$inferSelect;
-export type InsertArticle = typeof article.$inferInsert;
-export const insertArticleSchema = createInsertSchema(article);
-
-// Videos
-export const video = pgTable("video", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
-  description: text("description"),
-  thumbnailUrl: text("thumbnail_url"),
-  videoUrl: text("video_url").notNull(),
-  isPublished: boolean("is_published").default(false).notNull(),
-  publishedAt: timestamp("published_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Video = typeof video.$inferSelect;
-export type InsertVideo = typeof video.$inferInsert;
-export const insertVideoSchema = createInsertSchema(video);
-
-// Hero Section
+// ----- Hero Section Schema -----
 export const heroSection = pgTable("hero_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
-  buttonText: text("cta_text"),
-  buttonUrl: text("cta_link"),
+  description: text("description").notNull(),
   imageUrl: text("image_url"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  buttonText: text("button_text").notNull(),
+  buttonUrl: text("button_url").notNull(),
+  featuredIn: text("featured_in"),
+  videoUrl: text("video_url"),
 });
 
-export type Hero = typeof heroSection.$inferSelect;
-export type InsertHero = typeof heroSection.$inferInsert;
-export const insertHeroSchema = createInsertSchema(heroSection);
-
-// Featured Section
-export const featuredSection = pgTable("featured_section", {
-  id: serial("id").primaryKey(),
-  heading: text("heading").notNull(),
-  subheading: text("subheading"),
-  logoUrls: jsonb("logo_urls"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export type HeroSection = typeof heroSection.$inferSelect;
+export const insertHeroSectionSchema = createInsertSchema(heroSection).omit({
+  id: true,
 });
+export type InsertHeroSection = z.infer<typeof insertHeroSectionSchema>;
 
-export type Featured = typeof featuredSection.$inferSelect;
-export type InsertFeatured = typeof featuredSection.$inferInsert;
-export const insertFeaturedSchema = createInsertSchema(featuredSection);
-
-// Quote Section
+// ----- Quote Section Schema -----
 export const quoteSection = pgTable("quote_section", {
   id: serial("id").primaryKey(),
-  heading: text("heading"),
-  content: text("content"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  quote: text("quote").notNull(),
+  author: text("author").notNull(),
+  position: text("position"),
 });
 
-export type Quote = typeof quoteSection.$inferSelect;
-export type InsertQuote = typeof quoteSection.$inferInsert;
-export const insertQuoteSchema = createInsertSchema(quoteSection);
+export type QuoteSection = typeof quoteSection.$inferSelect;
+export const insertQuoteSectionSchema = createInsertSchema(quoteSection).omit({
+  id: true,
+});
+export type InsertQuoteSection = z.infer<typeof insertQuoteSectionSchema>;
 
-// Learning Points Section
+// ----- Learning Points Section Schema -----
 export const learningPointsSection = pgTable("learning_points_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  subtitle: text("subtitle"),
-  backgroundColor: text("background_color"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  subtitle: text("subtitle").notNull(),
+  description: text("description").notNull(),
 });
 
 export type LearningPointsSection = typeof learningPointsSection.$inferSelect;
-export type InsertLearningPointsSection = typeof learningPointsSection.$inferInsert;
-export const insertLearningPointsSectionSchema = createInsertSchema(learningPointsSection);
+export const insertLearningPointsSectionSchema = createInsertSchema(learningPointsSection).omit({
+  id: true,
+});
+export type InsertLearningPointsSection = z.infer<typeof insertLearningPointsSectionSchema>;
 
-// Learning Points
-export const learningPoint = pgTable("learning_point", {
+// ----- Learning Points Schema -----
+export const learningPoints = pgTable("learning_points", {
   id: serial("id").primaryKey(),
-  number: integer("number").notNull(),
-  text: text("text").notNull(),
-  sectionId: integer("section_id"),
-  showMobile: boolean("show_mobile").default(true),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  sectionId: integer("section_id")
+    .references(() => learningPointsSection.id)
+    .notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  iconName: text("icon_name").notNull(),
+  order: integer("order").notNull(),
 });
 
-export type LearningPoint = typeof learningPoint.$inferSelect;
-export type InsertLearningPoint = typeof learningPoint.$inferInsert;
-export const insertLearningPointSchema = createInsertSchema(learningPoint);
+export type LearningPoint = typeof learningPoints.$inferSelect;
+export const insertLearningPointSchema = createInsertSchema(learningPoints).omit({
+  id: true,
+});
+export type InsertLearningPoint = z.infer<typeof insertLearningPointSchema>;
 
-// Testimonial Section
+// ----- Testimonial Section Schema -----
 export const testimonialSection = pgTable("testimonial_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  subtitle: text("subtitle").notNull(),
+  description: text("description").notNull(),
 });
 
 export type TestimonialSection = typeof testimonialSection.$inferSelect;
-export type InsertTestimonialSection = typeof testimonialSection.$inferInsert;
-export const insertTestimonialSectionSchema = createInsertSchema(testimonialSection);
+export const insertTestimonialSectionSchema = createInsertSchema(testimonialSection).omit({
+  id: true,
+});
+export type InsertTestimonialSection = z.infer<typeof insertTestimonialSectionSchema>;
 
-// Testimonials
-export const testimonial = pgTable("testimonial", {
+// ----- Testimonials Schema -----
+export const testimonials = pgTable("testimonials", {
   id: serial("id").primaryKey(),
+  sectionId: integer("section_id")
+    .references(() => testimonialSection.id)
+    .notNull(),
   quote: text("quote").notNull(),
-  name: text("name").notNull(),
-  title: text("title"), // Job title or role
+  author: text("author").notNull(),
+  position: text("position"),
   imageUrl: text("image_url"),
   videoUrl: text("video_url"),
-  mediaType: text("media_type").default("image").notNull(), // 'image', 'video'
-  showMobile: boolean("show_mobile").default(true).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  order: integer("order").notNull(),
 });
 
-export type Testimonial = typeof testimonial.$inferSelect;
-export type InsertTestimonial = typeof testimonial.$inferInsert;
-export const insertTestimonialSchema = createInsertSchema(testimonial);
-
-// Book Sections
-export const bookSection = pgTable("book_section", {
-  id: serial("id").primaryKey(),
-  orderIndex: integer("order_index").notNull(),
-  title: text("title").notNull(),
-  subtitle: text("subtitle"),
-  content: text("content").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export type Testimonial = typeof testimonials.$inferSelect;
+export const insertTestimonialSchema = createInsertSchema(testimonials).omit({
+  id: true,
 });
+export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 
-export type BookSection = typeof bookSection.$inferSelect;
-export type InsertBookSection = typeof bookSection.$inferInsert;
-export const insertBookSectionSchema = createInsertSchema(bookSection);
-
-// About Book Section
-export const aboutBookSection = pgTable("about_book_section", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  bookCoverConfig: jsonb("book_cover_config"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type AboutBookSection = typeof aboutBookSection.$inferSelect;
-export type InsertAboutBookSection = typeof aboutBookSection.$inferInsert;
-export const insertAboutBookSectionSchema = createInsertSchema(aboutBookSection);
-
-// Author Section
-export const authorSection = pgTable("author_section", {
-  id: serial("id").primaryKey(),
-  title: text("title"),
-  name: text("author_name"), // Maps to author_name in the database
-  bio: text("bio"),
-  bioShort: text("bio_short"),
-  imageUrl: text("image_url"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type AuthorSection = typeof authorSection.$inferSelect;
-export type InsertAuthorSection = typeof authorSection.$inferInsert;
-export const insertAuthorSectionSchema = createInsertSchema(authorSection);
-
-// Footer Categories
-export const footerCategory = pgTable("footer_category", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  orderIndex: integer("order_index").default(0).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type FooterCategory = typeof footerCategory.$inferSelect;
-export type InsertFooterCategory = typeof footerCategory.$inferInsert;
-export const insertFooterCategorySchema = createInsertSchema(footerCategory);
-
-// Footer Links
-export const footerLink = pgTable("footer_link", {
-  id: serial("id").primaryKey(),
-  categoryId: integer("category_id").notNull().references(() => footerCategory.id, { onDelete: "cascade" }),
-  text: text("text").notNull(),
-  url: text("url").notNull(),
-  orderIndex: integer("order_index").default(0).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type FooterLink = typeof footerLink.$inferSelect;
-export type InsertFooterLink = typeof footerLink.$inferInsert;
-export const insertFooterLinkSchema = createInsertSchema(footerLink);
-
-// Social Links
-export const socialLink = pgTable("social_link", {
-  id: serial("id").primaryKey(),
-  platform: text("platform").notNull(),
-  url: text("url").notNull(),
-  iconName: text("icon_name").notNull(),
-  active: boolean("active").default(true).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type SocialLink = typeof socialLink.$inferSelect;
-export type InsertSocialLink = typeof socialLink.$inferInsert;
-export const insertSocialLinkSchema = createInsertSchema(socialLink);
-
-// Site Settings
-export const siteSetting = pgTable("site_setting", {
-  name: text("name").primaryKey(),
-  value: text("value").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type SiteSetting = typeof siteSetting.$inferSelect;
-export type InsertSiteSetting = typeof siteSetting.$inferInsert;
-export const insertSiteSettingSchema = createInsertSchema(siteSetting);
-
-// Analytics - Page Views
-export const pageView = pgTable("page_view", {
-  id: serial("id").primaryKey(),
-  path: text("path").notNull(),
-  date: date("date").notNull(),
-  count: integer("count").notNull().default(0),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type PageView = typeof pageView.$inferSelect;
-export type InsertPageView = typeof pageView.$inferInsert;
-export const insertPageViewSchema = createInsertSchema(pageView);
-
-// Analytics - Sales
-export const sale = pgTable("sale", {
-  id: serial("id").primaryKey(),
-  date: date("date").notNull(),
-  amount: numeric("amount").notNull(),
-  productType: text("product_type").notNull(), // 'physical', 'ebook', 'audiobook'
-  stripePaymentId: text("stripe_payment_id"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Sale = typeof sale.$inferSelect;
-export type InsertSale = typeof sale.$inferInsert;
-export const insertSaleSchema = createInsertSchema(sale);
-
-// Analytics - Visitors
-export const visitor = pgTable("visitor", {
-  id: serial("id").primaryKey(),
-  date: date("date").notNull(),
-  count: integer("count").notNull().default(0),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Visitor = typeof visitor.$inferSelect;
-export type InsertVisitor = typeof visitor.$inferInsert;
-export const insertVisitorSchema = createInsertSchema(visitor);
-
-// Analytics - Content Engagement
-export const contentEngagement = pgTable("content_engagement", {
-  id: serial("id").primaryKey(),
-  date: date("date").notNull(),
-  contentType: text("content_type").notNull(), // 'article', 'video'
-  contentId: integer("content_id").notNull(),
-  engagementScore: numeric("engagement_score").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type ContentEngagement = typeof contentEngagement.$inferSelect;
-export type InsertContentEngagement = typeof contentEngagement.$inferInsert;
-export const insertContentEngagementSchema = createInsertSchema(contentEngagement);
-
-// Theme Settings
-export const themeSettings = pgTable("theme_settings", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  primaryColor: text("primary_color").default("#4f46e5").notNull(), // Indigo
-  secondaryColor: text("secondary_color").default("#0ea5e9").notNull(), // Sky blue
-  accentColor: text("accent_color").default("#f59e0b").notNull(), // Amber
-  textColor: text("text_color").default("#111827").notNull(), // Near black
-  backgroundColor: text("background_color").default("#ffffff").notNull(), // White
-  fontPrimary: text("font_primary").default("Inter").notNull(),
-  fontSecondary: text("font_secondary").default("Merriweather").notNull(),
-  buttonRadius: text("button_radius").default("0.5rem").notNull(),
-  buttonStyle: text("button_style").default("filled").notNull(), // filled, outline, ghost
-  cardStyle: text("card_style").default("shadow").notNull(), // shadow, border, flat
-  layoutStyle: text("layout_style").default("modern").notNull(), // modern, classic, minimal
-  isDarkMode: boolean("is_dark_mode").default(false).notNull(),
-  isHighContrast: boolean("is_high_contrast").default(false).notNull(),
-  headerStyle: text("header_style").default("default").notNull(), // default, centered, minimal
-  footerStyle: text("footer_style").default("standard").notNull(), // standard, simple, detailed
-  customCss: text("custom_css"),
-  appliesGlobally: boolean("applies_globally").default(true).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type ThemeSettings = typeof themeSettings.$inferSelect;
-export type InsertThemeSettings = typeof themeSettings.$inferInsert;
-export const insertThemeSettingsSchema = createInsertSchema(themeSettings);
-
-// Free Bonuses Section
-export const bonusSection = pgTable("bonus_section", {
+// ----- Book Sections Schema -----
+export const bookSections = pgTable("book_sections", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
-  backgroundColor: text("background_color").default("#E6F1FE"),
+  description: text("description").notNull(),
+});
+
+export type BookSection = typeof bookSections.$inferSelect;
+export const insertBookSectionSchema = createInsertSchema(bookSections).omit({
+  id: true,
+});
+export type InsertBookSection = z.infer<typeof insertBookSectionSchema>;
+
+// ----- About Book Section Schema -----
+export const aboutBookSection = pgTable("about_book_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url"),
+  buttonText: text("button_text").notNull(),
+  buttonUrl: text("button_url").notNull(),
+  features: text("features").array(),
+});
+
+export type AboutBookSection = typeof aboutBookSection.$inferSelect;
+export const insertAboutBookSectionSchema = createInsertSchema(aboutBookSection).omit({
+  id: true,
+});
+export type InsertAboutBookSection = z.infer<typeof insertAboutBookSectionSchema>;
+
+// ----- Author Section Schema -----
+export const authorSection = pgTable("author_section", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  bio: text("bio").notNull(),
+  imageUrl: text("image_url"),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  credentials: text("credentials").array(),
+});
+
+export type AuthorSection = typeof authorSection.$inferSelect;
+export const insertAuthorSectionSchema = createInsertSchema(authorSection).omit({
+  id: true,
+});
+export type InsertAuthorSection = z.infer<typeof insertAuthorSectionSchema>;
+
+// ----- Footer Categories Schema -----
+export const footerCategories = pgTable("footer_categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  order: integer("order").notNull(),
+});
+
+export type FooterCategory = typeof footerCategories.$inferSelect;
+export const insertFooterCategorySchema = createInsertSchema(footerCategories).omit({
+  id: true,
+});
+export type InsertFooterCategory = z.infer<typeof insertFooterCategorySchema>;
+
+// ----- Footer Links Schema -----
+export const footerLinks = pgTable("footer_links", {
+  id: serial("id").primaryKey(),
+  categoryId: integer("category_id")
+    .references(() => footerCategories.id)
+    .notNull(),
+  label: text("label").notNull(),
+  url: text("url").notNull(),
+  order: integer("order").notNull(),
+});
+
+export type FooterLink = typeof footerLinks.$inferSelect;
+export const insertFooterLinkSchema = createInsertSchema(footerLinks).omit({
+  id: true,
+});
+export type InsertFooterLink = z.infer<typeof insertFooterLinkSchema>;
+
+// ----- Social Links Schema -----
+export const socialLinks = pgTable("social_links", {
+  id: serial("id").primaryKey(),
+  platform: text("platform").notNull(),
+  url: text("url").notNull(),
+  order: integer("order").notNull(),
+});
+
+export type SocialLink = typeof socialLinks.$inferSelect;
+export const insertSocialLinkSchema = createInsertSchema(socialLinks).omit({
+  id: true,
+});
+export type InsertSocialLink = z.infer<typeof insertSocialLinkSchema>;
+
+// ----- Site Settings Schema -----
+export const siteSettings = pgTable("site_settings", {
+  id: serial("id").primaryKey(),
+  siteName: text("site_name").notNull(),
+  siteDescription: text("site_description").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  copyrightText: text("copyright_text").notNull(),
+  logoUrl: text("logo_url"),
+  faviconUrl: text("favicon_url"),
+});
+
+export type SiteSettings = typeof siteSettings.$inferSelect;
+export const insertSiteSettingsSchema = createInsertSchema(siteSettings).omit({
+  id: true,
+});
+export type InsertSiteSettings = z.infer<typeof insertSiteSettingsSchema>;
+
+// ----- Theme Settings Schema -----
+export const themeSettings = pgTable("theme_settings", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  primaryColor: text("primary_color").notNull(),
+  secondaryColor: text("secondary_color").notNull(),
+  accentColor: text("accent_color").notNull(),
+  textColor: text("text_color").notNull(),
+  backgroundColor: text("background_color").notNull(),
+  fontFamily: text("font_family").notNull(),
+  isActive: boolean("is_active").default(false).notNull(),
+});
+
+export type ThemeSettings = typeof themeSettings.$inferSelect;
+export const insertThemeSettingsSchema = createInsertSchema(themeSettings).omit({
+  id: true,
+});
+export type InsertThemeSettings = z.infer<typeof insertThemeSettingsSchema>;
+
+// ----- Articles Schema -----
+export const articles = pgTable("articles", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt").notNull(),
+  coverImageUrl: text("cover_image_url"),
+  authorId: integer("author_id")
+    .references(() => users.id)
+    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  publishedAt: timestamp("published_at"),
+  tags: text("tags").array(),
+  status: text("status").notNull().default("draft"),
+});
+
+export type Article = typeof articles.$inferSelect;
+export const insertArticleSchema = createInsertSchema(articles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertArticle = z.infer<typeof insertArticleSchema>;
+
+// ----- Videos Schema -----
+export const videos = pgTable("videos", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  videoUrl: text("video_url").notNull(),
+  thumbnailUrl: text("thumbnail_url"),
+  authorId: integer("author_id")
+    .references(() => users.id)
+    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  publishedAt: timestamp("published_at"),
+  tags: text("tags").array(),
+  status: text("status").notNull().default("draft"),
+});
+
+export type Video = typeof videos.$inferSelect;
+export const insertVideoSchema = createInsertSchema(videos).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertVideo = z.infer<typeof insertVideoSchema>;
+
+// ----- Analytics Schema -----
+export const analytics = pgTable("analytics", {
+  id: serial("id").primaryKey(),
+  date: timestamp("date").defaultNow().notNull(),
+  pageViews: integer("page_views").notNull(),
+  uniqueVisitors: integer("unique_visitors").notNull(),
+  bounceRate: varchar("bounce_rate", { length: 10 }).notNull(),
+  averageSessionDuration: varchar("average_session_duration", { length: 10 }).notNull(),
+  conversionRate: varchar("conversion_rate", { length: 10 }).notNull(),
+  revenue: integer("revenue").notNull(),
+});
+
+export type Analytics = typeof analytics.$inferSelect;
+export const insertAnalyticsSchema = createInsertSchema(analytics).omit({
+  id: true,
+});
+export type InsertAnalytics = z.infer<typeof insertAnalyticsSchema>;
+
+// ----- Bonus Section Schema -----
+export const bonusSection = pgTable("bonus_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  description: text("description").notNull(),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  backgroundColor: text("background_color"),
 });
 
 export type BonusSection = typeof bonusSection.$inferSelect;
-export type InsertBonusSection = typeof bonusSection.$inferInsert;
-export const insertBonusSectionSchema = createInsertSchema(bonusSection);
+export const insertBonusSectionSchema = createInsertSchema(bonusSection).omit({
+  id: true,
+});
+export type InsertBonusSection = z.infer<typeof insertBonusSectionSchema>;
 
-// Free Bonus Items
-export const bonusItem = pgTable("bonus_item", {
+// ----- Bonus Items Schema -----
+export const bonusItems = pgTable("bonus_items", {
   id: serial("id").primaryKey(),
-  sectionId: integer("section_id").references(() => bonusSection.id, { onDelete: "cascade" }),
+  sectionId: integer("section_id")
+    .references(() => bonusSection.id)
+    .notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  iconName: text("icon_name").default("Gift"),
-  buttonText: text("button_text"),
-  buttonUrl: text("button_url"),
-  backgroundColor: text("background_color").default("#FFE382"),
-  orderIndex: integer("order_index").default(0),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  imageUrl: text("image_url"),
+  order: integer("order").notNull(),
 });
 
-export type BonusItem = typeof bonusItem.$inferSelect;
-export type InsertBonusItem = typeof bonusItem.$inferInsert;
-export const insertBonusItemSchema = createInsertSchema(bonusItem);
+export type BonusItem = typeof bonusItems.$inferSelect;
+export const insertBonusItemSchema = createInsertSchema(bonusItems).omit({
+  id: true,
+});
+export type InsertBonusItem = z.infer<typeof insertBonusItemSchema>;
+
+// ----- Guarantee Section Schema -----
+export const guaranteeSection = pgTable("guarantee_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url"),
+  paragraphs: text("paragraphs").array(),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  backgroundColor: text("background_color"),
+});
+
+export type GuaranteeSection = typeof guaranteeSection.$inferSelect;
+export const insertGuaranteeSectionSchema = createInsertSchema(guaranteeSection).omit({
+  id: true,
+});
+export type InsertGuaranteeSection = z.infer<typeof insertGuaranteeSectionSchema>;
+
+// ----- Scholarship Section Schema -----
+export const scholarshipSection = pgTable("scholarship_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url"),
+  requirements: text("requirements").array(),
+  applicationProcess: text("application_process").array(),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  backgroundColor: text("background_color"),
+});
+
+export type ScholarshipSection = typeof scholarshipSection.$inferSelect;
+export const insertScholarshipSectionSchema = createInsertSchema(scholarshipSection).omit({
+  id: true,
+});
+export type InsertScholarshipSection = z.infer<typeof insertScholarshipSectionSchema>;
+
+// ----- YouTube Framework Section Schema -----
+export const youtubeFrameworkSection = pgTable("youtube_framework_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  description: text("description").notNull(),
+  steps: json("steps").notNull(),
+  finalNote: text("final_note"),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  backgroundColor: text("background_color"),
+});
+
+export type YoutubeFrameworkSection = typeof youtubeFrameworkSection.$inferSelect;
+export const insertYoutubeFrameworkSectionSchema = createInsertSchema(youtubeFrameworkSection).omit({
+  id: true,
+});
+export type InsertYoutubeFrameworkSection = z.infer<typeof insertYoutubeFrameworkSectionSchema>;

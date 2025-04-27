@@ -175,6 +175,40 @@ export function useAllPublicContent() {
 }
 
 /**
+ * Hook for fetching the scholarship section for the public page
+ */
+export function usePublicScholarshipSection() {
+  return useQuery({
+    queryKey: ["/api/content/scholarship-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/scholarship-section");
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook for fetching the YouTube framework section for the public page
+ */
+export function usePublicYoutubeFrameworkSection() {
+  return useQuery({
+    queryKey: ["/api/content/youtube-framework-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/youtube-framework-section");
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for refreshing all public content
  */
 export function useRefreshPublicContent() {
@@ -197,6 +231,8 @@ export function useRefreshPublicContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-section"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-items"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/guarantee-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/scholarship-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/youtube-framework-section"] });
       
       toast({
         title: "Content refreshed",
