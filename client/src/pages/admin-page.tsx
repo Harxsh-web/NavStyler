@@ -13,6 +13,8 @@ import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import BonusSectionEditor from "@/components/admin/BonusSectionEditor";
 import GuaranteeSectionEditor from "@/components/admin/GuaranteeSectionEditor";
+import YoutubeFrameworkSectionEditor from "@/components/admin/YoutubeFrameworkSectionEditor";
+import ScholarshipSectionEditor from "@/components/admin/ScholarshipSectionEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -144,6 +146,24 @@ export default function AdminPage() {
               onClick={() => setActiveTab("guaranteeSection")}
             >
               Money-Back Guarantee
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "youtubeFrameworkSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("youtubeFrameworkSection")}
+            >
+              YouTube Framework
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "scholarshipSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("scholarshipSection")}
+            >
+              Scholarship
             </button>
             
             <button
@@ -501,6 +521,30 @@ export default function AdminPage() {
                 <p className="text-gray-600 mb-4">Edit the 100% satisfaction guarantee details.</p>
                 <div className="mt-6">
                   <GuaranteeSectionEditor />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "youtubeFrameworkSection" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">YouTube Framework Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the YouTube Framework section content.</p>
+                <div className="mt-6">
+                  <YoutubeFrameworkSectionEditor />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "scholarshipSection" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Scholarship Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the scholarship application section content.</p>
+                <div className="mt-6">
+                  <ScholarshipSectionEditor />
                 </div>
               </div>
             </div>
