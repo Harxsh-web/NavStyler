@@ -300,7 +300,7 @@ contentRouter.get("/guarantee-section", async (req, res, next) => {
 });
 
 // Scholarship section route
-contentRouter.get("/scholarship", async (req, res, next) => {
+contentRouter.get("/scholarship-section", async (req, res, next) => {
   try {
     const scholarshipSection = await storage.getScholarshipSection();
     res.json(scholarshipSection || {});
@@ -310,7 +310,7 @@ contentRouter.get("/scholarship", async (req, res, next) => {
 });
 
 // YouTube Framework section route
-contentRouter.get("/youtube-framework", async (req, res, next) => {
+contentRouter.get("/youtube-framework-section", async (req, res, next) => {
   try {
     const youtubeFrameworkSection = await storage.getYoutubeFrameworkSection();
     res.json(youtubeFrameworkSection || {});
