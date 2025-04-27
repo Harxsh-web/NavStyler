@@ -35,7 +35,7 @@ export function AdminCard({ title, description, children }: AdminCardProps) {
           <Button 
             variant="default" 
             size="sm" 
-            className="gap-1 bg-blue-600 text-white hover:bg-blue-700"
+            className="gap-3 bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => window.open('/', '_blank')}
           >
             <ExternalLink className="h-4 w-4" />
