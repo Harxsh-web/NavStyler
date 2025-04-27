@@ -12,6 +12,7 @@ import { SeoEditor } from "@/components/admin/SeoEditor";
 import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
 import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
+import BonusSectionEditor from "@/components/admin/BonusSectionEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -136,6 +137,15 @@ export default function AdminPage() {
               onClick={() => setActiveTab("author")}
             >
               Author Section
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "bonusSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("bonusSection")}
+            >
+              Free Bonuses
             </button>
             
             <button
