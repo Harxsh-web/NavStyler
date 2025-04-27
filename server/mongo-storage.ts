@@ -101,6 +101,29 @@ export interface IStorage {
   updateSocialLink(id: string, data: any): Promise<models.SocialLink | undefined>;
   deleteSocialLink(id: string): Promise<boolean>;
   
+  // Bonus Section
+  getBonusSection(): Promise<models.BonusSection | undefined>;
+  updateBonusSection(data: any): Promise<models.BonusSection>;
+  
+  // Bonus Items
+  getBonusItems(): Promise<models.BonusItem[]>;
+  getBonusItem(id: string): Promise<models.BonusItem | undefined>;
+  createBonusItem(data: any): Promise<models.BonusItem>;
+  updateBonusItem(id: string, data: any): Promise<models.BonusItem | undefined>;
+  deleteBonusItem(id: string): Promise<boolean>;
+  
+  // Guarantee Section
+  getGuaranteeSection(): Promise<models.GuaranteeSection | undefined>;
+  updateGuaranteeSection(data: any): Promise<models.GuaranteeSection>;
+  
+  // Scholarship Section
+  getScholarshipSection(): Promise<models.ScholarshipSection | undefined>;
+  updateScholarshipSection(data: any): Promise<models.ScholarshipSection>;
+  
+  // YouTube Framework Section
+  getYoutubeFrameworkSection(): Promise<models.YoutubeFrameworkSection | undefined>;
+  updateYoutubeFrameworkSection(data: any): Promise<models.YoutubeFrameworkSection>;
+  
   // Site settings
   getSiteSettings(): Promise<models.SiteSetting[]>;
   getSiteSetting(name: string): Promise<models.SiteSetting | undefined>;
