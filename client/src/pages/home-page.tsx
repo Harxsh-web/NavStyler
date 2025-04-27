@@ -70,8 +70,11 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex items-center gap-4">
-                    <a href="#buy" className="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-200">
-                      {heroData?.ctaText || "Get the Book"}
+                    <a
+                      href={heroData?.buttonUrl || "#buy"} 
+                      className="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-200"
+                    >
+                      {heroData?.buttonText || "Get the Book"}
                     </a>
                     <a href="#learn-more" className="text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
                       Learn More
@@ -244,8 +247,11 @@ export default function HomePage() {
                 </p>
                 
                 <div className="mt-8">
-                  <a href="#buy" className="bg-black text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition duration-200 inline-block">
-                    Get the Book
+                  <a 
+                    href={heroData?.buttonUrl || "#buy"} 
+                    className="bg-black text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition duration-200 inline-block"
+                  >
+                    {heroData?.buttonText || "Get the Book"}
                   </a>
                 </div>
               </div>
