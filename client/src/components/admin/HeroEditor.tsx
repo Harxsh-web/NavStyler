@@ -17,8 +17,8 @@ import { AdminCard } from "./AdminCard";
 const heroSchema = z.object({
   title: z.string().min(1, "Title is required"),
   subtitle: z.string().optional(),
-  ctaText: z.string().optional(),
-  ctaLink: z.string().url("Must be a valid URL").optional(),
+  buttonText: z.string().optional(),
+  buttonUrl: z.string().url("Must be a valid URL").optional(),
   imageUrl: z.string().optional(), // Allow any string - could be URL or data URL from image upload
 });
 
@@ -35,8 +35,8 @@ export function HeroEditor() {
     defaultValues: {
       title: "",
       subtitle: "",
-      ctaText: "",
-      ctaLink: "",
+      buttonText: "",
+      buttonUrl: "",
       imageUrl: "",
     },
   });
@@ -46,8 +46,8 @@ export function HeroEditor() {
     form.reset({
       title: hero.title || "",
       subtitle: hero.subtitle || "",
-      ctaText: hero.ctaText || "",
-      ctaLink: hero.ctaLink || "",
+      buttonText: hero.buttonText || "",
+      buttonUrl: hero.buttonUrl || "",
       imageUrl: hero.imageUrl || "",
     });
     setIsEditing(true);
@@ -152,12 +152,12 @@ export function HeroEditor() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="ctaText"
+                name="buttonText"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CTA Button Text</FormLabel>
+                    <FormLabel>Button Text</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Learn More" {...field} />
+                      <Input placeholder="e.g., Get the Book" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -166,10 +166,10 @@ export function HeroEditor() {
 
               <FormField
                 control={form.control}
-                name="ctaLink"
+                name="buttonUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CTA Button Link</FormLabel>
+                    <FormLabel>Button Link</FormLabel>
                     <FormControl>
                       <Input placeholder="https://example.com" {...field} />
                     </FormControl>
