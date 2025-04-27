@@ -654,3 +654,52 @@ adminRouter.delete("/videos/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+// Bonus section routes
+adminRouter.put("/bonus-section", validateRequest(schema.insertBonusSectionSchema.partial()), async (req, res, next) => {
+  try {
+    const updatedSection = await storage.updateBonusSection(req.validatedBody);
+    res.json(updatedSection);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.post("/bonus-items", validateRequest(schema.insertBonusItemSchema), async (req, res, next) => {
+  try {
+    const newItem = await storage.createBonusItem(req.validatedBody);
+    res.status(201).json(newItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put("/bonus-items/:id", validateRequest(schema.insertBonusItemSchema.partial()), async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const updatedItem = await storage.updateBonusItem(id, req.validatedBody);
+    
+    if (!updatedItem) {
+      return res.status(404).json({ error: "Bonus item not found" });
+    }
+    
+    res.json(updatedItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.delete("/bonus-items/:id", async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const success = await storage.deleteBonusItem(id);
+    
+    if (!success) {
+      return res.status(404).json({ error: "Bonus item not found" });
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
