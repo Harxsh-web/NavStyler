@@ -654,7 +654,7 @@ export class DatabaseStorage implements IStorage {
   async getSocialLinks(): Promise<schema.SocialLink[]> {
     try {
       const result = await query(
-        `SELECT id, platform, url, icon, order_index as "orderIndex", updated_at as "updatedAt" 
+        `SELECT id, platform, url, icon_name as "iconName", active, updated_at as "updatedAt" 
          FROM social_link`
       );
       return result.rows as schema.SocialLink[];

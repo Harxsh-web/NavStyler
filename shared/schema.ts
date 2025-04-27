@@ -234,8 +234,8 @@ export const socialLink = pgTable("social_link", {
   id: serial("id").primaryKey(),
   platform: text("platform").notNull(),
   url: text("url").notNull(),
-  icon: text("icon").notNull(),
-  orderIndex: integer("order_index").default(0).notNull(),
+  iconName: text("icon_name").notNull(),
+  active: boolean("active").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
