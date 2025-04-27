@@ -526,6 +526,11 @@ export const ContentEngagement = getModel<IContentEngagement>('ContentEngagement
 export const ThemeSettings = getModel<IThemeSettings>('ThemeSettings', themeSettingsSchema);
 export const Article = getModel<IArticle>('Article', articleSchema);
 export const Video = getModel<IVideo>('Video', videoSchema);
+export const BonusSection = getModel<IBonusSection>('BonusSection', bonusSectionSchema);
+export const BonusItem = getModel<IBonusItem>('BonusItem', bonusItemSchema);
+export const GuaranteeSection = getModel<IGuaranteeSection>('GuaranteeSection', guaranteeSectionSchema);
+export const ScholarshipSection = getModel<IScholarshipSection>('ScholarshipSection', scholarshipSectionSchema);
+export const YoutubeFrameworkSection = getModel<IYoutubeFrameworkSection>('YoutubeFrameworkSection', youtubeFrameworkSectionSchema);
 
 // Create Zod schemas for validation
 export const userZodSchema = z.object({
@@ -667,6 +672,53 @@ export const videoZodSchema = z.object({
   isPublished: z.boolean().optional().default(false)
 });
 
+export const bonusSectionZodSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  backgroundColor: z.string().optional()
+});
+
+export const bonusItemZodSchema = z.object({
+  sectionId: z.number(),
+  title: z.string(),
+  description: z.string(),
+  iconName: z.string().optional(),
+  buttonText: z.string().optional(),
+  buttonUrl: z.string().optional(),
+  backgroundColor: z.string().optional(),
+  orderIndex: z.number()
+});
+
+export const guaranteeSectionZodSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  content: z.string().optional(),
+  backgroundColor: z.string().optional()
+});
+
+export const scholarshipSectionZodSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  imageUrl: z.string().optional(),
+  requirements: z.array(z.string()).optional(),
+  applicationProcess: z.array(z.string()).optional(),
+  buttonText: z.string().optional(),
+  buttonUrl: z.string().optional(),
+  backgroundColor: z.string().optional()
+});
+
+export const youtubeFrameworkSectionZodSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  steps: z.array(z.any()).optional(),
+  finalNote: z.string().optional(),
+  buttonText: z.string().optional(),
+  buttonUrl: z.string().optional(),
+  backgroundColor: z.string().optional()
+});
+
 // Re-export types for compatibility with the old schema
 export type User = IUser;
 export type Hero = IHero;
@@ -690,6 +742,11 @@ export type ContentEngagement = IContentEngagement;
 export type ThemeSettings = IThemeSettings;
 export type Article = IArticle;
 export type Video = IVideo;
+export type BonusSection = IBonusSection;
+export type BonusItem = IBonusItem;
+export type GuaranteeSection = IGuaranteeSection;
+export type ScholarshipSection = IScholarshipSection;
+export type YoutubeFrameworkSection = IYoutubeFrameworkSection;
 
 // For compatibility with the insert schemas from drizzle-zod
 export const insertUserSchema = userZodSchema;
@@ -710,3 +767,8 @@ export const insertSiteSettingSchema = siteSettingZodSchema;
 export const insertThemeSettingsSchema = themeSettingsZodSchema;
 export const insertArticleSchema = articleZodSchema;
 export const insertVideoSchema = videoZodSchema;
+export const insertBonusSectionSchema = bonusSectionZodSchema;
+export const insertBonusItemSchema = bonusItemZodSchema;
+export const insertGuaranteeSectionSchema = guaranteeSectionZodSchema;
+export const insertScholarshipSectionSchema = scholarshipSectionZodSchema;
+export const insertYoutubeFrameworkSectionSchema = youtubeFrameworkSectionZodSchema;
