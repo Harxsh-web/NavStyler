@@ -5,18 +5,21 @@ import { Loader2, RefreshCw } from "lucide-react";
 import { 
   usePublicHeroSection, 
   usePublicQuoteSection, 
-  usePublicLearningPoints,
   usePublicAboutBookSection,
   usePublicAuthorSection,
   usePublicBonusSection,
   usePublicBonusItems,
   usePublicGuaranteeSection,
+  usePublicScholarshipSection,
+  usePublicYoutubeFrameworkSection,
   useRefreshPublicContent
 } from "@/hooks/use-public-content";
 import { Button } from "@/components/ui/button";
 import TestimonialsDisplay from "@/components/TestimonialsDisplay";
 import BonusSection from "@/components/BonusSection";
 import GuaranteeSection from "@/components/GuaranteeSection";
+import ScholarshipSection from "@/components/ScholarshipSection";
+import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
 
 export default function HomePage() {
   // Fetch data from the API
@@ -26,6 +29,8 @@ export default function HomePage() {
   const { data: bonusSectionData, isLoading: bonusSectionLoading } = usePublicBonusSection();
   const { data: bonusItemsData, isLoading: bonusItemsLoading } = usePublicBonusItems();
   const { data: guaranteeSectionData, isLoading: guaranteeSectionLoading } = usePublicGuaranteeSection();
+  const { data: scholarshipSectionData, isLoading: scholarshipSectionLoading } = usePublicScholarshipSection();
+  const { data: youtubeFrameworkSectionData, isLoading: youtubeFrameworkSectionLoading } = usePublicYoutubeFrameworkSection();
   
   // Content refresh mutation
   const refreshMutation = useRefreshPublicContent();
@@ -222,6 +227,20 @@ export default function HomePage() {
         {!guaranteeSectionLoading && (
           <GuaranteeSection
             guaranteeSection={guaranteeSectionData}
+          />
+        )}
+
+        {/* Scholarship Section */}
+        {!scholarshipSectionLoading && (
+          <ScholarshipSection 
+            scholarshipSection={scholarshipSectionData}
+          />
+        )}
+
+        {/* YouTube Framework Section */}
+        {!youtubeFrameworkSectionLoading && (
+          <YoutubeFrameworkSection
+            youtubeFrameworkSection={youtubeFrameworkSectionData}
           />
         )}
         
