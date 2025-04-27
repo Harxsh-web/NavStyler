@@ -305,6 +305,12 @@ export class DatabaseStorage implements IStorage {
       
       console.log('Updating hero section with data:', data);
       
+      // Add additional debug logging for button fields
+      console.log('Button values for update:', {
+        buttonText: data.buttonText || existing?.buttonText,
+        buttonUrl: data.buttonUrl || existing?.buttonUrl
+      });
+      
       if (existing) {
         // Use direct query to ensure field mappings are accurate
         const result = await query(
@@ -335,8 +341,8 @@ export class DatabaseStorage implements IStorage {
           [
             data.title || '',
             data.subtitle || '',
-            data.buttonText || '',
-            data.buttonUrl || '',
+            data.buttonText || 'Get the Book',
+            data.buttonUrl || 'https://chatgpt.com',
             data.imageUrl || ''
           ]
         );
