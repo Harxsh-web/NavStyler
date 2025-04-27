@@ -366,6 +366,19 @@ export default function AdminPage() {
                   
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
+                      <h3 className="font-medium">Free Bonuses</h3>
+                      <p className="text-sm text-gray-500">Free bonuses section with drag-and-drop items</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("bonusSection")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
                       <h3 className="font-medium">Footer</h3>
                       <p className="text-sm text-gray-500">Footer links and categories</p>
                     </div>
@@ -488,6 +501,18 @@ export default function AdminPage() {
                 <p className="text-gray-600 mb-4">Manage footer links, categories, and social media.</p>
                 <div className="mt-6">
                   <FooterEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "bonusSection" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Free Bonuses Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Manage the "What if I can't afford The $995?" free bonuses section.</p>
+                <div className="mt-6">
+                  <BonusSectionEditor />
                 </div>
               </div>
             </div>
