@@ -196,6 +196,7 @@ export function useRefreshPublicContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/content/author"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-section"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-items"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/guarantee-section"] });
       
       toast({
         title: "Content refreshed",

@@ -279,3 +279,13 @@ contentRouter.get("/bonus-items", async (req, res, next) => {
     next(error);
   }
 });
+
+// Guarantee section route
+contentRouter.get("/guarantee-section", async (req, res, next) => {
+  try {
+    const guaranteeSection = await storage.getGuaranteeSection();
+    res.json(guaranteeSection || {});
+  } catch (error) {
+    next(error);
+  }
+});

@@ -665,6 +665,16 @@ adminRouter.put("/bonus-section", validateRequest(schema.insertBonusSectionSchem
   }
 });
 
+// Guarantee section route
+adminRouter.put("/guarantee-section", async (req, res, next) => {
+  try {
+    const updatedSection = await storage.updateGuaranteeSection(req.body);
+    res.json(updatedSection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 adminRouter.post("/bonus-items", validateRequest(schema.insertBonusItemSchema), async (req, res, next) => {
   try {
     const newItem = await storage.createBonusItem(req.validatedBody);
