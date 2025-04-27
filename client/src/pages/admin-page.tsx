@@ -13,6 +13,7 @@ import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
 import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import BonusSectionEditor from "@/components/admin/BonusSectionEditor";
+import GuaranteeSectionEditor from "@/components/admin/GuaranteeSectionEditor";
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -146,6 +147,15 @@ export default function AdminPage() {
               onClick={() => setActiveTab("bonusSection")}
             >
               Free Bonuses
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "guaranteeSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("guaranteeSection")}
+            >
+              Money-Back Guarantee
             </button>
             
             <button
@@ -379,6 +389,19 @@ export default function AdminPage() {
                   
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
+                      <h3 className="font-medium">Money-Back Guarantee</h3>
+                      <p className="text-sm text-gray-500">100% satisfaction guarantee details</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("guaranteeSection")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
                       <h3 className="font-medium">Footer</h3>
                       <p className="text-sm text-gray-500">Footer links and categories</p>
                     </div>
@@ -513,6 +536,18 @@ export default function AdminPage() {
                 <p className="text-gray-600 mb-4">Manage the "What if I can't afford The $995?" free bonuses section.</p>
                 <div className="mt-6">
                   <BonusSectionEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "guaranteeSection" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Money-Back Guarantee Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the 100% satisfaction guarantee details.</p>
+                <div className="mt-6">
+                  <GuaranteeSectionEditor />
                 </div>
               </div>
             </div>
