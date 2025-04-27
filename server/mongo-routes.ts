@@ -2,11 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./mongo-auth";
 import { WebSocketServer } from "ws";
-import { adminRouter } from "./adminRoutes";
-import { themeRouter } from "./themeRoutes";
-import { contentRouter } from "./contentRoutes";
-import { analyticsRouter } from "./analyticsRoutes";
-import { stripeRouter } from "./stripeRoutes";
+import { adminRouter } from "./mongo-adminRoutes";
+import { themeRouter } from "./mongo-themeRoutes";
+import { contentRouter } from "./mongo-contentRoutes";
+import { analyticsRouter } from "./mongo-analyticsRoutes";
+import { stripeRouter } from "./mongo-stripeRoutes";
 import { storage } from "./mongo-storage";
 import { Hero, TestimonialSection, Testimonial, User, ThemeSettings } from "@shared/models";
 
@@ -110,11 +110,11 @@ async function initializeDatabase() {
     if (!heroSection) {
       console.log('Creating default hero section...');
       await storage.updateHeroSection({
-        title: 'Want To Escape Your 9-5 & travel the world? Join Our YouTube Masterclass',
-        subtitle: 'Discover the proven strategies and blueprints I've developed, that will allow you to quit your 9-5 and succeed on YouTube.',
-        buttonText: 'Get the Book',
-        buttonUrl: '/checkout',
-        imageUrl: 'https://example.com/book-cover.jpg'
+        title: "Want To Escape Your 9-5 & travel the world? Join Our YouTube Masterclass",
+        subtitle: "Discover the proven strategies and blueprints I've developed, that will allow you to quit your 9-5 and succeed on YouTube.",
+        buttonText: "Get the Book",
+        buttonUrl: "/checkout",
+        imageUrl: "https://example.com/book-cover.jpg"
       });
     }
     

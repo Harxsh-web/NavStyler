@@ -186,6 +186,21 @@ export class MongoDBStorage implements IStorage {
     }
   }
   
+  async updateUser(id: string, data: any): Promise<models.User | undefined> {
+    try {
+      if (!Types.ObjectId.isValid(id)) return undefined;
+      const updatedUser = await models.User.findByIdAndUpdate(
+        id,
+        { ...data, updatedAt: new Date() },
+        { new: true }
+      ).lean();
+      return updatedUser || undefined;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  }
+  
   // Articles
   async getArticles(limit: number = 10): Promise<models.Article[]> {
     try {
