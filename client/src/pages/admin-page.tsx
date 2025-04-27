@@ -4,7 +4,6 @@ import { Link } from "wouter";
 import { HeroEditor } from "@/components/admin/HeroEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { QuoteEditor } from "@/components/admin/QuoteEditor";
-import { LearningPointsEditor } from "@/components/admin/LearningPointsEditor";
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
@@ -107,18 +106,7 @@ export default function AdminPage() {
               Quote Section
             </button>
             
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                activeTab === "learning" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
-              }`}
-              onClick={() => {
-                setActiveTab("learning");
-                if (window.innerWidth < 1024) setShowSidebar(false);
-              }}
-            >
-              Learning Points
-            </button>
-            
+
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
                 activeTab === "testimonials" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
@@ -243,13 +231,7 @@ export default function AdminPage() {
                   </div>
                 </div>
                 
-                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Learning Points</span>
-                    <span className="text-xl sm:text-2xl font-bold mt-1">10</span>
-                    <span className="text-xs text-gray-500 mt-1">Total points</span>
-                  </div>
-                </div>
+
                 
                 <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
@@ -281,15 +263,7 @@ export default function AdminPage() {
                   </div>
                 </button>
                 
-                <button 
-                  onClick={() => setActiveTab("learning")}
-                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-                >
-                  <div className="text-left">
-                    <h3 className="font-medium">Manage Learning Points</h3>
-                    <p className="text-sm text-gray-500">Add or edit key learning points</p>
-                  </div>
-                </button>
+
                 
                 <button 
                   onClick={() => setActiveTab("testimonials")}
