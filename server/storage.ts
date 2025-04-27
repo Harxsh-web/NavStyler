@@ -1189,6 +1189,182 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
+
+  // ----- Scholarship Section Methods -----
+  async getScholarshipSection(): Promise<schema.ScholarshipSection | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, subtitle, description, image_url as "imageUrl", requirements, 
+         application_process as "applicationProcess", button_text as "buttonText", 
+         button_url as "buttonUrl", background_color as "backgroundColor"
+         FROM scholarship_section LIMIT 1`
+      );
+      return result.rows[0] as schema.ScholarshipSection;
+    } catch (error) {
+      console.error('Error in getScholarshipSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateScholarshipSection(data: Partial<schema.InsertScholarshipSection>): Promise<schema.ScholarshipSection> {
+    try {
+      // Check if section exists
+      const existing = await this.getScholarshipSection();
+      
+      if (!existing) {
+        // Create if doesn't exist
+        const result = await query(
+          `INSERT INTO scholarship_section 
+           (title, subtitle, description, image_url, requirements, application_process, button_text, button_url, background_color) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+           RETURNING id, title, subtitle, description, image_url as "imageUrl", requirements, 
+           application_process as "applicationProcess", button_text as "buttonText", 
+           button_url as "buttonUrl", background_color as "backgroundColor"`,
+          [
+            data.title || 'Can\'t Afford The $995?',
+            data.subtitle || 'Scholarship Application',
+            data.description || 'If you truly cannot afford the full price but are committed to building your YouTube channel, I\'m offering scholarships based on need and dedication.',
+            data.imageUrl || '/student-scholarship.jpg',
+            data.requirements || [],
+            data.applicationProcess || [],
+            data.buttonText || 'Apply for Scholarship',
+            data.buttonUrl || '#scholarship-application',
+            data.backgroundColor || 'bg-amber-50'
+          ]
+        );
+        
+        return result.rows[0] as schema.ScholarshipSection;
+      } else {
+        // Update if exists
+        const result = await query(
+          `UPDATE scholarship_section SET 
+           title = COALESCE($1, title),
+           subtitle = COALESCE($2, subtitle),
+           description = COALESCE($3, description),
+           image_url = COALESCE($4, image_url),
+           requirements = COALESCE($5, requirements),
+           application_process = COALESCE($6, application_process),
+           button_text = COALESCE($7, button_text),
+           button_url = COALESCE($8, button_url),
+           background_color = COALESCE($9, background_color)
+           WHERE id = $10
+           RETURNING id, title, subtitle, description, image_url as "imageUrl", requirements, 
+           application_process as "applicationProcess", button_text as "buttonText", 
+           button_url as "buttonUrl", background_color as "backgroundColor"`,
+          [
+            data.title || null,
+            data.subtitle || null,
+            data.description || null,
+            data.imageUrl || null,
+            data.requirements || null,
+            data.applicationProcess || null,
+            data.buttonText || null,
+            data.buttonUrl || null,
+            data.backgroundColor || null,
+            existing.id
+          ]
+        );
+        
+        return result.rows[0] as schema.ScholarshipSection;
+      }
+    } catch (error) {
+      console.error('Error in updateScholarshipSection:', error);
+      throw error;
+    }
+  }
+
+  // ----- YouTube Framework Section Methods -----
+  async getYoutubeFrameworkSection(): Promise<schema.YoutubeFrameworkSection | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, subtitle, description, steps, final_note as "finalNote", 
+         button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor"
+         FROM youtube_framework_section LIMIT 1`
+      );
+      return result.rows[0] as schema.YoutubeFrameworkSection;
+    } catch (error) {
+      console.error('Error in getYoutubeFrameworkSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateYoutubeFrameworkSection(data: Partial<schema.InsertYoutubeFrameworkSection>): Promise<schema.YoutubeFrameworkSection> {
+    try {
+      // Check if section exists
+      const existing = await this.getYoutubeFrameworkSection();
+      
+      if (!existing) {
+        // Create if doesn't exist
+        const result = await query(
+          `INSERT INTO youtube_framework_section 
+           (title, subtitle, description, steps, final_note, button_text, button_url, background_color) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+           RETURNING id, title, subtitle, description, steps, final_note as "finalNote", 
+           button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor"`,
+          [
+            data.title || 'My Simple 3 Step YouTube Framework',
+            data.subtitle || 'How I Grew My Channel to 4,000,000 Subscribers',
+            data.description || 'This is the exact framework I used to grow my YouTube channel from 0 to over 4 million subscribers.',
+            data.steps || JSON.stringify([
+              { 
+                number: 1, 
+                title: "Find Your Validated Content Angle", 
+                description: "Learn how to identify content topics people are actively searching for."
+              },
+              { 
+                number: 2, 
+                title: "Create Value-First Content", 
+                description: "Master my step-by-step process for creating content that genuinely helps viewers."
+              },
+              { 
+                number: 3, 
+                title: "Build Simple Systems for Growth", 
+                description: "Implement my proven framework for consistently growing your channel."
+              }
+            ]),
+            data.finalNote || 'This framework is what I teach my students who have gone on to build 6 and 7-figure YouTube channels.',
+            data.buttonText || 'Get The Full Framework',
+            data.buttonUrl || '#buy',
+            data.backgroundColor || 'bg-gray-50'
+          ]
+        );
+        
+        return result.rows[0] as schema.YoutubeFrameworkSection;
+      } else {
+        // Update if exists
+        const result = await query(
+          `UPDATE youtube_framework_section SET 
+           title = COALESCE($1, title),
+           subtitle = COALESCE($2, subtitle),
+           description = COALESCE($3, description),
+           steps = COALESCE($4, steps),
+           final_note = COALESCE($5, final_note),
+           button_text = COALESCE($6, button_text),
+           button_url = COALESCE($7, button_url),
+           background_color = COALESCE($8, background_color)
+           WHERE id = $9
+           RETURNING id, title, subtitle, description, steps, final_note as "finalNote", 
+           button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor"`,
+          [
+            data.title || null,
+            data.subtitle || null,
+            data.description || null,
+            data.steps ? JSON.stringify(data.steps) : null,
+            data.finalNote || null,
+            data.buttonText || null,
+            data.buttonUrl || null,
+            data.backgroundColor || null,
+            existing.id
+          ]
+        );
+        
+        return result.rows[0] as schema.YoutubeFrameworkSection;
+      }
+    } catch (error) {
+      console.error('Error in updateYoutubeFrameworkSection:', error);
+      throw error;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

@@ -22,7 +22,10 @@ contentRouter.get("/content", async (req, res, next) => {
       socialLinks,
       siteSettings,
       bonusSection,
-      bonusItems
+      bonusItems,
+      guaranteeSection,
+      scholarshipSection,
+      youtubeFrameworkSection
     ] = await Promise.all([
       storage.getHeroSection(),
       storage.getFeaturedSection(),
@@ -39,7 +42,10 @@ contentRouter.get("/content", async (req, res, next) => {
       storage.getSocialLinks(),
       storage.getSiteSettings(),
       storage.getBonusSection(),
-      storage.getBonusItems()
+      storage.getBonusItems(),
+      storage.getGuaranteeSection(),
+      storage.getScholarshipSection(),
+      storage.getYoutubeFrameworkSection()
     ]);
 
     // Filter testimonials for mobile view
