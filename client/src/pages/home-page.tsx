@@ -10,11 +10,13 @@ import {
   usePublicAuthorSection,
   usePublicBonusSection,
   usePublicBonusItems,
+  usePublicGuaranteeSection,
   useRefreshPublicContent
 } from "@/hooks/use-public-content";
 import { Button } from "@/components/ui/button";
 import TestimonialsDisplay from "@/components/TestimonialsDisplay";
 import BonusSection from "@/components/BonusSection";
+import GuaranteeSection from "@/components/GuaranteeSection";
 
 export default function HomePage() {
   // Fetch data from the API
@@ -23,6 +25,7 @@ export default function HomePage() {
   const { data: authorData, isLoading: authorLoading } = usePublicAuthorSection();
   const { data: bonusSectionData, isLoading: bonusSectionLoading } = usePublicBonusSection();
   const { data: bonusItemsData, isLoading: bonusItemsLoading } = usePublicBonusItems();
+  const { data: guaranteeSectionData, isLoading: guaranteeSectionLoading } = usePublicGuaranteeSection();
   
   // Content refresh mutation
   const refreshMutation = useRefreshPublicContent();
@@ -212,6 +215,13 @@ export default function HomePage() {
           <BonusSection 
             bonusSection={bonusSectionData} 
             bonusItems={bonusItemsData?.sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))} 
+          />
+        )}
+
+        {/* Guarantee Section */}
+        {!guaranteeSectionLoading && (
+          <GuaranteeSection
+            guaranteeSection={guaranteeSectionData}
           />
         )}
         

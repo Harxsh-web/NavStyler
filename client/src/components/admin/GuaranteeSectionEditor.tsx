@@ -29,9 +29,9 @@ export default function GuaranteeSectionEditor() {
 
   // Fetch the current guarantee section data
   const { data: guaranteeSection, isLoading } = useQuery({
-    queryKey: ["/api/admin/guarantee-section"],
+    queryKey: ["/api/content/guarantee-section"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/admin/guarantee-section");
+      const res = await apiRequest("GET", "/api/content/guarantee-section");
       const data = await res.json();
       return data;
     },
@@ -49,27 +49,17 @@ export default function GuaranteeSectionEditor() {
     values: guaranteeSection || undefined,
   });
 
-  // Create or update the guarantee section
+  // Update the guarantee section
   const mutation = useMutation({
     mutationFn: async (data: GuaranteeSectionFormValues) => {
-      if (guaranteeSection?.id) {
-        const res = await apiRequest(
-          "PATCH",
-          `/api/admin/guarantee-section/${guaranteeSection.id}`,
-          data
-        );
-        return res.json();
-      } else {
-        const res = await apiRequest("POST", "/api/admin/guarantee-section", data);
-        return res.json();
-      }
+      const res = await apiRequest("PUT", "/api/admin/guarantee-section", data);
+      return res.json();
     },
     onSuccess: () => {
       toast({
         title: "Success",
         description: "Guarantee section has been saved.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/guarantee-section"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/guarantee-section"] });
     },
     onError: (error: Error) => {
