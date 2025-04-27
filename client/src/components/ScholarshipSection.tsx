@@ -17,15 +17,17 @@ const ScholarshipSection: React.FC<{ scholarshipSection?: ScholarshipSectionProp
 }) => {
   if (!scholarshipSection) return null;
 
-  const {
-    title = "Can't Afford The $995?",
-    subtitle = "Scholarship Application",
-    description = "If you truly cannot afford the full price but are committed to building your YouTube channel, I'm offering scholarships based on need and dedication. Submit your application explaining your situation and YouTube goals.",
-    imageUrl = "/student-scholarship.jpg",
-    buttonText = "Apply for Scholarship",
-    buttonUrl = "#scholarship-application",
-    backgroundColor = "bg-amber-50"
-  } = scholarshipSection;
+  // Map the response data
+  const data = scholarshipSection || {};
+  
+  // Extract properties with fallbacks
+  const title = data.title || "Can't Afford The $995?";
+  const subtitle = data.subtitle || "Scholarship Application";
+  const description = data.description || "If you truly cannot afford the full price but are committed to building your YouTube channel, I'm offering scholarships based on need and dedication. Submit your application explaining your situation and YouTube goals.";
+  const imageUrl = data.imageUrl || "/student-scholarship.jpg";
+  const buttonText = data.buttonText || "Apply for Scholarship";
+  const buttonUrl = data.buttonUrl || "#scholarship-application";
+  const backgroundColor = data.backgroundColor || "bg-amber-50";
 
   return (
     <section className={`py-16 ${backgroundColor}`}>

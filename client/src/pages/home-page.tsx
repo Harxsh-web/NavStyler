@@ -140,19 +140,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* YouTube Framework Section */}
-        {!youtubeFrameworkSectionLoading && youtubeFrameworkSectionData && (
-          <YoutubeFrameworkSection
-            youtubeFrameworkSection={youtubeFrameworkSectionData}
-          />
-        )}
-
-        {/* Scholarship Section */}
-        {!scholarshipSectionLoading && scholarshipSectionData && (
-          <ScholarshipSection 
-            scholarshipSection={scholarshipSectionData}
-          />
-        )}
         
         {/* Bonus Section */}
         {!bonusSectionLoading && !bonusItemsLoading && (
@@ -169,8 +156,21 @@ export default function HomePage() {
           />
         )}
         
+        {/* YouTube Framework Section */}
+        {!youtubeFrameworkSectionLoading && (
+          <YoutubeFrameworkSection
+            youtubeFrameworkSection={youtubeFrameworkSectionData}
+          />
+        )}
+
+        {/* Scholarship Section */}
+        {!scholarshipSectionLoading && (
+          <ScholarshipSection 
+            scholarshipSection={scholarshipSectionData}
+          />
+        )}
         {/* About Book Section */}
-        <section className="py-16 bg-white" id="learn-more">
+        {/* <section className="py-16 bg-white" id="learn-more">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="flex flex-col items-center mb-10">
               <FaBook className="text-cyan-500 text-4xl mb-4" />
@@ -224,7 +224,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        
+         */}
         {/* Author Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 max-w-6xl">

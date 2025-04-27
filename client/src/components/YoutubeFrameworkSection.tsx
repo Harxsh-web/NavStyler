@@ -23,32 +23,34 @@ const YoutubeFrameworkSection: React.FC<{ youtubeFrameworkSection?: YoutubeFrame
 }) => {
   if (!youtubeFrameworkSection) return null;
 
-  const {
-    title = "My Simple 3 Step YouTube Framework",
-    subtitle = "How I Grew My Channel to 4,000,000 Subscribers",
-    description = "This is the exact framework I used to grow my YouTube channel from 0 to over 4 million subscribers and generate 8 figures in revenue - all while maintaining my medical career.",
-    steps = [
-      { 
-        number: 1, 
-        title: "Find Your Validated Content Angle", 
-        description: "Learn how to identify content topics people are actively searching for, and position yourself as the perfect creator to deliver what they need." 
-      },
-      { 
-        number: 2, 
-        title: "Create Value-First Content", 
-        description: "Master my step-by-step process for creating content that genuinely helps viewers while building your authority and subscriber base." 
-      },
-      { 
-        number: 3, 
-        title: "Build Simple Systems for Growth", 
-        description: "Implement my proven framework for consistently growing your channel and turning viewers into loyal fans and customers." 
-      }
-    ],
-    finalNote = "This framework is what I teach my students who have gone on to build 6 and 7-figure YouTube channels and businesses - and now I'm sharing it with you.",
-    buttonText = "Get The Full Framework",
-    buttonUrl = "#buy",
-    backgroundColor = "bg-gray-50"
-  } = youtubeFrameworkSection;
+  // Map the response data
+  const data = youtubeFrameworkSection || {};
+  
+  // Extract properties with fallbacks
+  const title = data.title || "My Simple 3 Step YouTube Framework";
+  const subtitle = data.subtitle || "How I Grew My Channel to 4,000,000 Subscribers";
+  const description = data.description || "This is the exact framework I used to grow my YouTube channel from 0 to over 4 million subscribers and generate 8 figures in revenue - all while maintaining my medical career.";
+  const steps = data.steps || [
+    { 
+      number: 1, 
+      title: "Find Your Validated Content Angle", 
+      description: "Learn how to identify content topics people are actively searching for, and position yourself as the perfect creator to deliver what they need." 
+    },
+    { 
+      number: 2, 
+      title: "Create Value-First Content", 
+      description: "Master my step-by-step process for creating content that genuinely helps viewers while building your authority and subscriber base." 
+    },
+    { 
+      number: 3, 
+      title: "Build Simple Systems for Growth", 
+      description: "Implement my proven framework for consistently growing your channel and turning viewers into loyal fans and customers." 
+    }
+  ];
+  const finalNote = data.finalNote || "This framework is what I teach my students who have gone on to build 6 and 7-figure YouTube channels and businesses - and now I'm sharing it with you.";
+  const buttonText = data.buttonText || "Get The Full Framework";
+  const buttonUrl = data.buttonUrl || "#buy";
+  const backgroundColor = data.backgroundColor || "bg-gray-50";
 
   return (
     <section className={`py-16 ${backgroundColor}`}>
