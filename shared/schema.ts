@@ -75,7 +75,7 @@ export const insertHeroSchema = createInsertSchema(heroSection);
 export const featuredSection = pgTable("featured_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  logoUrls: text("logo_urls").array(),
+  logoUrls: jsonb("logo_urls"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -86,11 +86,8 @@ export const insertFeaturedSchema = createInsertSchema(featuredSection);
 // Quote Section
 export const quoteSection = pgTable("quote_section", {
   id: serial("id").primaryKey(),
-  quoteText: text("quote_text").notNull(),
-  authorName: text("author_name").notNull(),
-  authorRole: text("author_role"),
-  authorImageUrl: text("author_image_url"),
-  backgroundColor: text("background_color"),
+  heading: text("heading"),
+  content: text("content"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -115,9 +112,9 @@ export const insertLearningPointsSectionSchema = createInsertSchema(learningPoin
 export const learningPoint = pgTable("learning_point", {
   id: serial("id").primaryKey(),
   number: integer("number").notNull(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  iconName: text("icon_name"),
+  text: text("text").notNull(),
+  sectionId: integer("section_id"),
+  showMobile: boolean("show_mobile").default(true),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -158,11 +155,8 @@ export const bookSection = pgTable("book_section", {
   id: serial("id").primaryKey(),
   orderIndex: integer("order_index").notNull(),
   title: text("title").notNull(),
+  subtitle: text("subtitle"),
   content: text("content").notNull(),
-  imageUrl: text("image_url"),
-  backgroundColor: text("background_color"),
-  buttonText: text("button_text"),
-  buttonUrl: text("button_url"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -174,12 +168,7 @@ export const insertBookSectionSchema = createInsertSchema(bookSection);
 export const aboutBookSection = pgTable("about_book_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  subtitle: text("subtitle"),
-  description: text("description").notNull(),
-  imageUrl: text("image_url"),
-  backgroundColor: text("background_color"),
-  buttonText: text("button_text"),
-  buttonUrl: text("button_url"),
+  bookCoverConfig: jsonb("book_cover_config"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -190,10 +179,11 @@ export const insertAboutBookSectionSchema = createInsertSchema(aboutBookSection)
 // Author Section
 export const authorSection = pgTable("author_section", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  bio: text("bio").notNull(),
+  title: text("title"),
+  authorName: text("author_name"),
+  bio: text("bio"),
+  bioShort: text("bio_short"),
   imageUrl: text("image_url"),
-  backgroundColor: text("background_color"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -204,7 +194,7 @@ export const insertAuthorSectionSchema = createInsertSchema(authorSection);
 // Footer Categories
 export const footerCategory = pgTable("footer_category", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  name: text("name").notNull(),
   orderIndex: integer("order_index").default(0).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -217,10 +207,9 @@ export const insertFooterCategorySchema = createInsertSchema(footerCategory);
 export const footerLink = pgTable("footer_link", {
   id: serial("id").primaryKey(),
   categoryId: integer("category_id").notNull().references(() => footerCategory.id, { onDelete: "cascade" }),
-  title: text("title").notNull(),
+  text: text("text").notNull(),
   url: text("url").notNull(),
   orderIndex: integer("order_index").default(0).notNull(),
-  isExternal: boolean("is_external").default(false).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

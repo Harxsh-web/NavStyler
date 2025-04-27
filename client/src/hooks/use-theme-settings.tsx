@@ -320,6 +320,59 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
     setCssVariables(variables);
   };
   
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    
+    // Apply dark mode classes and update CSS variables
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+      const darkVariables = {
+        ...cssVariables,
+        '--background': '#121212',
+        '--text': '#ffffff',
+      };
+      
+      // Apply dark mode variables
+      const root = document.documentElement;
+      Object.entries(darkVariables).forEach(([property, value]) => {
+        root.style.setProperty(property, value);
+      });
+      
+      // Save dark mode variables to localStorage
+      localStorage.setItem('theme-css-variables', JSON.stringify(darkVariables));
+    } else {
+      document.documentElement.classList.remove('dark');
+      
+      // Restore light mode variables
+      if (theme) {
+        updateCssVariables(theme);
+      } else {
+        updateCssVariables(defaultTheme);
+      }
+    }
+  };
+  
+  // Apply dark mode setting on initial load
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      const darkVariables = {
+        ...cssVariables,
+        '--background': '#121212',
+        '--text': '#ffffff',
+      };
+      
+      // Apply dark mode variables
+      const root = document.documentElement;
+      Object.entries(darkVariables).forEach(([property, value]) => {
+        root.style.setProperty(property, value);
+      });
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   return (
     <ThemeContext.Provider
       value={{
@@ -334,6 +387,8 @@ export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
         deleteTheme,
         setActiveTheme,
         cssVariables,
+        isDarkMode,
+        toggleDarkMode,
       }}
     >
       {children}
