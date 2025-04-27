@@ -90,79 +90,7 @@ adminRouter.put("/quote", validateRequest(models.quoteZodSchema.partial()), asyn
   }
 });
 
-// Learning Points Section
-adminRouter.get("/learning-points-section", async (req, res, next) => {
-  try {
-    const section = await storage.getLearningPointsSection();
-    res.json(section || {});
-  } catch (error) {
-    next(error);
-  }
-});
 
-adminRouter.put("/learning-points-section", validateRequest(models.learningPointsSectionZodSchema.partial()), async (req, res, next) => {
-  try {
-    const updatedSection = await storage.updateLearningPointsSection(req.validatedBody);
-    res.json(updatedSection);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Learning Points
-adminRouter.get("/learning-points", async (req, res, next) => {
-  try {
-    const points = await storage.getLearningPoints();
-    res.json(points);
-  } catch (error) {
-    next(error);
-  }
-});
-
-adminRouter.get("/learning-points/:id", async (req, res, next) => {
-  try {
-    const point = await storage.getLearningPoint(req.params.id);
-    if (!point) {
-      return res.status(404).json({ error: "Learning point not found" });
-    }
-    res.json(point);
-  } catch (error) {
-    next(error);
-  }
-});
-
-adminRouter.post("/learning-points", validateRequest(models.learningPointZodSchema), async (req, res, next) => {
-  try {
-    const newPoint = await storage.createLearningPoint(req.validatedBody);
-    res.status(201).json(newPoint);
-  } catch (error) {
-    next(error);
-  }
-});
-
-adminRouter.put("/learning-points/:id", validateRequest(models.learningPointZodSchema.partial()), async (req, res, next) => {
-  try {
-    const updatedPoint = await storage.updateLearningPoint(req.params.id, req.validatedBody);
-    if (!updatedPoint) {
-      return res.status(404).json({ error: "Learning point not found" });
-    }
-    res.json(updatedPoint);
-  } catch (error) {
-    next(error);
-  }
-});
-
-adminRouter.delete("/learning-points/:id", async (req, res, next) => {
-  try {
-    const success = await storage.deleteLearningPoint(req.params.id);
-    if (!success) {
-      return res.status(404).json({ error: "Learning point not found" });
-    }
-    res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-});
 
 // Testimonial Section
 adminRouter.get("/testimonial-section", async (req, res, next) => {

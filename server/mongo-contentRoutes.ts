@@ -31,23 +31,7 @@ contentRouter.get("/quote", async (req, res, next) => {
   }
 });
 
-contentRouter.get("/learning-points-section", async (req, res, next) => {
-  try {
-    const section = await storage.getLearningPointsSection();
-    res.json(section || {});
-  } catch (error) {
-    next(error);
-  }
-});
 
-contentRouter.get("/learning-points", async (req, res, next) => {
-  try {
-    const points = await storage.getLearningPoints();
-    res.json(points);
-  } catch (error) {
-    next(error);
-  }
-});
 
 contentRouter.get("/testimonial-section", async (req, res, next) => {
   try {
