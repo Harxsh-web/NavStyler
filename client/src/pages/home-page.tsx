@@ -54,8 +54,7 @@ export default function HomePage() {
                     <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
                       {/* Use dynamic content or fallback if not available */}
                       {heroData?.title || "Feel-Good"} <span className="text-black relative inline-block">
-                        Productivity
-                        <span className="absolute bottom-1 left-0 w-full h-1.5 bg-cyan-400"></span>
+                       
                       </span>
                     </h1>
                     <h2 className="text-xl md:text-2xl font-medium text-gray-700 mb-8">
@@ -63,11 +62,11 @@ export default function HomePage() {
                     </h2>
                   </div>
                   
-                  <div className="flex flex-wrap gap-4 items-center mb-8">
+                  {/* <div className="flex flex-wrap gap-4 items-center mb-8">
                     <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/63a6770e3e6bcc9e7c6aaa9ad9f3f0f9.png" alt="New York Times" className="h-6" />
                     <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/ca22e1850226ddb886bc2cf69290c8dc.png" alt="Sunday Times" className="h-6" />
                     <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/adf7bc3af650d4fefbd310e1cebf6d6e.png" alt="Financial Times" className="h-6" />
-                  </div>
+                  </div> */}
                   
                   <div className="flex items-center gap-4">
                     <a
