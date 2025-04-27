@@ -286,7 +286,8 @@ export class DatabaseStorage implements IStorage {
   // Hero section
   async getHeroSection(): Promise<schema.Hero | undefined> {
     try {
-      const result = await db.execute(
+      // Using a direct query to ensure field mappings are correct
+      const result = await query(
         `SELECT id, title, subtitle, cta_text as "buttonText", cta_link as "buttonUrl", 
          image_url as "imageUrl", updated_at as "updatedAt"
          FROM hero_section LIMIT 1`
@@ -299,40 +300,114 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateHeroSection(data: Partial<schema.InsertHero>): Promise<schema.Hero> {
-    const existing = await this.getHeroSection();
-    if (existing) {
-      const [updated] = await db.update(schema.heroSection)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(schema.heroSection.id, existing.id))
-        .returning();
-      return updated;
-    } else {
-      const [newHero] = await db.insert(schema.heroSection)
-        .values(data as schema.InsertHero)
-        .returning();
-      return newHero;
+    try {
+      const existing = await this.getHeroSection();
+      
+      console.log('Updating hero section with data:', data);
+      
+      if (existing) {
+        // Use direct query to ensure field mappings are accurate
+        const result = await query(
+          `UPDATE hero_section 
+           SET title = $1, subtitle = $2, cta_text = $3, cta_link = $4, image_url = $5, updated_at = NOW()
+           WHERE id = $6
+           RETURNING id, title, subtitle, cta_text as "buttonText", cta_link as "buttonUrl", 
+           image_url as "imageUrl", updated_at as "updatedAt"`,
+          [
+            data.title ?? existing.title,
+            data.subtitle ?? existing.subtitle,
+            data.buttonText ?? existing.buttonText, 
+            data.buttonUrl ?? existing.buttonUrl,
+            data.imageUrl ?? existing.imageUrl,
+            existing.id
+          ]
+        );
+        
+        console.log('Hero section updated successfully:', result.rows[0]);
+        
+        return result.rows[0] as schema.Hero;
+      } else {
+        const result = await query(
+          `INSERT INTO hero_section (title, subtitle, cta_text, cta_link, image_url)
+           VALUES ($1, $2, $3, $4, $5)
+           RETURNING id, title, subtitle, cta_text as "buttonText", cta_link as "buttonUrl", 
+           image_url as "imageUrl", updated_at as "updatedAt"`,
+          [
+            data.title || '',
+            data.subtitle || '',
+            data.buttonText || '',
+            data.buttonUrl || '',
+            data.imageUrl || ''
+          ]
+        );
+        
+        console.log('New hero section created:', result.rows[0]);
+        
+        return result.rows[0] as schema.Hero;
+      }
+    } catch (error) {
+      console.error('Error updating hero section:', error);
+      throw error;
     }
   }
 
   // Featured section
   async getFeaturedSection(): Promise<schema.Featured | undefined> {
-    const [featured] = await db.select().from(schema.featuredSection).limit(1);
-    return featured;
+    try {
+      const result = await query(
+        `SELECT id, heading, subheading, logo_urls as "logoUrls", updated_at as "updatedAt"
+         FROM featured_section LIMIT 1`
+      );
+      return result.rows[0] as schema.Featured | undefined;
+    } catch (error) {
+      console.error('Error in getFeaturedSection:', error);
+      return undefined;
+    }
   }
 
   async updateFeaturedSection(data: Partial<schema.InsertFeatured>): Promise<schema.Featured> {
-    const existing = await this.getFeaturedSection();
-    if (existing) {
-      const [updated] = await db.update(schema.featuredSection)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(schema.featuredSection.id, existing.id))
-        .returning();
-      return updated;
-    } else {
-      const [newFeatured] = await db.insert(schema.featuredSection)
-        .values(data as schema.InsertFeatured)
-        .returning();
-      return newFeatured;
+    try {
+      const existing = await this.getFeaturedSection();
+      
+      console.log('Updating featured section with data:', data);
+      
+      if (existing) {
+        // Using direct query for more reliable field mapping
+        const result = await query(
+          `UPDATE featured_section 
+           SET heading = $1, subheading = $2, logo_urls = $3, updated_at = NOW()
+           WHERE id = $4
+           RETURNING id, heading, subheading, logo_urls as "logoUrls", updated_at as "updatedAt"`,
+          [
+            data.heading ?? existing.heading,
+            data.subheading ?? existing.subheading,
+            data.logoUrls ? JSON.stringify(data.logoUrls) : existing.logoUrls,
+            existing.id
+          ]
+        );
+        
+        console.log('Featured section updated successfully:', result.rows[0]);
+        
+        return result.rows[0] as schema.Featured;
+      } else {
+        const result = await query(
+          `INSERT INTO featured_section (heading, subheading, logo_urls)
+           VALUES ($1, $2, $3)
+           RETURNING id, heading, subheading, logo_urls as "logoUrls", updated_at as "updatedAt"`,
+          [
+            data.heading || '',
+            data.subheading || '',
+            data.logoUrls ? JSON.stringify(data.logoUrls) : '[]'
+          ]
+        );
+        
+        console.log('New featured section created:', result.rows[0]);
+        
+        return result.rows[0] as schema.Featured;
+      }
+    } catch (error) {
+      console.error('Error updating featured section:', error);
+      throw error;
     }
   }
 

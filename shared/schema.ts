@@ -74,7 +74,8 @@ export const insertHeroSchema = createInsertSchema(heroSection);
 // Featured Section
 export const featuredSection = pgTable("featured_section", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  heading: text("heading").notNull(),
+  subheading: text("subheading"),
   logoUrls: jsonb("logo_urls"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
