@@ -107,6 +107,40 @@ export function usePublicAuthorSection() {
 }
 
 /**
+ * Hook for fetching the bonus section content for the public page
+ */
+export function usePublicBonusSection() {
+  return useQuery({
+    queryKey: ["/api/content/bonus-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/bonus-section");
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook for fetching the bonus items for the public page
+ */
+export function usePublicBonusItems() {
+  return useQuery({
+    queryKey: ["/api/content/bonus-items"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/bonus-items");
+      if (!response.ok) {
+        return [];
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for fetching all public content in one call
  */
 export function useAllPublicContent() {
@@ -143,6 +177,8 @@ export function useRefreshPublicContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/content/testimonials"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/about-book"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/author"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/bonus-items"] });
       
       toast({
         title: "Content refreshed",

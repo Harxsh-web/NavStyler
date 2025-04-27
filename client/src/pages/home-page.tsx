@@ -8,16 +8,21 @@ import {
   usePublicLearningPoints,
   usePublicAboutBookSection,
   usePublicAuthorSection,
+  usePublicBonusSection,
+  usePublicBonusItems,
   useRefreshPublicContent
 } from "@/hooks/use-public-content";
 import { Button } from "@/components/ui/button";
 import TestimonialsDisplay from "@/components/TestimonialsDisplay";
+import BonusSection from "@/components/BonusSection";
 
 export default function HomePage() {
   // Fetch data from the API
   const { data: heroData, isLoading: heroLoading } = usePublicHeroSection();
   const { data: quoteData, isLoading: quoteLoading } = usePublicQuoteSection();
   const { data: authorData, isLoading: authorLoading } = usePublicAuthorSection();
+  const { data: bonusSectionData, isLoading: bonusSectionLoading } = usePublicBonusSection();
+  const { data: bonusItemsData, isLoading: bonusItemsLoading } = usePublicBonusItems();
   
   // Content refresh mutation
   const refreshMutation = useRefreshPublicContent();
@@ -201,6 +206,14 @@ export default function HomePage() {
             <TestimonialsDisplay />
           </div>
         </section>
+        
+        {/* Bonus Section */}
+        {!bonusSectionLoading && !bonusItemsLoading && (
+          <BonusSection 
+            bonusSection={bonusSectionData} 
+            bonusItems={bonusItemsData?.sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))} 
+          />
+        )}
         
         {/* About Book Section */}
         <section className="py-16 bg-white" id="learn-more">
