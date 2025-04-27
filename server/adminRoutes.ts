@@ -45,19 +45,10 @@ adminRouter.get("/hero", async (req, res, next) => {
 
 adminRouter.put("/hero", validateRequest(schema.insertHeroSchema.partial()), async (req, res, next) => {
   try {
-    // Map the client-side field names to our database field names
-    const heroData = {
-      ...req.validatedBody,
-      // Map ctaText to buttonText and ctaLink to buttonUrl if they exist
-      buttonText: req.validatedBody.ctaText,
-      buttonUrl: req.validatedBody.ctaLink
-    };
+    // We don't need mapping anymore since we've standardized on buttonText and buttonUrl
+    const heroData = req.validatedBody;
     
-    // Remove the original client-side field names from the data to avoid duplication
-    if (heroData.ctaText) delete heroData.ctaText;
-    if (heroData.ctaLink) delete heroData.ctaLink;
-    
-    console.log('Mapped heroData for update:', heroData);
+    console.log('Updating hero section with data:', heroData);
     
     const updatedHero = await storage.updateHeroSection(heroData);
     res.json(updatedHero);

@@ -226,8 +226,8 @@ export function HeroEditor() {
                     form.reset({
                       title: hero.title || "",
                       subtitle: hero.subtitle || "",
-                      ctaText: hero.ctaText || "",
-                      ctaLink: hero.ctaLink || "",
+                      buttonText: hero.buttonText || "",
+                      buttonUrl: hero.buttonUrl || "",
                       imageUrl: hero.imageUrl || "",
                     });
                   }
