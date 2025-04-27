@@ -84,7 +84,10 @@ contentRouter.get("/content", async (req, res, next) => {
       socialLinks,
       siteSettings: siteSettingsMap,
       bonusSection,
-      bonusItems
+      bonusItems,
+      guaranteeSection,
+      scholarshipSection,
+      youtubeFrameworkSection
     });
   } catch (error) {
     next(error);
