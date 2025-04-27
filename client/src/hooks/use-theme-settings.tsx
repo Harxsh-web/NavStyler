@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { useLocalStorage } from '../hooks/use-local-storage';
 
 // Theme settings type from backend schema
 export interface ThemeSettings {
@@ -49,6 +50,10 @@ interface ThemeContextType {
   
   // CSS variables generated from theme
   cssVariables: Record<string, string>;
+  
+  // Dark mode controls
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
 }
 
 const defaultTheme: ThemeSettings = {
@@ -79,6 +84,7 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const [cssVariables, setCssVariables] = useState<Record<string, string>>({});
+  const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>('dark-mode', false);
   
   // Fetch the active theme
   const { 

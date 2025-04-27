@@ -61,10 +61,9 @@ export const heroSection = pgTable("hero_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
-  buttonText: text("button_text"),
-  buttonUrl: text("button_url"),
+  buttonText: text("cta_text"),
+  buttonUrl: text("cta_link"),
   imageUrl: text("image_url"),
-  backgroundColor: text("background_color"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
