@@ -172,6 +172,58 @@ export interface IThemeSettings extends Document {
   updatedAt: Date;
 }
 
+export interface IBonusSection extends Document {
+  title: string;
+  subtitle?: string;
+  backgroundColor?: string;
+  updatedAt: Date;
+}
+
+export interface IBonusItem extends Document {
+  sectionId: number;
+  title: string;
+  description: string;
+  iconName?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  backgroundColor?: string;
+  orderIndex: number;
+  updatedAt: Date;
+}
+
+export interface IGuaranteeSection extends Document {
+  title: string;
+  subtitle?: string;
+  content?: string;
+  backgroundColor?: string;
+  updatedAt: Date;
+}
+
+export interface IScholarshipSection extends Document {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  imageUrl?: string;
+  requirements?: string[];
+  applicationProcess?: string[];
+  buttonText?: string;
+  buttonUrl?: string;
+  backgroundColor?: string;
+  updatedAt: Date;
+}
+
+export interface IYoutubeFrameworkSection extends Document {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  steps?: any[];
+  finalNote?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  backgroundColor?: string;
+  updatedAt: Date;
+}
+
 export interface IArticle extends Document {
   title: string;
   slug: string;
@@ -386,6 +438,58 @@ const videoSchema = new Schema<IVideo>({
   videoUrl: { type: String, required: true },
   isPublished: { type: Boolean, default: false },
   publishedAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const bonusSectionSchema = new Schema<IBonusSection>({
+  title: { type: String, required: true },
+  subtitle: { type: String },
+  backgroundColor: { type: String },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const bonusItemSchema = new Schema<IBonusItem>({
+  sectionId: { type: Number, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  iconName: { type: String },
+  buttonText: { type: String },
+  buttonUrl: { type: String },
+  backgroundColor: { type: String },
+  orderIndex: { type: Number, required: true },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const guaranteeSectionSchema = new Schema<IGuaranteeSection>({
+  title: { type: String, required: true },
+  subtitle: { type: String },
+  content: { type: String },
+  backgroundColor: { type: String },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const scholarshipSectionSchema = new Schema<IScholarshipSection>({
+  title: { type: String, required: true },
+  subtitle: { type: String },
+  description: { type: String },
+  imageUrl: { type: String },
+  requirements: { type: [String] },
+  applicationProcess: { type: [String] },
+  buttonText: { type: String },
+  buttonUrl: { type: String },
+  backgroundColor: { type: String },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const youtubeFrameworkSectionSchema = new Schema<IYoutubeFrameworkSection>({
+  title: { type: String, required: true },
+  subtitle: { type: String },
+  description: { type: String },
+  steps: { type: [Schema.Types.Mixed] },
+  finalNote: { type: String },
+  buttonText: { type: String },
+  buttonUrl: { type: String },
+  backgroundColor: { type: String },
   updatedAt: { type: Date, default: Date.now }
 });
 
