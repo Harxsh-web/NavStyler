@@ -121,6 +121,51 @@ contentRouter.get("/social-links", async (req, res, next) => {
   }
 });
 
+contentRouter.get("/bonus-section", async (req, res, next) => {
+  try {
+    const bonusSection = await storage.getBonusSection();
+    res.json(bonusSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/bonus-items", async (req, res, next) => {
+  try {
+    const bonusItems = await storage.getBonusItems();
+    res.json(bonusItems);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/guarantee-section", async (req, res, next) => {
+  try {
+    const guaranteeSection = await storage.getGuaranteeSection();
+    res.json(guaranteeSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/scholarship-section", async (req, res, next) => {
+  try {
+    const scholarshipSection = await storage.getScholarshipSection();
+    res.json(scholarshipSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/youtube-framework-section", async (req, res, next) => {
+  try {
+    const youtubeFrameworkSection = await storage.getYoutubeFrameworkSection();
+    res.json(youtubeFrameworkSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
 contentRouter.get("/site-settings", async (req, res, next) => {
   try {
     const settings = await storage.getSiteSettings();

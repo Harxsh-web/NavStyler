@@ -756,6 +756,223 @@ export class MongoDBStorage implements IStorage {
     }
   }
   
+  // Bonus Section
+  async getBonusSection(): Promise<models.BonusSection | undefined> {
+    try {
+      const bonusSection = await models.BonusSection.findOne().lean();
+      return bonusSection || undefined;
+    } catch (error) {
+      console.error('Error getting bonus section:', error);
+      throw error;
+    }
+  }
+  
+  async updateBonusSection(data: any): Promise<models.BonusSection> {
+    try {
+      const updatedBonusSection = await models.BonusSection.findOneAndUpdate(
+        {},
+        { ...data, updatedAt: new Date() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      ).lean();
+      
+      if (!updatedBonusSection) {
+        // If for some reason it failed to create, create one with defaults
+        const newBonusSection = new models.BonusSection({
+          title: data.title || 'Wait, did you say free bonuses?',
+          subtitle: data.subtitle || "Yup. We've decided to bundle in a bunch of free bonuses, just for fun:",
+          backgroundColor: data.backgroundColor || '#E6F1FE',
+          updatedAt: new Date()
+        });
+        await newBonusSection.save();
+        return newBonusSection.toObject();
+      }
+      
+      return updatedBonusSection;
+    } catch (error) {
+      console.error('Error updating bonus section:', error);
+      throw error;
+    }
+  }
+  
+  // Bonus Items
+  async getBonusItems(): Promise<models.BonusItem[]> {
+    try {
+      const bonusItems = await models.BonusItem.find().sort({ orderIndex: 1 }).lean();
+      return bonusItems;
+    } catch (error) {
+      console.error('Error getting bonus items:', error);
+      throw error;
+    }
+  }
+  
+  async getBonusItem(id: string): Promise<models.BonusItem | undefined> {
+    try {
+      if (!Types.ObjectId.isValid(id)) return undefined;
+      const bonusItem = await models.BonusItem.findById(id).lean();
+      return bonusItem || undefined;
+    } catch (error) {
+      console.error('Error getting bonus item:', error);
+      throw error;
+    }
+  }
+  
+  async createBonusItem(data: any): Promise<models.BonusItem> {
+    try {
+      const newBonusItem = new models.BonusItem({
+        ...data,
+        updatedAt: new Date()
+      });
+      await newBonusItem.save();
+      return newBonusItem.toObject();
+    } catch (error) {
+      console.error('Error creating bonus item:', error);
+      throw error;
+    }
+  }
+  
+  async updateBonusItem(id: string, data: any): Promise<models.BonusItem | undefined> {
+    try {
+      if (!Types.ObjectId.isValid(id)) return undefined;
+      const updatedBonusItem = await models.BonusItem.findByIdAndUpdate(
+        id,
+        { ...data, updatedAt: new Date() },
+        { new: true }
+      ).lean();
+      return updatedBonusItem || undefined;
+    } catch (error) {
+      console.error('Error updating bonus item:', error);
+      throw error;
+    }
+  }
+  
+  async deleteBonusItem(id: string): Promise<boolean> {
+    try {
+      if (!Types.ObjectId.isValid(id)) return false;
+      const result = await models.BonusItem.deleteOne({ _id: id });
+      return result.deletedCount === 1;
+    } catch (error) {
+      console.error('Error deleting bonus item:', error);
+      throw error;
+    }
+  }
+  
+  // Guarantee Section
+  async getGuaranteeSection(): Promise<models.GuaranteeSection | undefined> {
+    try {
+      const guaranteeSection = await models.GuaranteeSection.findOne().lean();
+      return guaranteeSection || undefined;
+    } catch (error) {
+      console.error('Error getting guarantee section:', error);
+      throw error;
+    }
+  }
+  
+  async updateGuaranteeSection(data: any): Promise<models.GuaranteeSection> {
+    try {
+      const updatedGuaranteeSection = await models.GuaranteeSection.findOneAndUpdate(
+        {},
+        { ...data, updatedAt: new Date() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      ).lean();
+      
+      if (!updatedGuaranteeSection) {
+        // If for some reason it failed to create, create one with defaults
+        const newGuaranteeSection = new models.GuaranteeSection({
+          title: data.title || 'Our 100% Satisfaction Guarantee & Money-Back Promise',
+          subtitle: data.subtitle || 'We want the investment in this course to be an absolute no-brainer for you – if you\'re actually going to do the work 😉',
+          content: data.content || '"Do the work" technically involves completing the core modules. If you\'ve done that and for whatever reason aren\'t 100% happy with your experience, drop us an email (within 30 days of purchasing the course) and we\'ll happily refund your entire payment.',
+          backgroundColor: data.backgroundColor || '#F9F9F7',
+          updatedAt: new Date()
+        });
+        await newGuaranteeSection.save();
+        return newGuaranteeSection.toObject();
+      }
+      
+      return updatedGuaranteeSection;
+    } catch (error) {
+      console.error('Error updating guarantee section:', error);
+      throw error;
+    }
+  }
+  
+  // Scholarship Section
+  async getScholarshipSection(): Promise<models.ScholarshipSection | undefined> {
+    try {
+      const scholarshipSection = await models.ScholarshipSection.findOne().lean();
+      return scholarshipSection || undefined;
+    } catch (error) {
+      console.error('Error getting scholarship section:', error);
+      throw error;
+    }
+  }
+  
+  async updateScholarshipSection(data: any): Promise<models.ScholarshipSection> {
+    try {
+      const updatedScholarshipSection = await models.ScholarshipSection.findOneAndUpdate(
+        {},
+        { ...data, updatedAt: new Date() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      ).lean();
+      
+      if (!updatedScholarshipSection) {
+        // If for some reason it failed to create, create one with defaults
+        const newScholarshipSection = new models.ScholarshipSection({
+          title: data.title || 'Apply for a Scholarship',
+          subtitle: data.subtitle || 'We offer scholarships to those who need support',
+          description: data.description || 'If financial constraints are holding you back, you may be eligible for our scholarship program.',
+          backgroundColor: data.backgroundColor || '#F0F9FF',
+          updatedAt: new Date()
+        });
+        await newScholarshipSection.save();
+        return newScholarshipSection.toObject();
+      }
+      
+      return updatedScholarshipSection;
+    } catch (error) {
+      console.error('Error updating scholarship section:', error);
+      throw error;
+    }
+  }
+  
+  // YouTube Framework Section
+  async getYoutubeFrameworkSection(): Promise<models.YoutubeFrameworkSection | undefined> {
+    try {
+      const youtubeFrameworkSection = await models.YoutubeFrameworkSection.findOne().lean();
+      return youtubeFrameworkSection || undefined;
+    } catch (error) {
+      console.error('Error getting youtube framework section:', error);
+      throw error;
+    }
+  }
+  
+  async updateYoutubeFrameworkSection(data: any): Promise<models.YoutubeFrameworkSection> {
+    try {
+      const updatedYoutubeFrameworkSection = await models.YoutubeFrameworkSection.findOneAndUpdate(
+        {},
+        { ...data, updatedAt: new Date() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      ).lean();
+      
+      if (!updatedYoutubeFrameworkSection) {
+        // If for some reason it failed to create, create one with defaults
+        const newYoutubeFrameworkSection = new models.YoutubeFrameworkSection({
+          title: data.title || 'My Simple 3 Step YouTube Framework',
+          subtitle: data.subtitle || 'Learn how to build a successful YouTube channel',
+          description: data.description || 'I\'ve developed a simple but effective framework for creating YouTube content that drives views and builds an audience.',
+          backgroundColor: data.backgroundColor || '#FFF9EC',
+          updatedAt: new Date()
+        });
+        await newYoutubeFrameworkSection.save();
+        return newYoutubeFrameworkSection.toObject();
+      }
+      
+      return updatedYoutubeFrameworkSection;
+    } catch (error) {
+      console.error('Error updating youtube framework section:', error);
+      throw error;
+    }
+  }
+  
   // Footer Categories
   async getFooterCategories(): Promise<models.FooterCategory[]> {
     try {
