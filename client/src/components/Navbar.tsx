@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import { ChevronDown, X, Menu } from 'lucide-react';
 import { TransitionLink } from './TransitionLink';
+import { DarkModeToggle } from './DarkModeToggle';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -206,6 +207,9 @@ export default function Navbar() {
                 Join 270k+ Subscribers
               </Button>
             </TransitionLink>
+            
+            {/* Dark Mode Toggle */}
+            <DarkModeToggle />
           </nav>
           
           {/* Mobile menu button and drawer */}
@@ -301,6 +305,11 @@ export default function Navbar() {
                     Join 270k+ Subscribers
                   </Button>
                 </TransitionLink>
+                
+                <div className="flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-800">
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">Dark Mode</span>
+                  <DarkModeToggle variant="minimal" />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
