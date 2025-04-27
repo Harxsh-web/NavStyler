@@ -977,6 +977,163 @@ export class DatabaseStorage implements IStorage {
       .where(eq(schema.themeSettings.id, id));
     return !!result;
   }
+
+  // Bonus section
+  async getBonusSection(): Promise<schema.BonusSection | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, subtitle, background_color as "backgroundColor", updated_at as "updatedAt"
+         FROM bonus_section LIMIT 1`
+      );
+      return result.rows[0] as schema.BonusSection | undefined;
+    } catch (error) {
+      console.error('Error in getBonusSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateBonusSection(data: Partial<schema.InsertBonusSection>): Promise<schema.BonusSection> {
+    try {
+      const existing = await this.getBonusSection();
+      
+      if (existing) {
+        const result = await query(
+          `UPDATE bonus_section 
+           SET title = $1, subtitle = $2, background_color = $3, updated_at = NOW()
+           WHERE id = $4
+           RETURNING id, title, subtitle, background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.title ?? existing.title,
+            data.subtitle ?? existing.subtitle,
+            data.backgroundColor ?? existing.backgroundColor,
+            existing.id
+          ]
+        );
+        
+        return result.rows[0] as schema.BonusSection;
+      } else {
+        const result = await query(
+          `INSERT INTO bonus_section (title, subtitle, background_color)
+           VALUES ($1, $2, $3)
+           RETURNING id, title, subtitle, background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.title || 'Wait, did you say free bonuses?',
+            data.subtitle || "Yup. We've decided to bundle in a bunch of free bonuses, just for fun:",
+            data.backgroundColor || '#E6F1FE'
+          ]
+        );
+        
+        return result.rows[0] as schema.BonusSection;
+      }
+    } catch (error) {
+      console.error('Error updating bonus section:', error);
+      throw error;
+    }
+  }
+
+  // Bonus items
+  async getBonusItems(): Promise<schema.BonusItem[]> {
+    try {
+      const result = await query(
+        `SELECT id, section_id as "sectionId", title, description, icon_name as "iconName", 
+         button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor",
+         order_index as "orderIndex", updated_at as "updatedAt"
+         FROM bonus_item ORDER BY order_index ASC`
+      );
+      return result.rows as schema.BonusItem[];
+    } catch (error) {
+      console.error('Error in getBonusItems:', error);
+      return [];
+    }
+  }
+
+  async getBonusItem(id: number): Promise<schema.BonusItem | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, section_id as "sectionId", title, description, icon_name as "iconName", 
+         button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor",
+         order_index as "orderIndex", updated_at as "updatedAt"
+         FROM bonus_item WHERE id = $1`,
+        [id]
+      );
+      return result.rows[0] as schema.BonusItem | undefined;
+    } catch (error) {
+      console.error('Error in getBonusItem:', error);
+      return undefined;
+    }
+  }
+
+  async createBonusItem(data: schema.InsertBonusItem): Promise<schema.BonusItem> {
+    try {
+      const result = await query(
+        `INSERT INTO bonus_item (section_id, title, description, icon_name, button_text, button_url, background_color, order_index)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         RETURNING id, section_id as "sectionId", title, description, icon_name as "iconName", 
+         button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor",
+         order_index as "orderIndex", updated_at as "updatedAt"`,
+        [
+          data.sectionId,
+          data.title,
+          data.description,
+          data.iconName || 'Gift',
+          data.buttonText,
+          data.buttonUrl,
+          data.backgroundColor || '#FFE382',
+          data.orderIndex || 0
+        ]
+      );
+      return result.rows[0] as schema.BonusItem;
+    } catch (error) {
+      console.error('Error in createBonusItem:', error);
+      throw error;
+    }
+  }
+
+  async updateBonusItem(id: number, data: Partial<schema.InsertBonusItem>): Promise<schema.BonusItem | undefined> {
+    try {
+      const existing = await this.getBonusItem(id);
+      
+      if (!existing) {
+        return undefined;
+      }
+      
+      const result = await query(
+        `UPDATE bonus_item
+         SET section_id = $1, title = $2, description = $3, icon_name = $4, 
+         button_text = $5, button_url = $6, background_color = $7, order_index = $8, updated_at = NOW()
+         WHERE id = $9
+         RETURNING id, section_id as "sectionId", title, description, icon_name as "iconName", 
+         button_text as "buttonText", button_url as "buttonUrl", background_color as "backgroundColor",
+         order_index as "orderIndex", updated_at as "updatedAt"`,
+        [
+          data.sectionId ?? existing.sectionId,
+          data.title ?? existing.title,
+          data.description ?? existing.description,
+          data.iconName ?? existing.iconName,
+          data.buttonText ?? existing.buttonText,
+          data.buttonUrl ?? existing.buttonUrl,
+          data.backgroundColor ?? existing.backgroundColor,
+          data.orderIndex ?? existing.orderIndex,
+          id
+        ]
+      );
+      
+      return result.rows[0] as schema.BonusItem;
+    } catch (error) {
+      console.error('Error in updateBonusItem:', error);
+      throw error;
+    }
+  }
+
+  async deleteBonusItem(id: number): Promise<boolean> {
+    try {
+      const result = await query('DELETE FROM bonus_item WHERE id = $1', [id]);
+      return result.rowCount > 0;
+    } catch (error) {
+      console.error('Error in deleteBonusItem:', error);
+      return false;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

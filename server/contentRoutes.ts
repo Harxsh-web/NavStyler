@@ -20,7 +20,9 @@ contentRouter.get("/content", async (req, res, next) => {
       footerCategories,
       footerLinks,
       socialLinks,
-      siteSettings
+      siteSettings,
+      bonusSection,
+      bonusItems
     ] = await Promise.all([
       storage.getHeroSection(),
       storage.getFeaturedSection(),
@@ -35,7 +37,9 @@ contentRouter.get("/content", async (req, res, next) => {
       storage.getFooterCategories(),
       storage.getFooterLinks(),
       storage.getSocialLinks(),
-      storage.getSiteSettings()
+      storage.getSiteSettings(),
+      storage.getBonusSection(),
+      storage.getBonusItems()
     ]);
 
     // Filter testimonials for mobile view
@@ -72,7 +76,9 @@ contentRouter.get("/content", async (req, res, next) => {
       footerLinks,
       footerLinksByCategory,
       socialLinks,
-      siteSettings: siteSettingsMap
+      siteSettings: siteSettingsMap,
+      bonusSection,
+      bonusItems
     });
   } catch (error) {
     next(error);
@@ -250,6 +256,25 @@ contentRouter.get("/videos/:slug", async (req, res, next) => {
       return res.status(404).json({ error: "Video not found" });
     }
     res.json(video);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Bonus section routes
+contentRouter.get("/bonus-section", async (req, res, next) => {
+  try {
+    const bonusSection = await storage.getBonusSection();
+    res.json(bonusSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get("/bonus-items", async (req, res, next) => {
+  try {
+    const bonusItems = await storage.getBonusItems();
+    res.json(bonusItems);
   } catch (error) {
     next(error);
   }
