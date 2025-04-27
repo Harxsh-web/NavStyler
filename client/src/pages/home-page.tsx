@@ -129,82 +129,7 @@ export default function HomePage() {
           </div>
         </section>
         
-        {/* Benefits Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">10 Things This Book Will Teach You</h2>
-              <p className="text-gray-600 max-w-3xl mx-auto">
-                This book is your guide to achieving more without sacrificing your happiness and wellbeing.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                {
-                  num: 1,
-                  title: "The Energize Framework",
-                  description: "Discover the three fundamental energizers that make us feel good and lead to true productivity."
-                },
-                {
-                  num: 2,
-                  title: "Beating Procrastination",
-                  description: "Learn a groundbreaking method for beating procrastination that doesn't rely on temporary motivation or painful discipline."
-                },
-                {
-                  num: 3,
-                  title: "Emotional regulation",
-                  description: "Understand the psychological and neuroscientific evidence for why positive emotions fuel success."
-                },
-                {
-                  num: 4,
-                  title: "Finding joy in work",
-                  description: "Learn how feeling good in your work can boost your energy, reduce stress, and enrich your life."
-                },
-                {
-                  num: 5,
-                  title: "Practical strategies",
-                  description: "Get simple, actionable techniques you can use to stay focused and consistent with your goals."
-                },
-                {
-                  num: 6,
-                  title: "Motivation mastery",
-                  description: "Learn the strategies used by Nobel laureates and trailblazing founders to maintain motivation."
-                },
-                {
-                  num: 7,
-                  title: "Combating blockers",
-                  description: "Identify the three biggest blockers that run down your feel-good emotions and derail productivity."
-                },
-                {
-                  num: 8,
-                  title: "Sustainable progress",
-                  description: "Create systems for consistent progress that don't rely on willpower or burnout-inducing work habits."
-                },
-                {
-                  num: 9,
-                  title: "Applying science",
-                  description: "Apply evidence-based techniques from psychology and neuroscience to your daily work routine."
-                },
-                {
-                  num: 10,
-                  title: "Life transformation",
-                  description: "Transform not just how you work, but how you approach your entire life for greater fulfillment."
-                }
-              ].map((item) => (
-                <div key={item.num} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                  <span className="bg-cyan-100 text-cyan-800 text-sm font-medium px-2.5 py-0.5 rounded-full mb-3 inline-block">
-                    #{item.num}
-                  </span>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-gray-600">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+
 
         {/* Testimonials Section */}
         <section className="py-16 bg-gray-50">
@@ -216,14 +141,14 @@ export default function HomePage() {
         </section>
 
         {/* YouTube Framework Section */}
-        {!youtubeFrameworkSectionLoading && (
+        {!youtubeFrameworkSectionLoading && youtubeFrameworkSectionData && (
           <YoutubeFrameworkSection
             youtubeFrameworkSection={youtubeFrameworkSectionData}
           />
         )}
 
         {/* Scholarship Section */}
-        {!scholarshipSectionLoading && (
+        {!scholarshipSectionLoading && scholarshipSectionData && (
           <ScholarshipSection 
             scholarshipSection={scholarshipSectionData}
           />
@@ -241,20 +166,6 @@ export default function HomePage() {
         {!guaranteeSectionLoading && (
           <GuaranteeSection
             guaranteeSection={guaranteeSectionData}
-          />
-        )}
-        
-        {/* YouTube Framework Section */}
-        {!youtubeFrameworkSectionLoading && (
-          <YoutubeFrameworkSection
-            youtubeFrameworkSection={youtubeFrameworkSectionData}
-          />
-        )}
-
-        {/* Scholarship Section */}
-        {!scholarshipSectionLoading && (
-          <ScholarshipSection 
-            scholarshipSection={scholarshipSectionData}
           />
         )}
         
