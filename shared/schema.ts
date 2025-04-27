@@ -181,7 +181,7 @@ export const insertAboutBookSectionSchema = createInsertSchema(aboutBookSection)
 export const authorSection = pgTable("author_section", {
   id: serial("id").primaryKey(),
   title: text("title"),
-  authorName: text("author_name"),
+  name: text("author_name"), // Maps to author_name in the database
   bio: text("bio"),
   bioShort: text("bio_short"),
   imageUrl: text("image_url"),

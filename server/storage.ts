@@ -516,7 +516,7 @@ export class DatabaseStorage implements IStorage {
   // Testimonials
   async getTestimonials(): Promise<schema.Testimonial[]> {
     try {
-      const result = await db.execute(
+      const result = await query(
         `SELECT id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
          show_mobile as "showMobile", updated_at as "updatedAt"
@@ -546,41 +546,74 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTestimonial(data: schema.InsertTestimonial): Promise<schema.Testimonial> {
-    // Map the data to the correct column names
-    const dbData: any = {
-      name: data.name,
-      quote: data.quote,
-      title: data.title,
-      image_url: data.imageUrl,
-      video_url: data.videoUrl,
-      media_type: data.mediaType,
-      show_mobile: data.showMobile,
-      updated_at: new Date()
-    };
-    
-    const [testimonial] = await db.insert(schema.testimonial).values(dbData).returning();
-    return testimonial;
+    try {
+      const result = await query(
+        `INSERT INTO testimonial (name, quote, title, image_url, video_url, media_type, show_mobile)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING id, quote, name, title, image_url as "imageUrl", 
+         video_url as "videoUrl", media_type as "mediaType", 
+         show_mobile as "showMobile", updated_at as "updatedAt"`,
+        [
+          data.name,
+          data.quote, 
+          data.title || '',
+          data.imageUrl || '',
+          data.videoUrl || '',
+          data.mediaType || 'image',
+          data.showMobile ?? true
+        ]
+      );
+      
+      console.log('New testimonial created:', result.rows[0]);
+      
+      return result.rows[0] as schema.Testimonial;
+    } catch (error) {
+      console.error('Error creating testimonial:', error);
+      throw error;
+    }
   }
 
   async updateTestimonial(id: number, data: Partial<schema.InsertTestimonial>): Promise<schema.Testimonial | undefined> {
-    // Map the data to the correct column names
-    const dbData: any = {
-      updated_at: new Date()
-    };
-    
-    if (data.name !== undefined) dbData.name = data.name;
-    if (data.quote !== undefined) dbData.quote = data.quote;
-    if (data.title !== undefined) dbData.title = data.title;
-    if (data.imageUrl !== undefined) dbData.image_url = data.imageUrl;
-    if (data.videoUrl !== undefined) dbData.video_url = data.videoUrl;
-    if (data.mediaType !== undefined) dbData.media_type = data.mediaType;
-    if (data.showMobile !== undefined) dbData.show_mobile = data.showMobile;
-    
-    const [updated] = await db.update(schema.testimonial)
-      .set(dbData)
-      .where(eq(schema.testimonial.id, id))
-      .returning();
-    return updated;
+    try {
+      const existing = await this.getTestimonial(id);
+      
+      if (!existing) {
+        return undefined;
+      }
+      
+      console.log('Updating testimonial with data:', data);
+      
+      const result = await query(
+        `UPDATE testimonial 
+         SET name = $1, quote = $2, title = $3, image_url = $4, 
+         video_url = $5, media_type = $6, show_mobile = $7, updated_at = NOW()
+         WHERE id = $8
+         RETURNING id, quote, name, title, image_url as "imageUrl", 
+         video_url as "videoUrl", media_type as "mediaType", 
+         show_mobile as "showMobile", updated_at as "updatedAt"`,
+        [
+          data.name ?? existing.name,
+          data.quote ?? existing.quote,
+          data.title ?? existing.title,
+          data.imageUrl ?? existing.imageUrl,
+          data.videoUrl ?? existing.videoUrl,
+          data.mediaType ?? existing.mediaType,
+          data.showMobile ?? existing.showMobile,
+          id
+        ]
+      );
+      
+      if (result.rows.length === 0) {
+        return undefined;
+      }
+      
+      console.log('Testimonial updated successfully:', result.rows[0]);
+      
+      return result.rows[0] as schema.Testimonial;
+    } catch (error) {
+      console.error(`Error updating testimonial ${id}:`, error);
+      throw error;
+    }
   }
 
   async deleteTestimonial(id: number): Promise<boolean> {
@@ -654,18 +687,54 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateAuthorSection(data: Partial<schema.InsertAuthorSection>): Promise<schema.AuthorSection> {
-    const existing = await this.getAuthorSection();
-    if (existing) {
-      const [updated] = await db.update(schema.authorSection)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(schema.authorSection.id, existing.id))
-        .returning();
-      return updated;
-    } else {
-      const [newSection] = await db.insert(schema.authorSection)
-        .values(data as schema.InsertAuthorSection)
-        .returning();
-      return newSection;
+    try {
+      const existing = await this.getAuthorSection();
+      
+      console.log('Updating author section with data:', data);
+      
+      if (existing) {
+        // Use direct query to ensure field mappings are accurate
+        const result = await query(
+          `UPDATE author_section 
+           SET title = $1, author_name = $2, bio = $3, bio_short = $4, image_url = $5, updated_at = NOW()
+           WHERE id = $6
+           RETURNING id, title, author_name as "name", bio, bio_short as "bioShort", 
+           image_url as "imageUrl", updated_at as "updatedAt"`,
+          [
+            data.title ?? existing.title,
+            data.name ?? existing.name,
+            data.bio ?? existing.bio,
+            data.bioShort ?? existing.bioShort,
+            data.imageUrl ?? existing.imageUrl,
+            existing.id
+          ]
+        );
+        
+        console.log('Author section updated successfully:', result.rows[0]);
+        
+        return result.rows[0] as schema.AuthorSection;
+      } else {
+        const result = await query(
+          `INSERT INTO author_section (title, author_name, bio, bio_short, image_url)
+           VALUES ($1, $2, $3, $4, $5)
+           RETURNING id, title, author_name as "name", bio, bio_short as "bioShort", 
+           image_url as "imageUrl", updated_at as "updatedAt"`,
+          [
+            data.title || '',
+            data.name || 'Luke Mikic',
+            data.bio || '',
+            data.bioShort || '',
+            data.imageUrl || ''
+          ]
+        );
+        
+        console.log('New author section created:', result.rows[0]);
+        
+        return result.rows[0] as schema.AuthorSection;
+      }
+    } catch (error) {
+      console.error('Error updating author section:', error);
+      throw error;
     }
   }
 
