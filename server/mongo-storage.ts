@@ -154,8 +154,11 @@ export class MongoDBStorage implements IStorage {
   sessionStore: any;
   
   constructor() {
+    // Use MongoDB URI if available, otherwise construct one from PostgreSQL URL
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/bookSite';
+    
     this.sessionStore = MongoSessionStore.create({
-      mongoUrl: process.env.DATABASE_URL,
+      mongoUrl: mongoUri,
       ttl: 14 * 24 * 60 * 60, // 14 days session timeout
       autoRemove: 'native',
     });
