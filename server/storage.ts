@@ -1134,6 +1134,61 @@ export class DatabaseStorage implements IStorage {
       return false;
     }
   }
+
+  // Guarantee Section
+  async getGuaranteeSection(): Promise<any | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, subtitle, content, background_color as "backgroundColor", updated_at as "updatedAt"
+         FROM guarantee_section LIMIT 1`
+      );
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error in getGuaranteeSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateGuaranteeSection(data: any): Promise<any> {
+    try {
+      const existing = await this.getGuaranteeSection();
+      
+      if (existing) {
+        const result = await query(
+          `UPDATE guarantee_section 
+           SET title = $1, subtitle = $2, content = $3, background_color = $4, updated_at = NOW()
+           WHERE id = $5
+           RETURNING id, title, subtitle, content, background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.title ?? existing.title,
+            data.subtitle ?? existing.subtitle,
+            data.content ?? existing.content,
+            data.backgroundColor ?? existing.backgroundColor,
+            existing.id
+          ]
+        );
+        
+        return result.rows[0];
+      } else {
+        const result = await query(
+          `INSERT INTO guarantee_section (title, subtitle, content, background_color)
+           VALUES ($1, $2, $3, $4)
+           RETURNING id, title, subtitle, content, background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.title || 'Our 100% Satisfaction Guarantee & Money-Back Promise',
+            data.subtitle || 'We want the investment in this course to be an absolute no-brainer for you – if you\'re actually going to do the work 😉',
+            data.content || '"Do the work" technically involves completing the core modules. If you\'ve done that and for whatever reason aren\'t 100% happy with your experience, drop us an email (within 30 days of purchasing the course) and we\'ll happily refund your entire payment.',
+            data.backgroundColor || '#F9F9F7'
+          ]
+        );
+        
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error('Error updating guarantee section:', error);
+      throw error;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

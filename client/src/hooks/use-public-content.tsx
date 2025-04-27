@@ -141,6 +141,23 @@ export function usePublicBonusItems() {
 }
 
 /**
+ * Hook for fetching the guarantee section for the public page
+ */
+export function usePublicGuaranteeSection() {
+  return useQuery({
+    queryKey: ["/api/content/guarantee-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/guarantee-section");
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for fetching all public content in one call
  */
 export function useAllPublicContent() {
