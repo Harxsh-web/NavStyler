@@ -394,6 +394,7 @@ function getModel<T extends Document>(modelName: string, schema: Schema): Model<
   try {
     return model<T>(modelName);
   } catch (error) {
+    // If model doesn't exist, create it
     return model<T>(modelName, schema);
   }
 }

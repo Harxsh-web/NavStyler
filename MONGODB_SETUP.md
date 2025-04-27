@@ -1,102 +1,101 @@
-# MongoDB Setup Instructions
+# MongoDB Setup Guide
 
-This document provides instructions for setting up and using MongoDB with this project.
+This document provides instructions for setting up and using MongoDB with this application.
 
 ## Prerequisites
 
-- Make sure you have MongoDB installed and running (locally or in the cloud)
-- Set the `DATABASE_URL` environment variable to your MongoDB connection string
+- Node.js (v18 or newer)
+- MongoDB (local installation or cloud service like MongoDB Atlas)
 
-## Setup Process
+## MongoDB Configuration
 
-### 1. Backup Current Files (PostgreSQL)
+### 1. Set up MongoDB
 
-Before switching to MongoDB, it's a good idea to create backups of the current PostgreSQL files:
+You can either use a local MongoDB installation or a cloud-based MongoDB service like MongoDB Atlas.
 
-```bash
-cp server/index.ts server/pg-index.ts
-cp server/storage.ts server/pg-storage.ts
-cp server/auth.ts server/pg-auth.ts
-cp server/routes.ts server/pg-routes.ts
+#### Option A: Local MongoDB Installation
+
+1. Install MongoDB on your machine: [MongoDB Installation Guide](https://docs.mongodb.com/manual/installation/)
+2. Start MongoDB service:
+   ```bash
+   mongod --dbpath=/path/to/data/directory
+   ```
+
+#### Option B: MongoDB Atlas (Cloud)
+
+1. Create a free MongoDB Atlas account: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Set up a new cluster
+3. Create a database user
+4. Get your connection string
+
+### 2. Configure Environment Variables
+
+Create or update your `.env` file with MongoDB connection details:
+
 ```
+# MongoDB Connection
+MONGODB_URI=mongodb://username:password@localhost:27017/book_landing_page
+# or for MongoDB Atlas
+# MONGODB_URI=mongodb+srv://username:password@cluster0.mongodb.net/book_landing_page?retryWrites=true&w=majority
 
-### 2. Switch to MongoDB
-
-Replace the main server files with MongoDB versions:
-
-```bash
-cp server/mongo-index.ts server/index.ts
-cp server/mongo-storage.ts server/storage.ts
-cp server/mongo-auth.ts server/auth.ts
-cp server/mongo-routes.ts server/routes.ts
-```
-
-### 3. Migrate Data (Optional)
-
-If you want to migrate your existing PostgreSQL data to MongoDB, run:
-
-```bash
-NODE_ENV=development tsx scripts/migrate-to-mongodb.ts
-```
-
-### 4. Start the Server
-
-Start the application with:
-
-```bash
-NODE_ENV=development tsx server/index.ts
+SESSION_SECRET=your_session_secret
 ```
 
 ## Switching Between Databases
 
-You can use the provided script to switch between databases:
+This application supports both PostgreSQL and MongoDB. You can switch between them using the provided script.
+
+### Using the Database Switcher Script
 
 ```bash
 # Switch to MongoDB
-NODE_ENV=development tsx scripts/switch-database.ts mongodb
+node switch-database.js mongodb
 
-# Switch back to PostgreSQL
-NODE_ENV=development tsx scripts/switch-database.ts postgres
+# Switch to PostgreSQL
+node switch-database.js postgres
 ```
 
-## MongoDB Environment Variables
+## Data Migration
 
-The following environment variables should be set in your .env file:
+If you've been using PostgreSQL and want to migrate your data to MongoDB, use the migration script:
 
+```bash
+# Migrate from PostgreSQL to MongoDB
+node scripts/migrate-to-mongodb.js
 ```
-DATABASE_URL=mongodb://username:password@host:port/database
-SESSION_SECRET=your_session_secret
+
+## Manual Starting with MongoDB
+
+If you prefer to start the application with MongoDB manually:
+
+```bash
+# Start the application with MongoDB
+NODE_ENV=development tsx server/mongo-index.ts
 ```
+
+## MongoDB Models
+
+The MongoDB implementation uses Mongoose for schema definition and data modeling. All models are defined in `shared/models.ts`.
 
 ## Troubleshooting
 
 ### Connection Issues
 
-If you're having trouble connecting to MongoDB:
+If you face connection issues with MongoDB:
 
-1. Verify that MongoDB is running
-2. Check your connection string
-3. Ensure your MongoDB server allows connections from your application
+1. Verify your connection string in the `.env` file
+2. Ensure MongoDB service is running
+3. Check for network connectivity (for MongoDB Atlas)
+4. Verify authentication credentials
 
-### Authentication Issues
+### Data Migration Issues
 
-If you're having trouble with user authentication:
+If data migration fails:
 
-1. The first time you switch to MongoDB, you'll need to create users again
-2. You can use the migration script to transfer users from PostgreSQL
+1. Ensure both PostgreSQL and MongoDB are running
+2. Check that your PostgreSQL database has the data you want to migrate
+3. Verify MongoDB connection string
 
-### Data Persistence
+## Support
 
-MongoDB stores data in a different format than PostgreSQL:
-
-1. Document-based vs. relational
-2. Uses ObjectId as primary keys instead of serial integers
-3. Handles relationships differently (embedded documents vs. foreign keys)
-
-## MongoDB Compass
-
-MongoDB Compass is a great tool for managing your MongoDB database:
-
-1. Download from https://www.mongodb.com/products/compass
-2. Connect using your MongoDB connection string
-3. View, edit, and manage your collections
+For additional support or questions about MongoDB implementation, please contact the development team.
