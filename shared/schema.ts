@@ -327,3 +327,34 @@ export const themeSettings = pgTable("theme_settings", {
 export type ThemeSettings = typeof themeSettings.$inferSelect;
 export type InsertThemeSettings = typeof themeSettings.$inferInsert;
 export const insertThemeSettingsSchema = createInsertSchema(themeSettings);
+
+// Free Bonuses Section
+export const bonusSection = pgTable("bonus_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  backgroundColor: text("background_color").default("#E6F1FE"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type BonusSection = typeof bonusSection.$inferSelect;
+export type InsertBonusSection = typeof bonusSection.$inferInsert;
+export const insertBonusSectionSchema = createInsertSchema(bonusSection);
+
+// Free Bonus Items
+export const bonusItem = pgTable("bonus_item", {
+  id: serial("id").primaryKey(),
+  sectionId: integer("section_id").references(() => bonusSection.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  iconName: text("icon_name").default("Gift"),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
+  backgroundColor: text("background_color").default("#FFE382"),
+  orderIndex: integer("order_index").default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type BonusItem = typeof bonusItem.$inferSelect;
+export type InsertBonusItem = typeof bonusItem.$inferInsert;
+export const insertBonusItemSchema = createInsertSchema(bonusItem);

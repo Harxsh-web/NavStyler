@@ -114,6 +114,17 @@ export interface IStorage {
   updateThemeSettings(id: number, data: Partial<schema.InsertThemeSettings>): Promise<schema.ThemeSettings | undefined>;
   deleteThemeSettings(id: number): Promise<boolean>;
   
+  // Bonus section
+  getBonusSection(): Promise<schema.BonusSection | undefined>;
+  updateBonusSection(data: Partial<schema.InsertBonusSection>): Promise<schema.BonusSection>;
+  
+  // Bonus items
+  getBonusItems(): Promise<schema.BonusItem[]>;
+  getBonusItem(id: number): Promise<schema.BonusItem | undefined>;
+  createBonusItem(data: schema.InsertBonusItem): Promise<schema.BonusItem>;
+  updateBonusItem(id: number, data: Partial<schema.InsertBonusItem>): Promise<schema.BonusItem | undefined>;
+  deleteBonusItem(id: number): Promise<boolean>;
+  
   // Session store for authentication
   sessionStore: any;
 }
