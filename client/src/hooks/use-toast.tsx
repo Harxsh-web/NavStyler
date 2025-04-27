@@ -143,6 +143,15 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
+  // Set success variant for success messages
+  if (props.title && typeof props.title === 'string' && 
+      (props.title.toLowerCase().includes('success') || 
+       props.title.toLowerCase().includes('updated') || 
+       props.title.toLowerCase().includes('saved') || 
+       props.title.toLowerCase().includes('created'))) {
+    props.variant = 'success';
+  }
+
   const update = (props: ToasterToast) =>
     dispatch({
       type: "UPDATE_TOAST",
