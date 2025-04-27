@@ -1052,7 +1052,7 @@ export class MongoDBStorage implements IStorage {
   // Analytics
   async getPageViews(start?: Date, end?: Date): Promise<models.PageView[]> {
     try {
-      let query = {};
+      let query: any = {};
       if (start || end) {
         query = { date: {} };
         if (start) query.date['$gte'] = start;
@@ -1069,7 +1069,7 @@ export class MongoDBStorage implements IStorage {
   
   async getSales(start?: Date, end?: Date): Promise<models.Sale[]> {
     try {
-      let query = {};
+      let query: any = {};
       if (start || end) {
         query = { date: {} };
         if (start) query.date['$gte'] = start;
@@ -1084,9 +1084,20 @@ export class MongoDBStorage implements IStorage {
     }
   }
   
+  async createSale(data: any): Promise<models.Sale> {
+    try {
+      const newSale = new models.Sale(data);
+      await newSale.save();
+      return newSale.toObject();
+    } catch (error) {
+      console.error('Error creating sale:', error);
+      throw error;
+    }
+  }
+  
   async getVisitors(start?: Date, end?: Date): Promise<models.Visitor[]> {
     try {
-      let query = {};
+      let query: any = {};
       if (start || end) {
         query = { date: {} };
         if (start) query.date['$gte'] = start;
@@ -1103,7 +1114,7 @@ export class MongoDBStorage implements IStorage {
   
   async getContentEngagement(start?: Date, end?: Date): Promise<models.ContentEngagement[]> {
     try {
-      let query = {};
+      let query: any = {};
       if (start || end) {
         query = { date: {} };
         if (start) query.date['$gte'] = start;

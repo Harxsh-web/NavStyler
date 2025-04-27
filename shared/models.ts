@@ -1,4 +1,4 @@
-import { Schema, model, Document, models, Model } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 import { z } from 'zod';
 
 // Types for Mongoose models
@@ -391,7 +391,11 @@ const videoSchema = new Schema<IVideo>({
 
 // Create or get existing models
 function getModel<T extends Document>(modelName: string, schema: Schema): Model<T> {
-  return models[modelName] || model<T>(modelName, schema);
+  try {
+    return model<T>(modelName);
+  } catch (error) {
+    return model<T>(modelName, schema);
+  }
 }
 
 // Export models
