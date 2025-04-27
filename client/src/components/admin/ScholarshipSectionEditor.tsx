@@ -1,327 +1,213 @@
-import React, { useState, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { Trash2, Plus, Save } from "lucide-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import ScholarshipSection from "../ScholarshipSection";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { backgroundColorOptions } from "@/lib/constants";
 
 const scholarshipSectionSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  subtitle: z.string().min(1, "Subtitle is required"),
   description: z.string().min(1, "Description is required"),
-  requirements: z.array(z.string().min(1, "Requirement is required")),
-  applicationProcess: z.array(z.string().min(1, "Application step is required")),
-  buttonText: z.string().optional().nullable(),
-  buttonUrl: z.string().optional().nullable(),
-  backgroundColor: z.string().optional().nullable(),
+  imageUrl: z.string().min(1, "Image URL is required"),
+  buttonText: z.string().min(1, "Button text is required"),
+  buttonUrl: z.string().min(1, "Button URL is required"),
+  backgroundColor: z.string().optional(),
 });
 
 type ScholarshipSectionFormValues = z.infer<typeof scholarshipSectionSchema>;
 
-const ScholarshipSectionEditor: React.FC = () => {
-  const [isPreviewing, setIsPreviewing] = useState(false);
+const ScholarshipSectionEditor = ({ initialData }: { initialData?: any }) => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const { data: scholarshipSection, isLoading } = useQuery({
-    queryKey: ["/api/admin/scholarship-section"],
-    queryFn: async () => {
-      const response = await apiRequest("GET", "/api/admin/scholarship-section");
-      if (!response.ok) {
-        throw new Error("Failed to fetch scholarship section");
-      }
-      return await response.json();
-    },
-  });
-
-  const { register, handleSubmit, control, reset, watch, formState: { errors } } = useForm<ScholarshipSectionFormValues>({
+  
+  const form = useForm<ScholarshipSectionFormValues>({
     resolver: zodResolver(scholarshipSectionSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      requirements: [""],
-      applicationProcess: [""],
-      buttonText: "",
-      buttonUrl: "",
-      backgroundColor: "#f9fafe",
-    },
-  });
-
-  const { fields: requirementsFields, append: appendRequirement, remove: removeRequirement } = useFieldArray({
-    control,
-    name: "requirements",
-  });
-
-  const { fields: applicationProcessFields, append: appendApplicationStep, remove: removeApplicationStep } = useFieldArray({
-    control,
-    name: "applicationProcess",
-  });
-
-  useEffect(() => {
-    if (scholarshipSection) {
-      reset({
-        title: scholarshipSection.title,
-        description: scholarshipSection.description,
-        requirements: scholarshipSection.requirements && scholarshipSection.requirements.length > 0 
-          ? scholarshipSection.requirements 
-          : [""],
-        applicationProcess: scholarshipSection.applicationProcess && scholarshipSection.applicationProcess.length > 0 
-          ? scholarshipSection.applicationProcess 
-          : [""],
-        buttonText: scholarshipSection.buttonText || "",
-        buttonUrl: scholarshipSection.buttonUrl || "",
-        backgroundColor: scholarshipSection.backgroundColor || "#f9fafe",
-      });
+      title: initialData?.title || "Can't Afford The $995?",
+      subtitle: initialData?.subtitle || "Scholarship Application",
+      description: initialData?.description || 
+        "If you truly cannot afford the full price but are committed to building your YouTube channel, I'm offering scholarships based on need and dedication. Submit your application explaining your situation and YouTube goals.",
+      imageUrl: initialData?.imageUrl || "/student-scholarship.jpg",
+      buttonText: initialData?.buttonText || "Apply for Scholarship",
+      buttonUrl: initialData?.buttonUrl || "#scholarship-application",
+      backgroundColor: initialData?.backgroundColor || "bg-amber-50",
     }
-  }, [scholarshipSection, reset]);
+  });
 
-  const updateMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: async (data: ScholarshipSectionFormValues) => {
-      const response = await apiRequest("PUT", "/api/admin/scholarship-section", data);
-      if (!response.ok) {
-        throw new Error("Failed to update scholarship section");
-      }
-      return await response.json();
+      const res = await apiRequest("PUT", "/api/admin/scholarship", data);
+      return res.json();
     },
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Scholarship section updated successfully",
+        description: "Scholarship section has been updated",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/scholarship-section"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/content/scholarship-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/scholarship"] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to update scholarship section",
+        description: error.message,
         variant: "destructive",
       });
     },
   });
 
   const onSubmit = (data: ScholarshipSectionFormValues) => {
-    updateMutation.mutate(data);
+    mutation.mutate(data);
   };
 
-  const watchedValues = watch();
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Scholarship Section Editor</h2>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setIsPreviewing(!isPreviewing)}
-          >
-            {isPreviewing ? "Edit" : "Preview"}
-          </Button>
-          {!isPreviewing && (
-            <Button
-              onClick={handleSubmit(onSubmit)}
-              disabled={updateMutation.isPending}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              {updateMutation.isPending ? (
-                <>
-                  <div className="animate-spin mr-2 h-4 w-4 border-2 border-b-0 border-white rounded-full"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Changes
-                </>
+    <Card>
+      <CardHeader>
+        <CardTitle>Scholarship Section</CardTitle>
+        <CardDescription>
+          Edit the scholarship application section that appears on the homepage
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter section title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {isPreviewing ? (
-        <div className="border rounded-lg p-4 mb-8 bg-gray-50">
-          <ScholarshipSection 
-            title={watchedValues.title}
-            description={watchedValues.description}
-            requirements={watchedValues.requirements.filter(Boolean)}
-            applicationProcess={watchedValues.applicationProcess.filter(Boolean)}
-            buttonText={watchedValues.buttonText || undefined}
-            buttonUrl={watchedValues.buttonUrl || undefined}
-            backgroundColor={watchedValues.backgroundColor || undefined}
-          />
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-6">
-              <div>
-                <Label htmlFor="title">Section Title</Label>
-                <Input id="title" {...register("title")} className="mt-1" />
-                {errors.title && (
-                  <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="description">Section Description</Label>
-                <Textarea 
-                  id="description" 
-                  {...register("description")} 
-                  rows={3} 
-                  className="mt-1"
-                />
-                {errors.description && (
-                  <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="buttonText">Button Text (Optional)</Label>
-                <Input id="buttonText" {...register("buttonText")} className="mt-1" />
-              </div>
-
-              <div>
-                <Label htmlFor="buttonUrl">Button URL (Optional)</Label>
-                <Input id="buttonUrl" {...register("buttonUrl")} className="mt-1" />
-              </div>
-
-              <div>
-                <Label htmlFor="backgroundColor">Background Color</Label>
-                <div className="flex gap-3 mt-1">
-                  <Input 
-                    id="backgroundColor" 
-                    type="text"
-                    {...register("backgroundColor")} 
-                  />
-                  <Input 
-                    type="color" 
-                    {...register("backgroundColor")} 
-                    className="w-12 h-10 p-1" 
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label>Requirements</Label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => appendRequirement("")}
-                  >
-                    <Plus className="h-4 w-4 mr-1" /> Add Requirement
-                  </Button>
-                </div>
-
-                <div className="space-y-3">
-                  {requirementsFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2">
-                      <Textarea
-                        {...register(`requirements.${index}` as const)}
-                        placeholder={`Requirement ${index + 1}`}
-                        className="flex-1"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeRequirement(index)}
-                        disabled={requirementsFields.length === 1}
-                        className="flex-shrink-0"
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label>Application Process Steps</Label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => appendApplicationStep("")}
-                  >
-                    <Plus className="h-4 w-4 mr-1" /> Add Step
-                  </Button>
-                </div>
-
-                <div className="space-y-3">
-                  {applicationProcessFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2">
-                      <Textarea
-                        {...register(`applicationProcess.${index}` as const)}
-                        placeholder={`Step ${index + 1}`}
-                        className="flex-1"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeApplicationStep(index)}
-                        disabled={applicationProcessFields.length === 1}
-                        className="flex-shrink-0"
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={updateMutation.isPending}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              {updateMutation.isPending ? (
-                <>
-                  <div className="animate-spin mr-2 h-4 w-4 border-2 border-b-0 border-white rounded-full"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Changes
-                </>
+            />
+            
+            <FormField
+              control={form.control}
+              name="subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subtitle</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter section subtitle" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </Button>
-          </div>
-        </form>
-      )}
-    </div>
+            />
+            
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Enter section description" 
+                      {...field} 
+                      className="min-h-[120px]" 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter image URL" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="buttonText"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Button Text</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter button text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="buttonUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Button URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter button URL" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <FormField
+              control={form.control}
+              name="backgroundColor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Background Color</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a background color" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {backgroundColorOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? "Saving..." : "Save changes"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 };
 
