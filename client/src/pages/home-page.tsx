@@ -214,6 +214,20 @@ export default function HomePage() {
             <TestimonialsDisplay />
           </div>
         </section>
+
+        {/* YouTube Framework Section */}
+        {!youtubeFrameworkSectionLoading && (
+          <YoutubeFrameworkSection
+            youtubeFrameworkSection={youtubeFrameworkSectionData}
+          />
+        )}
+
+        {/* Scholarship Section */}
+        {!scholarshipSectionLoading && (
+          <ScholarshipSection 
+            scholarshipSection={scholarshipSectionData}
+          />
+        )}
         
         {/* Bonus Section */}
         {!bonusSectionLoading && !bonusItemsLoading && (
@@ -229,18 +243,18 @@ export default function HomePage() {
             guaranteeSection={guaranteeSectionData}
           />
         )}
+        
+        {/* YouTube Framework Section */}
+        {!youtubeFrameworkSectionLoading && (
+          <YoutubeFrameworkSection
+            youtubeFrameworkSection={youtubeFrameworkSectionData}
+          />
+        )}
 
         {/* Scholarship Section */}
         {!scholarshipSectionLoading && (
           <ScholarshipSection 
             scholarshipSection={scholarshipSectionData}
-          />
-        )}
-
-        {/* YouTube Framework Section */}
-        {!youtubeFrameworkSectionLoading && (
-          <YoutubeFrameworkSection
-            youtubeFrameworkSection={youtubeFrameworkSectionData}
           />
         )}
         
