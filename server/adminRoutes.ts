@@ -51,6 +51,35 @@ adminRouter.put("/hero", validateRequest(schema.insertHeroSectionSchema.partial(
     // We don't need mapping anymore since we've standardized on buttonText and buttonUrl
     const heroData = req.validatedBody;
     
+    // Validate image URL if provided
+    if (heroData.imageUrl && heroData.imageUrl.startsWith('/uploads/')) {
+      const fs = require('fs');
+      const path = require('path');
+      const filePath = path.join(process.cwd(), 'public', heroData.imageUrl.substring(1));
+      
+      console.log('Verifying file exists at path:', filePath);
+      
+      // Check if the file exists
+      if (!fs.existsSync(filePath)) {
+        console.warn(`Image file doesn't exist: ${filePath}`);
+        
+        // List available files in the uploads directory
+        const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+        const files = fs.readdirSync(uploadsDir);
+        console.log('Available files in uploads directory:', files);
+        
+        // If no files, return error
+        if (files.length === 0) {
+          return res.status(400).json({ error: 'Image file not found and no uploads available' });
+        }
+        
+        // Use the most recent file
+        const mostRecentFile = files.sort().pop();
+        heroData.imageUrl = `/uploads/${mostRecentFile}`;
+        console.log(`Image file not found. Using most recent upload instead: ${heroData.imageUrl}`);
+      }
+    }
+    
     console.log('Updating hero section with data:', heroData);
     
     const updatedHero = await storage.updateHeroSection(heroData);
