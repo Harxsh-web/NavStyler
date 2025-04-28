@@ -4,11 +4,53 @@ import {
   FaLinkedin, 
   FaYoutube, 
   FaTiktok, 
-  FaTwitter 
+  FaTwitter,
+  FaSpotify
 } from "react-icons/fa";
+import { SiRumble } from "react-icons/si";
+import { SiApplepodcasts } from "react-icons/si";
+import { useQuery } from "@tanstack/react-query";
+import { SocialLink } from "@shared/schema";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  
+  const { data: socialLinks } = useQuery<SocialLink[]>({
+    queryKey: ["/api/admin/social-links"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/social-links");
+      if (!response.ok) {
+        return [];
+      }
+      return await response.json();
+    }
+  });
+
+  // Map platform names to their respective icon components
+  const getIconForPlatform = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'youtube':
+        return <FaYoutube className="text-gray-700" />;
+      case 'instagram':
+        return <FaInstagram className="text-gray-700" />;
+      case 'linkedin':
+        return <FaLinkedin className="text-gray-700" />;
+      case 'tiktok':
+        return <FaTiktok className="text-gray-700" />;
+      case 'twitter':
+        return <FaTwitter className="text-gray-700" />;
+      case 'facebook':
+        return <FaFacebook className="text-gray-700" />;
+      case 'spotify':
+        return <FaSpotify className="text-gray-700" />;
+      case 'applepodcast':
+        return <SiApplepodcasts className="text-gray-700" />;
+      case 'rumble':
+        return <SiRumble className="text-gray-700" />;
+      default:
+        return <FaYoutube className="text-gray-700" />;
+    }
+  };
   
   return (
     <footer className="bg-white text-gray-800 pt-16 pb-8">
@@ -27,24 +69,40 @@ export default function Footer() {
           </div>
           
           <div className="flex space-x-3 mb-8">
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaYoutube className="text-gray-700" />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaInstagram className="text-gray-700" />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaLinkedin className="text-gray-700" />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaTiktok className="text-gray-700" />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaTwitter className="text-gray-700" />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <FaFacebook className="text-gray-700" />
-            </a>
+            {socialLinks && socialLinks.length > 0 ? (
+              socialLinks.map((link) => (
+                <a 
+                  key={link.id} 
+                  href={link.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition"
+                >
+                  {getIconForPlatform(link.platform)}
+                </a>
+              ))
+            ) : (
+              <>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaYoutube className="text-gray-700" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaInstagram className="text-gray-700" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaLinkedin className="text-gray-700" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaTiktok className="text-gray-700" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaTwitter className="text-gray-700" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                  <FaFacebook className="text-gray-700" />
+                </a>
+              </>
+            )}
           </div>
         </div>
         

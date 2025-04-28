@@ -31,7 +31,9 @@ const footerLinkSchema = z.object({
 const socialLinkSchema = z.object({
   platform: z.string().min(1, "Platform is required"),
   url: z.string().url("Must be a valid URL"),
-  order: z.number().default(0),
+  order_index: z.number().default(0),
+  icon_name: z.string().optional(),
+  active: z.boolean().default(true),
 });
 
 type FooterCategoryFormValues = z.infer<typeof footerCategorySchema>;
@@ -76,7 +78,9 @@ export function FooterEditor() {
     defaultValues: {
       platform: "",
       url: "",
-      order: 0,
+      order_index: 0,
+      icon_name: "",
+      active: true,
     },
   });
 
@@ -148,6 +152,7 @@ export function FooterEditor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/content/social-links"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/social-links"] });
       toast({
         title: "Success",
         description: "Social link created successfully",
@@ -229,6 +234,7 @@ export function FooterEditor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/content/social-links"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/social-links"] });
       toast({
         title: "Success",
         description: "Social link deleted successfully",
@@ -252,6 +258,20 @@ export function FooterEditor() {
   };
 
   const onSocialLinkSubmit = (values: SocialLinkFormValues) => {
+    // Add icon name based on platform
+    const platformToIcon: Record<string, string> = {
+      facebook: 'FaFacebook',
+      twitter: 'FaTwitter',
+      instagram: 'FaInstagram',
+      linkedin: 'FaLinkedin',
+      youtube: 'FaYoutube',
+      tiktok: 'FaTiktok',
+      spotify: 'FaSpotify',
+      applepodcast: 'SiApplepodcasts',
+      rumble: 'SiRumble'
+    };
+    
+    values.icon_name = platformToIcon[values.platform] || '';
     createSocialLinkMutation.mutate(values);
   };
 
