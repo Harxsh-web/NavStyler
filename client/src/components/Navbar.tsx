@@ -218,7 +218,7 @@ export default function Navbar() {
             {/* Newsletter */}
             <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
               <Button className="rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
-                Join 270k+ Subscribers
+                Join 15k+ Subscribers
               </Button>
             </a>
             
@@ -317,7 +317,7 @@ export default function Navbar() {
                   
                   <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
-                      Join 270k+ Subscribers
+                      Join 15k+ Subscribers
                     </Button>
                   </a>
                 </div>
