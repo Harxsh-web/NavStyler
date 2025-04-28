@@ -97,8 +97,8 @@ export type InsertLearningPoint = z.infer<typeof insertLearningPointSchema>;
 export const testimonialSection = pgTable("testimonial_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  subtitle: text("subtitle").notNull(),
-  description: text("description").notNull(),
+  subtitle: text("subtitle"),
+  description: text("description"),
 });
 
 export type TestimonialSection = typeof testimonialSection.$inferSelect;
