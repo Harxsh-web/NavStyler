@@ -69,6 +69,7 @@ export function HeroEditor() {
       toast({
         title: "Success",
         description: "Hero section updated successfully",
+        className: "bg-green-500 text-white border-none",
       });
     },
     onError: (error) => {

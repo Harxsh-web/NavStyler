@@ -62,9 +62,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             );
           })}
           <div className="pt-4">
-            <Button className="w-full bg-[#FF9470] hover:bg-opacity-90 text-white font-medium py-3 px-4 rounded-full">
-              Join 270k+ Subscribers
-            </Button>
+            <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
+              <Button className="w-full bg-[#FF9470] hover:bg-opacity-90 text-white font-medium py-3 px-4 rounded-full">
+                Join 270k+ Subscribers
+              </Button>
+            </a>
           </div>
         </div>
       </div>

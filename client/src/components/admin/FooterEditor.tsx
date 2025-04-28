@@ -296,7 +296,7 @@ export function FooterEditor() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="categories">
-          <TabsList className="mb-4">
+          <TabsList className="mb-4 p-2 gap-5">
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="links">Links</TabsTrigger>
             <TabsTrigger value="social">Social Links</TabsTrigger>
@@ -579,7 +579,8 @@ export function FooterEditor() {
                       </p>
                     </div>
                     <Button
-                      variant="ghost"
+                     
+                      className="delete-button"
                       size="sm"
                       onClick={() => {
                         if (confirm(`Are you sure you want to delete "${link.platform}" social link?`)) {
@@ -587,7 +588,7 @@ export function FooterEditor() {
                         }
                       }}
                     >
-                      <Trash className="h-4 w-4 text-destructive" />
+                      <Trash className="h-4 w-4 " />
                     </Button>
                   </div>
                 ))}

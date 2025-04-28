@@ -216,11 +216,11 @@ export default function Navbar() {
             </TransitionLink>
             
             {/* Newsletter */}
-            <TransitionLink href="/newsletter" transitionType="scale">
+            <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
               <Button className="rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                 Join 270k+ Subscribers
               </Button>
-            </TransitionLink>
+            </a>
             
             {/* Dark Mode Toggle */}
             {/* <DarkModeToggle /> */}
@@ -315,11 +315,11 @@ export default function Navbar() {
                     </div>
                   </TransitionLink>
                   
-                  <TransitionLink href="/" transitionType="scale">
+                  <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                       Join 270k+ Subscribers
                     </Button>
-                  </TransitionLink>
+                  </a>
                 </div>
               </SheetContent>
             </Sheet>

@@ -186,12 +186,12 @@ const YoutubeFrameworkSectionEditor = ({ initialData }: { initialData?: any }) =
                       <h4 className="font-medium">Step {index + 1}</h4>
                       <Button
                         type="button"
-                        variant="ghost"
+                         className="delete-button"
                         size="sm"
                         onClick={() => remove(index)}
                         disabled={fields.length <= 1}
                       >
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <Trash2 className="h-4 w-4 " />
                       </Button>
                     </div>
                     

@@ -59,6 +59,7 @@ export default function GuaranteeSectionEditor() {
       toast({
         title: "Success",
         description: "Guarantee section has been saved.",
+        className: "bg-green-500 text-white border-none",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/content/guarantee-section"] });
     },

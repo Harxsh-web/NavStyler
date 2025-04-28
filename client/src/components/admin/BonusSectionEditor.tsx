@@ -81,6 +81,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       toast({
         title: 'Section updated',
         description: 'Bonus section has been successfully updated',
+        className: "bg-green-500 text-white border-none",
       });
     },
     onError: (error: Error) => {
