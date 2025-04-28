@@ -124,6 +124,10 @@ export interface IStorage {
   getYoutubeFrameworkSection(): Promise<models.YoutubeFrameworkSection | undefined>;
   updateYoutubeFrameworkSection(data: any): Promise<models.YoutubeFrameworkSection>;
   
+  // Questions Section
+  getQuestionsSection(): Promise<models.QuestionsSection | undefined>;
+  updateQuestionsSection(data: any): Promise<models.QuestionsSection>;
+  
   // Site settings
   getSiteSettings(): Promise<models.SiteSetting[]>;
   getSiteSetting(name: string): Promise<models.SiteSetting | undefined>;
@@ -972,6 +976,47 @@ export class MongoDBStorage implements IStorage {
       return updatedYoutubeFrameworkSection;
     } catch (error) {
       console.error('Error updating youtube framework section:', error);
+      throw error;
+    }
+  }
+  
+  // Questions Section
+  async getQuestionsSection(): Promise<models.QuestionsSection | undefined> {
+    try {
+      const questionsSection = await models.QuestionsSection.findOne().lean();
+      return questionsSection || undefined;
+    } catch (error) {
+      console.error('Error getting questions section:', error);
+      throw error;
+    }
+  }
+  
+  async updateQuestionsSection(data: any): Promise<models.QuestionsSection> {
+    try {
+      const updatedQuestionsSection = await models.QuestionsSection.findOneAndUpdate(
+        {},
+        { ...data, updatedAt: new Date() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      ).lean();
+      
+      if (!updatedQuestionsSection) {
+        // If for some reason it failed to create, create one with defaults
+        const newQuestionsSection = new models.QuestionsSection({
+          title: data.title || 'Questions?',
+          subtitle: data.subtitle || 'Still not sure or just want to chat?',
+          contactText: data.contactText || 'Contact us at',
+          contactEmail: data.contactEmail || 'support@example.com',
+          description: data.description || 'If you\'ve got any questions about the book, the payment process, or anything else that\'s on your mind, we\'re here to help.',
+          backgroundColor: data.backgroundColor || '#ffffff',
+          updatedAt: new Date()
+        });
+        await newQuestionsSection.save();
+        return newQuestionsSection.toObject();
+      }
+      
+      return updatedQuestionsSection;
+    } catch (error) {
+      console.error('Error updating questions section:', error);
       throw error;
     }
   }
