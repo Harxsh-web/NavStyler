@@ -1365,6 +1365,77 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
+
+  // Questions section methods
+  async getQuestionsSection(): Promise<schema.QuestionsSection | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, subtitle, contact_text as "contactText", contact_email as "contactEmail",
+         description, background_color as "backgroundColor"
+         FROM questions_section LIMIT 1`
+      );
+      return result.rows[0] as schema.QuestionsSection;
+    } catch (error) {
+      console.error('Error in getQuestionsSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateQuestionsSection(data: Partial<schema.InsertQuestionsSection>): Promise<schema.QuestionsSection> {
+    try {
+      // Check if section exists
+      const existing = await this.getQuestionsSection();
+      
+      if (!existing) {
+        // Create if doesn't exist
+        const result = await query(
+          `INSERT INTO questions_section 
+           (title, subtitle, contact_text, contact_email, description, background_color) 
+           VALUES ($1, $2, $3, $4, $5, $6) 
+           RETURNING id, title, subtitle, contact_text as "contactText", contact_email as "contactEmail", 
+           description, background_color as "backgroundColor"`,
+          [
+            data.title || 'Questions?',
+            data.subtitle || 'Still not sure or just want to chat?',
+            data.contactText || 'Contact us at',
+            data.contactEmail || 'support@lukemikic.com',
+            data.description || 'If you\'ve got any questions about whether the course is right for you, drop us an email and we\'ll get back to you as soon as possible.',
+            data.backgroundColor || 'bg-white'
+          ]
+        );
+        
+        return result.rows[0] as schema.QuestionsSection;
+      } else {
+        // Update if exists
+        const result = await query(
+          `UPDATE questions_section SET 
+           title = COALESCE($1, title),
+           subtitle = COALESCE($2, subtitle),
+           contact_text = COALESCE($3, contact_text),
+           contact_email = COALESCE($4, contact_email),
+           description = COALESCE($5, description),
+           background_color = COALESCE($6, background_color)
+           WHERE id = $7
+           RETURNING id, title, subtitle, contact_text as "contactText", contact_email as "contactEmail", 
+           description, background_color as "backgroundColor"`,
+          [
+            data.title || null,
+            data.subtitle || null,
+            data.contactText || null,
+            data.contactEmail || null,
+            data.description || null,
+            data.backgroundColor || null,
+            existing.id
+          ]
+        );
+        
+        return result.rows[0] as schema.QuestionsSection;
+      }
+    } catch (error) {
+      console.error('Error in updateQuestionsSection:', error);
+      throw error;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

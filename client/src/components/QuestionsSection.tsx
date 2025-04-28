@@ -1,5 +1,5 @@
-import React from "react";
-import { FaQuestion } from "react-icons/fa";
+import React from 'react';
+import { Mail } from 'lucide-react';
 
 interface QuestionsSectionProps {
   title?: string;
@@ -14,33 +14,33 @@ const QuestionsSection: React.FC<{ questionsSection?: QuestionsSectionProps }> =
   questionsSection 
 }) => {
   if (!questionsSection) return null;
-  
-  // Map the response data
-  const data = questionsSection || {};
-  
-  // Extract properties with fallbacks
-  const title = data.title || "Questions?";
-  const subtitle = data.subtitle || "Still not sure or just want to chat?";
-  const contactText = data.contactText || "Contact us at";
-  const contactEmail = data.contactEmail || "support@lukemikic.com";
-  const description = data.description || "If you've got any questions about the Academy, or need a hand with anything else, we're just an email away. Drop us a we'll and we'll do our best to help 😊";
-  const backgroundColor = data.backgroundColor || "bg-gray-50";
+
+  const {
+    title = "Questions?",
+    subtitle = "Still not sure or just want to chat?",
+    contactText = "Contact us at",
+    contactEmail = "support@lukemikic.com",
+    description = "If you've got any questions about whether the course is right for you, drop us an email and we'll get back to you as soon as possible.",
+    backgroundColor = "bg-white"
+  } = questionsSection;
 
   return (
-    <section className={`py-16 ${backgroundColor}`}>
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="bg-white rounded-lg shadow-sm p-8 md:p-12 max-w-4xl mx-auto">
-          <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">{title}</h2>
-            <p className="text-lg md:text-xl font-medium text-gray-700">{subtitle}</p>
-            
-            <p className="text-gray-700">
-              {contactText} <a href={`mailto:${contactEmail}`} className="font-semibold text-blue-600 hover:underline">{contactEmail}</a>
-            </p>
-            
+    <section className={`py-20 ${backgroundColor}`}>
+      <div className="container mx-auto px-4 max-w-4xl text-center">
+        <div className="mb-8">
+          <Mail className="h-12 w-12 text-cyan-500 mx-auto mb-4" />
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">{title}</h2>
+          <p className="text-xl text-gray-700 mb-2">{subtitle}</p>
+          <p className="text-lg">
+            {contactText} <a href={`mailto:${contactEmail}`} className="text-cyan-600 font-semibold hover:underline">{contactEmail}</a>
+          </p>
+        </div>
+        
+        {description && (
+          <div className="max-w-2xl mx-auto">
             <p className="text-gray-700">{description}</p>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
