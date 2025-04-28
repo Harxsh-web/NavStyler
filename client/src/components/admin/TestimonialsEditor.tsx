@@ -324,7 +324,7 @@ export function TestimonialsEditor() {
                               <Button 
                                 variant="outline" 
                                 size="icon"
-                                className="text-destructive hover:text-destructive"
+                                className="bg-red-50 border-red-200 text-red-600 hover:bg-red-100 hover:text-red-700"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -341,7 +341,7 @@ export function TestimonialsEditor() {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction 
                                   onClick={() => handleDelete(testimonial.id)}
-                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  className="bg-red-600 text-white hover:bg-red-700"
                                 >
                                   Delete
                                 </AlertDialogAction>
@@ -370,7 +370,7 @@ export function TestimonialsEditor() {
                 Add Testimonial
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg bg-white">
               <DialogHeader>
                 <DialogTitle>Add Testimonial</DialogTitle>
                 <DialogDescription>
@@ -557,7 +557,7 @@ export function TestimonialsEditor() {
           </Dialog>
 
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg bg-white">
               <DialogHeader>
                 <DialogTitle>Edit Testimonial</DialogTitle>
                 <DialogDescription>
