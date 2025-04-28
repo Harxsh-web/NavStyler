@@ -228,7 +228,35 @@ export const siteSettings = pgTable("site_settings", {
   copyrightText: text("copyright_text").notNull(),
   logoUrl: text("logo_url"),
   faviconUrl: text("favicon_url"),
+  siteTagline: text("site_tagline"),
+  enablePreorders: boolean("enable_preorders").default(true),
+  preorderUrl: text("preorder_url"),
+  maintenanceMode: boolean("maintenance_mode").default(false),
 });
+
+// ----- SEO Metadata Schema -----
+export const seoMetadata = pgTable("seo_metadata", {
+  id: serial("id").primaryKey(),
+  metaTitle: text("meta_title").notNull(),
+  metaDescription: text("meta_description").notNull(),
+  ogTitle: text("og_title"),
+  ogDescription: text("og_description"),
+  ogImageUrl: text("og_image_url"),
+  twitterTitle: text("twitter_title"),
+  twitterDescription: text("twitter_description"),
+  twitterImageUrl: text("twitter_image_url"),
+  canonicalUrl: text("canonical_url"),
+  keywords: text("keywords"),
+  structuredData: text("structured_data"),
+  pagePath: text("page_path").notNull().default("/"),
+  isDefault: boolean("is_default").default(false),
+});
+
+export type SeoMetadata = typeof seoMetadata.$inferSelect;
+export const insertSeoMetadataSchema = createInsertSchema(seoMetadata).omit({
+  id: true,
+});
+export type InsertSeoMetadata = z.infer<typeof insertSeoMetadataSchema>;
 
 export type SiteSettings = typeof siteSettings.$inferSelect;
 export const insertSiteSettingsSchema = createInsertSchema(siteSettings).omit({
@@ -240,13 +268,23 @@ export type InsertSiteSettings = z.infer<typeof insertSiteSettingsSchema>;
 export const themeSettings = pgTable("theme_settings", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  primaryColor: text("primary_color").notNull(),
-  secondaryColor: text("secondary_color").notNull(),
-  accentColor: text("accent_color").notNull(),
-  textColor: text("text_color").notNull(),
-  backgroundColor: text("background_color").notNull(),
-  fontFamily: text("font_family").notNull(),
-  isActive: boolean("is_active").default(false).notNull(),
+  primaryColor: text("primary_color").notNull().default("#4f46e5"),
+  secondaryColor: text("secondary_color").notNull().default("#0ea5e9"),
+  accentColor: text("accent_color").notNull().default("#f59e0b"),
+  textColor: text("text_color").notNull().default("#111827"),
+  backgroundColor: text("background_color").notNull().default("#ffffff"),
+  fontPrimary: text("font_primary").notNull().default("Inter"),
+  fontSecondary: text("font_secondary").notNull().default("Merriweather"),
+  buttonRadius: text("button_radius").notNull().default("0.5rem"),
+  buttonStyle: text("button_style").notNull().default("filled"),
+  cardStyle: text("card_style").notNull().default("shadow"),
+  layoutStyle: text("layout_style").notNull().default("modern"),
+  isDarkMode: boolean("is_dark_mode").default(false).notNull(),
+  isHighContrast: boolean("is_high_contrast").default(false).notNull(),
+  headerStyle: text("header_style").notNull().default("default"),
+  footerStyle: text("footer_style").notNull().default("standard"),
+  customCss: text("custom_css"),
+  appliesGlobally: boolean("applies_globally").default(false).notNull(),
 });
 
 export type ThemeSettings = typeof themeSettings.$inferSelect;

@@ -102,9 +102,18 @@ export interface IStorage {
   deleteSocialLink(id: number): Promise<boolean>;
   
   // Site settings
-  getSiteSettings(): Promise<schema.SiteSetting[]>;
-  getSiteSetting(name: string): Promise<schema.SiteSetting | undefined>;
-  updateSiteSetting(name: string, value: string): Promise<schema.SiteSetting>;
+  getSiteSettings(): Promise<schema.SiteSettings[]>;
+  getSiteSetting(id: number): Promise<schema.SiteSettings | undefined>;
+  updateSiteSettings(id: number, data: Partial<schema.InsertSiteSettings>): Promise<schema.SiteSettings | undefined>;
+  createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings>;
+  
+  // SEO Metadata
+  getSeoMetadata(id?: number): Promise<schema.SeoMetadata[]>;
+  getSeoMetadataByPage(pagePath: string): Promise<schema.SeoMetadata | undefined>;
+  getDefaultSeoMetadata(): Promise<schema.SeoMetadata | undefined>;
+  createSeoMetadata(data: schema.InsertSeoMetadata): Promise<schema.SeoMetadata>;
+  updateSeoMetadata(id: number, data: Partial<schema.InsertSeoMetadata>): Promise<schema.SeoMetadata | undefined>;
+  deleteSeoMetadata(id: number): Promise<boolean>;
   
   // Theme settings
   getThemeSettings(): Promise<schema.ThemeSettings[]>;
