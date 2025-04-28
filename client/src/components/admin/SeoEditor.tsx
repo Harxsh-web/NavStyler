@@ -143,7 +143,28 @@ export function SeoEditor() {
     }
   };
   
-  const handleSelectExisting = (seoId: number) => {
+  const handleSelectExisting = (value: string) => {
+    if (value === 'new') {
+      // Reset form and clear selection for creating a new entry
+      form.reset({
+        pagePath: '/',
+        metaTitle: '',
+        metaDescription: '',
+        ogTitle: '',
+        ogDescription: '',
+        ogImageUrl: '',
+        twitterTitle: '',
+        twitterDescription: '',
+        twitterImageUrl: '',
+        canonicalUrl: '',
+        structuredData: '',
+        isDefault: false,
+      });
+      setSelectedId(null);
+      return;
+    }
+    
+    const seoId = parseInt(value);
     const selectedSeo = allMetadata?.find(item => item.id === seoId);
     if (selectedSeo) {
       setSelectedId(seoId);
@@ -197,14 +218,14 @@ export function SeoEditor() {
       <CardContent>
         <div className="mb-6">
           <Select 
-            value={selectedId?.toString() || ''} 
-            onValueChange={(value) => handleSelectExisting(parseInt(value))}
+            value={selectedId?.toString() || 'new'} 
+            onValueChange={(value) => handleSelectExisting(value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select a page to edit or create new" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Create New SEO Entry</SelectItem>
+              <SelectItem value="new">Create New SEO Entry</SelectItem>
               {allMetadata?.map((metadata: SeoMetadata) => (
                 <SelectItem key={metadata.id} value={metadata.id.toString()}>
                   {metadata.pagePath} {metadata.isDefault ? '(Default)' : ''}
