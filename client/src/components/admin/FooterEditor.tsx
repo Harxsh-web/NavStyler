@@ -28,8 +28,9 @@ const footerLinkSchema = z.object({
 
 // Schema for social link
 const socialLinkSchema = z.object({
-  type: z.string().min(1, "Type is required"),
+  platform: z.string().min(1, "Platform is required"),
   url: z.string().url("Must be a valid URL"),
+  order: z.number().default(0),
 });
 
 type FooterCategoryFormValues = z.infer<typeof footerCategorySchema>;
@@ -72,8 +73,9 @@ export function FooterEditor() {
   const socialLinkForm = useForm<SocialLinkFormValues>({
     resolver: zodResolver(socialLinkSchema),
     defaultValues: {
-      type: "",
+      platform: "",
       url: "",
+      order: 0,
     },
   });
 
