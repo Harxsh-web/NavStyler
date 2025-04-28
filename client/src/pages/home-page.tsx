@@ -12,6 +12,7 @@ import {
   usePublicGuaranteeSection,
   usePublicScholarshipSection,
   usePublicYoutubeFrameworkSection,
+  usePublicQuestionsSection,
   useRefreshPublicContent
 } from "@/hooks/use-public-content";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import BonusSection from "@/components/BonusSection";
 import GuaranteeSection from "@/components/GuaranteeSection";
 import ScholarshipSection from "@/components/ScholarshipSection";
 import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
+import QuestionsSection from "@/components/QuestionsSection";
 
 export default function HomePage() {
   // Fetch data from the API

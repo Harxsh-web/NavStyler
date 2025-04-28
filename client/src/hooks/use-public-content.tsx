@@ -209,6 +209,23 @@ export function usePublicYoutubeFrameworkSection() {
 }
 
 /**
+ * Hook for fetching the questions section for the public page
+ */
+export function usePublicQuestionsSection() {
+  return useQuery({
+    queryKey: ["/api/content/questions-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/questions-section");
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for refreshing all public content
  */
 export function useRefreshPublicContent() {
@@ -233,6 +250,7 @@ export function useRefreshPublicContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/content/guarantee-section"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/scholarship-section"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/youtube-framework-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/questions-section"] });
       
       toast({
         title: "Content refreshed",
