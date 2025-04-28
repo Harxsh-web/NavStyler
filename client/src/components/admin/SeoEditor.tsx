@@ -24,10 +24,10 @@ const formSchema = z.object({
   metaDescription: z.string().min(1, { message: 'Meta description is required' }),
   ogTitle: z.string().nullable().optional(),
   ogDescription: z.string().nullable().optional(),
-  ogImage: z.string().nullable().optional(),
+  ogImageUrl: z.string().nullable().optional(),
   twitterTitle: z.string().nullable().optional(),
   twitterDescription: z.string().nullable().optional(),
-  twitterImage: z.string().nullable().optional(),
+  twitterImageUrl: z.string().nullable().optional(),
   canonicalUrl: z.string().nullable().optional(),
   structuredData: z.string().nullable().optional(),
   isDefault: z.boolean().default(false),
@@ -51,10 +51,10 @@ export function SeoEditor() {
       metaDescription: '',
       ogTitle: '',
       ogDescription: '',
-      ogImage: '',
+      ogImageUrl: '',
       twitterTitle: '',
       twitterDescription: '',
-      twitterImage: '',
+      twitterImageUrl: '',
       canonicalUrl: '',
       structuredData: '',
       isDefault: false,
@@ -154,10 +154,10 @@ export function SeoEditor() {
         metaDescription: selectedSeo.metaDescription,
         ogTitle: selectedSeo.ogTitle || '',
         ogDescription: selectedSeo.ogDescription || '',
-        ogImage: selectedSeo.ogImage || '',
+        ogImageUrl: selectedSeo.ogImageUrl || '',
         twitterTitle: selectedSeo.twitterTitle || '',
         twitterDescription: selectedSeo.twitterDescription || '',
-        twitterImage: selectedSeo.twitterImage || '',
+        twitterImageUrl: selectedSeo.twitterImageUrl || '',
         canonicalUrl: selectedSeo.canonicalUrl || '',
         structuredData: selectedSeo.structuredData || '',
         isDefault: selectedSeo.isDefault,
@@ -328,7 +328,7 @@ export function SeoEditor() {
                 
                 <FormField
                   control={form.control}
-                  name="ogImage"
+                  name="ogImageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Open Graph Image URL</FormLabel>
@@ -376,7 +376,7 @@ export function SeoEditor() {
                 
                 <FormField
                   control={form.control}
-                  name="twitterImage"
+                  name="twitterImageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Twitter Image URL</FormLabel>

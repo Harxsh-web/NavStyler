@@ -21,7 +21,7 @@ export function SEOHead({
   // Use provided props or fall back to SEO data from the database
   const metaTitle = title || seo?.metaTitle || 'Feel-Good Productivity';
   const metaDescription = description || seo?.metaDescription || 'Learn how to be productive without burning out';
-  const metaImage = image || seo?.ogImage || '/images/default-og-image.jpg';
+  const metaImage = image || seo?.ogImageUrl || '/images/default-og-image.jpg';
   
   const url = typeof window !== 'undefined' ? window.location.origin + pagePath : '';
   
@@ -43,7 +43,7 @@ export function SEOHead({
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={seo?.twitterTitle || metaTitle} />
       <meta name="twitter:description" content={seo?.twitterDescription || metaDescription} />
-      <meta name="twitter:image" content={seo?.twitterImage || metaImage} />
+      <meta name="twitter:image" content={seo?.twitterImageUrl || metaImage} />
       
       {/* Canonical URL */}
       {seo?.canonicalUrl && <link rel="canonical" href={seo.canonicalUrl} />}

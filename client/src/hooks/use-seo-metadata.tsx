@@ -1,44 +1,42 @@
-import { useQuery } from '@tanstack/react-query';
-import { SeoMetadata } from '@shared/schema';
+import { useQuery } from "@tanstack/react-query";
+import { SeoMetadata } from "@shared/schema";
 
 /**
  * Hook to fetch SEO metadata for a specific page
- * @param pagePath The path of the page to fetch metadata for (e.g., '/', '/about')
- * @returns The SEO metadata for the specified page or the default metadata if not found
+ * @param pagePath The path of the page to fetch metadata for
  */
-export function useSeoMetadata(pagePath: string) {
-  const encodedPath = encodeURIComponent(pagePath);
-  
+export function useSeoMetadata(pagePath: string = '/') {
   return useQuery<SeoMetadata>({
-    queryKey: ['/api/seo/page', encodedPath],
+    queryKey: ['/api/seo/page', pagePath],
     queryFn: async () => {
-      const response = await fetch(`/api/seo/page/${encodedPath}`);
-      if (!response.ok) {
-        // If no specific metadata for this page, try to get default metadata
-        const defaultResponse = await fetch('/api/seo/default');
-        if (!defaultResponse.ok) {
+      const res = await fetch(`/api/seo/page/${encodeURIComponent(pagePath)}`);
+      
+      if (!res.ok) {
+        // If no specific metadata for this page, try to get the default metadata
+        const defaultRes = await fetch('/api/seo/default');
+        if (!defaultRes.ok) {
           throw new Error('Failed to fetch SEO metadata');
         }
-        return await defaultResponse.json();
+        return defaultRes.json();
       }
-      return await response.json();
+      
+      return res.json();
     },
   });
 }
 
 /**
- * Hook to fetch all SEO metadata (admin only)
- * @returns Array of all SEO metadata entries
+ * Hook to fetch all SEO metadata entries for admin use
  */
 export function useAllSeoMetadata() {
   return useQuery<SeoMetadata[]>({
     queryKey: ['/api/seo'],
     queryFn: async () => {
-      const response = await fetch('/api/seo');
-      if (!response.ok) {
-        throw new Error('Failed to fetch SEO metadata list');
+      const res = await fetch('/api/seo');
+      if (!res.ok) {
+        throw new Error('Failed to fetch all SEO metadata');
       }
-      return await response.json();
+      return res.json();
     },
   });
 }
