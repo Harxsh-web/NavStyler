@@ -50,10 +50,16 @@ export function MediaUploader({
       }
 
       const data = await response.json();
-      onChange(data.url);
+      console.log("Upload response:", data);
+      
+      // Make sure the URL is correct for the environment
+      const imageUrl = data.url.startsWith('/') ? data.url : `/${data.url}`;
+      console.log("Final image URL being set:", imageUrl);
+      
+      onChange(imageUrl);
       toast({
         title: "Upload successful",
-        description: "File was uploaded successfully.",
+        description: `File uploaded: ${imageUrl}`,
         variant: "default"
       });
     } catch (error) {

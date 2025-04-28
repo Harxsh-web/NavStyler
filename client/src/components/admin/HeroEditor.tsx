@@ -192,6 +192,10 @@ export function HeroEditor() {
                       <Input 
                         placeholder="https://example.com/image.jpg" 
                         {...field} 
+                        onChange={(e) => {
+                          console.log("Manual URL input:", e.target.value);
+                          field.onChange(e.target.value);
+                        }}
                       />
                       
                       {/* Divider with text */}
@@ -203,20 +207,31 @@ export function HeroEditor() {
                       
                       {/* Image upload component */}
                       <MediaUploader 
-                        onChange={field.onChange}
+                        onChange={(url) => {
+                          console.log("MediaUploader returned URL:", url);
+                          field.onChange(url);
+                        }}
                         value={field.value}
                         accept="image/*"
                         maxSize={5}
                       />
                       
-                      {/* Image preview for uploaded images */}
-                      {field.value && !field.value.startsWith('http') && (
+                      {/* Image preview for all images */}
+                      {field.value && (
                         <div className="mt-2 rounded-md overflow-hidden border aspect-video">
                           <img 
                             src={field.value} 
                             alt="Preview" 
                             className="w-full h-full object-cover" 
+                            onError={(e) => {
+                              console.error("Image failed to load:", field.value);
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
                           />
+                          <div className="p-2 text-xs text-gray-500">
+                            Image URL: {field.value}
+                          </div>
                         </div>
                       )}
                     </div>

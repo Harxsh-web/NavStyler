@@ -84,7 +84,17 @@ export default function HomePage() {
                       src={heroData?.imageUrl || "https://images.squarespace-cdn.com/content/v1/60bd6ea1c39d1e35837d56c1/f1d4b73c-8a28-4854-9b0e-6291a3e86410/FeelGoodProductivityCover.jpg"} 
                       alt="Feel-Good Productivity Book Cover" 
                       className="w-full h-auto rounded-lg shadow-md"
+                      onError={(e) => {
+                        console.error("Failed to load hero image:", heroData?.imageUrl);
+                        // Fallback to default image if the hero image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.squarespace-cdn.com/content/v1/60bd6ea1c39d1e35837d56c1/f1d4b73c-8a28-4854-9b0e-6291a3e86410/FeelGoodProductivityCover.jpg";
+                      }}
                     />
+                    {/* Debug: Show image URL for troubleshooting */}
+                    <div className="mt-2 text-xs text-gray-500 hidden">
+                      Image source: {heroData?.imageUrl}
+                    </div>
                   </div>
                 </div>
               </div>
