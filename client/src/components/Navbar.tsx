@@ -129,190 +129,201 @@ export default function Navbar() {
               <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
                 <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span className="text-xl font-bold">Luke Mikic</span>
+              <span className="font-bold text-xl">Luke Mikic</span>
             </div>
           </TransitionLink>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-8">
+            {/* Book Link */}
             <TransitionLink href="/my-book" transitionType="slide-left">
-              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">My Book</span>
+              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
+                My Book
+              </div>
             </TransitionLink>
             
-            {/* Free Resources Dropdown - Desktop */}
+            {/* Resources Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center space-x-1 text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium focus:outline-none bg-transparent border-none">
-                <span>Free Resources</span>
-                <ChevronDown className="h-4 w-4" />
+              <DropdownMenuTrigger asChild>
+                <div className="flex items-center font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
+                  <span>Free Resources</span>
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[500px] p-4 grid grid-cols-2 gap-x-8">
-                <div>
-                  <DropdownMenuLabel className="text-sm font-semibold text-gray-500">Browse by type:</DropdownMenuLabel>
-                  <div className="space-y-2 mt-2">
-                    {resourcesByType.map((resource, index) => (
-                      <DropdownMenuItem key={`type-${index}`} asChild className="p-0">
-                        <TransitionLink href={resource.href} transitionType="slide-left">
-                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
+              <DropdownMenuContent align="center" className="w-[350px] p-4">
+                <DropdownMenuLabel className="text-center text-lg font-medium mb-3">
+                  Free Resources
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-3">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
+                    <div className="space-y-3">
+                      {resourcesByType.map((resource, index) => (
+                        <TransitionLink key={`type-${index}`} href={resource.href} transitionType="slide-left">
+                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer">
                             <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
                               {resource.icon}
                             </span>
                             <span>{resource.label}</span>
                           </div>
                         </TransitionLink>
-                      </DropdownMenuItem>
-                    ))}
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by topic:</h3>
+                    <div className="space-y-3">
+                      {resourcesByTopic.map((resource, index) => (
+                        <TransitionLink key={`topic-${index}`} href={resource.href} transitionType="slide-left">
+                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer">
+                            <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
+                              {resource.icon}
+                            </span>
+                            <span>{resource.label}</span>
+                          </div>
+                        </TransitionLink>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 
-                <div>
-                  <DropdownMenuLabel className="text-sm font-semibold text-gray-500">Browse by topic:</DropdownMenuLabel>
-                  <div className="space-y-2 mt-2">
-                    {resourcesByTopic.map((resource, index) => (
-                      <DropdownMenuItem key={`topic-${index}`} asChild className="p-0">
-                        <TransitionLink href={resource.href} transitionType="slide-left">
-                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
-                            <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                              {resource.icon}
-                            </span>
-                            <span>{resource.label}</span>
-                          </div>
-                        </TransitionLink>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                  
-                  <DropdownMenuSeparator className="my-2" />
-                  <DropdownMenuItem asChild className="p-0">
-                    <TransitionLink href="/all-categories" transitionType="slide-up">
-                      <div className="flex items-center text-gray-700 hover:text-black cursor-pointer w-full p-1.5">
-                        <span className="font-medium">all categories</span>
-                        <span className="ml-1">→</span>
-                      </div>
-                    </TransitionLink>
-                  </DropdownMenuItem>
+                <div className="mt-4 border-t border-gray-100 pt-3 text-center">
+                  <TransitionLink href="/all-categories" transitionType="slide-up">
+                    <div className="flex items-center justify-center text-gray-700 hover:text-black cursor-pointer">
+                      <span className="font-medium">all categories</span>
+                      <span className="ml-1">→</span>
+                    </div>
+                  </TransitionLink>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
             
+            {/* YouTube Academy */}
             <TransitionLink href="/youtube-academy" transitionType="slide-left">
-              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">YouTube Academy</span>
+              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
+                YouTube Academy
+              </div>
             </TransitionLink>
             
+            {/* LifeOS */}
             <TransitionLink href="/lifeos" transitionType="slide-up">
-              <span className="text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white font-medium cursor-pointer">LifeOS Productivity System</span>
+              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
+                LifeOS System
+              </div>
             </TransitionLink>
             
+            {/* Newsletter */}
             <TransitionLink href="/newsletter" transitionType="scale">
-              <Button className="bg-orange-300 hover:bg-orange-400 text-white rounded-full">
+              <Button className="rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                 Join 270k+ Subscribers
               </Button>
             </TransitionLink>
             
             {/* Dark Mode Toggle */}
             <DarkModeToggle />
-          </nav>
+          </div>
           
-          {/* Mobile menu button and drawer */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden bg-amber-300 border-none text-white hover:bg-amber-400 hover:text-white">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-full pt-12 px-6 bg-white dark:bg-gray-900">
-              <SheetHeader>
-                <SheetTitle className="text-left">
-                  <div className="flex items-center">
-                    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                      <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="text-lg font-bold">Luke Mikic</span>
-                  </div>
-                </SheetTitle>
-              </SheetHeader>
-              
-              <div className="mt-8 space-y-6">
-                <TransitionLink href="/my-book" transitionType="slide-left">
-                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                    My Book
-                  </div>
-                </TransitionLink>
-                
-                <div>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start p-2 font-medium text-lg text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" 
-                    onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
-                  >
-                    <span>Free Resources</span>
-                    <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
-                  </Button>
-                  
-                  {mobileResourcesOpen && (
-                    <div className="mt-2 pl-2">
-                      <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
-                      <div className="space-y-3">
-                        {resourcesByType.map((resource, index) => (
-                          <TransitionLink key={`mobile-type-${index}`} href={resource.href} transitionType="slide-left">
-                            <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
-                              <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                                {resource.icon}
-                              </span>
-                              <span>{resource.label}</span>
-                            </div>
-                          </TransitionLink>
-                        ))}
-                      </div>
-                      
-                      <h3 className="text-sm font-semibold text-gray-500 mb-3 mt-6">Browse by topic:</h3>
-                      <div className="space-y-3">
-                        {resourcesByTopic.map((resource, index) => (
-                          <TransitionLink key={`mobile-topic-${index}`} href={resource.href} transitionType="slide-left">
-                            <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
-                              <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                                {resource.icon}
-                              </span>
-                              <span>{resource.label}</span>
-                            </div>
-                          </TransitionLink>
-                        ))}
-                      </div>
-                      
-                      <TransitionLink href="/all-categories" transitionType="slide-up">
-                        <div className="flex items-center text-gray-700 hover:text-black mt-3 cursor-pointer">
-                          <span className="font-medium">all categories</span>
-                          <span className="ml-1">→</span>
-                        </div>
-                      </TransitionLink>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Menu">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-full pt-12 px-6 bg-white dark:bg-gray-900">
+                <SheetHeader>
+                  <SheetTitle className="text-left">
+                    <div className="flex items-center">
+                      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+                        <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span className="text-lg font-bold">Luke Mikic</span>
                     </div>
-                  )}
-                </div>
+                  </SheetTitle>
+                </SheetHeader>
                 
-                <TransitionLink href="/youtube-academy" transitionType="slide-left">
-                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                    YouTube Academy
+                <div className="mt-8 space-y-6">
+                  <TransitionLink href="/my-book" transitionType="slide-left">
+                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
+                      My Book
+                    </div>
+                  </TransitionLink>
+                  
+                  <div>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start p-2 font-medium text-lg text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" 
+                      onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
+                    >
+                      <span>Free Resources</span>
+                      <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
+                    </Button>
+                    
+                    {mobileResourcesOpen && (
+                      <div className="mt-2 pl-2">
+                        <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
+                        <div className="space-y-3">
+                          {resourcesByType.map((resource, index) => (
+                            <TransitionLink key={`mobile-type-${index}`} href={resource.href} transitionType="slide-left">
+                              <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
+                                <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
+                                  {resource.icon}
+                                </span>
+                                <span>{resource.label}</span>
+                              </div>
+                            </TransitionLink>
+                          ))}
+                        </div>
+                        
+                        <h3 className="text-sm font-semibold text-gray-500 mb-3 mt-6">Browse by topic:</h3>
+                        <div className="space-y-3">
+                          {resourcesByTopic.map((resource, index) => (
+                            <TransitionLink key={`mobile-topic-${index}`} href={resource.href} transitionType="slide-left">
+                              <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
+                                <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
+                                  {resource.icon}
+                                </span>
+                                <span>{resource.label}</span>
+                              </div>
+                            </TransitionLink>
+                          ))}
+                        </div>
+                        
+                        <TransitionLink href="/all-categories" transitionType="slide-up">
+                          <div className="flex items-center text-gray-700 hover:text-black mt-3 cursor-pointer">
+                            <span className="font-medium">all categories</span>
+                            <span className="ml-1">→</span>
+                          </div>
+                        </TransitionLink>
+                      </div>
+                    )}
                   </div>
-                </TransitionLink>
-                
-                <TransitionLink href="/lifeos" transitionType="slide-up">
-                  <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                    LifeOS Productivity System
-                  </div>
-                </TransitionLink>
-                
-                <TransitionLink href="/newsletter" transitionType="scale">
-                  <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
-                    Join 270k+ Subscribers
-                  </Button>
-                </TransitionLink>
-                
-                <div className="flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-800">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Dark Mode</span>
-                  <DarkModeToggle variant="minimal" />
+                  
+                  <TransitionLink href="/youtube-academy" transitionType="slide-left">
+                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
+                      YouTube Academy
+                    </div>
+                  </TransitionLink>
+                  
+                  <TransitionLink href="/lifeos" transitionType="slide-up">
+                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
+                      LifeOS Productivity System
+                    </div>
+                  </TransitionLink>
+                  
+                  <TransitionLink href="/newsletter" transitionType="scale">
+                    <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
+                      Join 270k+ Subscribers
+                    </Button>
+                  </TransitionLink>
                 </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
