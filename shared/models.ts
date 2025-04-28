@@ -224,6 +224,16 @@ export interface IYoutubeFrameworkSection extends Document {
   updatedAt: Date;
 }
 
+export interface IQuestionsSection extends Document {
+  title: string;
+  subtitle?: string;
+  contactText?: string;
+  contactEmail?: string;
+  description?: string;
+  backgroundColor?: string;
+  updatedAt: Date;
+}
+
 export interface IArticle extends Document {
   title: string;
   slug: string;
@@ -493,6 +503,16 @@ const youtubeFrameworkSectionSchema = new Schema<IYoutubeFrameworkSection>({
   updatedAt: { type: Date, default: Date.now }
 });
 
+const questionsSectionSchema = new Schema<IQuestionsSection>({
+  title: { type: String, required: true },
+  subtitle: { type: String },
+  contactText: { type: String },
+  contactEmail: { type: String },
+  description: { type: String },
+  backgroundColor: { type: String },
+  updatedAt: { type: Date, default: Date.now }
+});
+
 // Create or get existing models
 function getModel<T extends Document>(modelName: string, schema: Schema): Model<T> {
   try {
@@ -531,6 +551,7 @@ export const BonusItem = getModel<IBonusItem>('BonusItem', bonusItemSchema);
 export const GuaranteeSection = getModel<IGuaranteeSection>('GuaranteeSection', guaranteeSectionSchema);
 export const ScholarshipSection = getModel<IScholarshipSection>('ScholarshipSection', scholarshipSectionSchema);
 export const YoutubeFrameworkSection = getModel<IYoutubeFrameworkSection>('YoutubeFrameworkSection', youtubeFrameworkSectionSchema);
+export const QuestionsSection = getModel<IQuestionsSection>('QuestionsSection', questionsSectionSchema);
 
 // Create Zod schemas for validation
 export const userZodSchema = z.object({
@@ -719,6 +740,15 @@ export const youtubeFrameworkSectionZodSchema = z.object({
   backgroundColor: z.string().optional()
 });
 
+export const questionsSectionZodSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  contactText: z.string().optional(),
+  contactEmail: z.string().optional(),
+  description: z.string().optional(),
+  backgroundColor: z.string().optional()
+});
+
 // Re-export types for compatibility with the old schema
 export type User = IUser;
 export type Hero = IHero;
@@ -747,6 +777,7 @@ export type BonusItem = IBonusItem;
 export type GuaranteeSection = IGuaranteeSection;
 export type ScholarshipSection = IScholarshipSection;
 export type YoutubeFrameworkSection = IYoutubeFrameworkSection;
+export type QuestionsSection = IQuestionsSection;
 
 // For compatibility with the insert schemas from drizzle-zod
 export const insertUserSchema = userZodSchema;
@@ -772,3 +803,4 @@ export const insertBonusItemSchema = bonusItemZodSchema;
 export const insertGuaranteeSectionSchema = guaranteeSectionZodSchema;
 export const insertScholarshipSectionSchema = scholarshipSectionZodSchema;
 export const insertYoutubeFrameworkSectionSchema = youtubeFrameworkSectionZodSchema;
+export const insertQuestionsSectionSchema = questionsSectionZodSchema;
