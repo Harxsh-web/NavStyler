@@ -315,7 +315,7 @@ export default function Navbar() {
                     </div>
                   </TransitionLink>
                   
-                  <TransitionLink href="/newsletter" transitionType="scale">
+                  <TransitionLink href="/" transitionType="scale">
                     <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                       Join 270k+ Subscribers
                     </Button>
