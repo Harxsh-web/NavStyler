@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ImageUpload } from "@/components/ui/image-upload";
+import { MediaUploader } from "@/components/ui/MediaUploader";
 import { AdminCard } from "./AdminCard";
 
 const heroSchema = z.object({
@@ -202,15 +202,23 @@ export function HeroEditor() {
                       </div>
                       
                       {/* Image upload component */}
-                      <ImageUpload 
-                        onImageChange={(imageUrl) => {
-                          if (imageUrl) {
-                            field.onChange(imageUrl);
-                          }
-                        }}
-                        currentImage={field.value}
-                        aspectRatio="wide"
+                      <MediaUploader 
+                        onChange={field.onChange}
+                        value={field.value}
+                        accept="image/*"
+                        maxSize={5}
                       />
+                      
+                      {/* Image preview for uploaded images */}
+                      {field.value && !field.value.startsWith('http') && (
+                        <div className="mt-2 rounded-md overflow-hidden border aspect-video">
+                          <img 
+                            src={field.value} 
+                            alt="Preview" 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                      )}
                     </div>
                   </FormControl>
                   <FormMessage />
