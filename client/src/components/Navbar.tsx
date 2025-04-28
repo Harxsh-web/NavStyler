@@ -223,7 +223,7 @@ export default function Navbar() {
             </TransitionLink>
             
             {/* Dark Mode Toggle */}
-            <DarkModeToggle />
+            {/* <DarkModeToggle /> */}
           </div>
           
           {/* Mobile Menu Button */}
