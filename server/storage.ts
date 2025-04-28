@@ -851,20 +851,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createSocialLink(data: schema.InsertSocialLink): Promise<schema.SocialLink> {
-    const [link] = await db.insert(schema.socialLink).values(data).returning();
+    const [link] = await db.insert(schema.socialLinks).values(data).returning();
     return link;
   }
 
   async updateSocialLink(id: number, data: Partial<schema.InsertSocialLink>): Promise<schema.SocialLink | undefined> {
-    const [updated] = await db.update(schema.socialLink)
-      .set({ ...data, updatedAt: new Date() })
-      .where(eq(schema.socialLink.id, id))
+    const [updated] = await db.update(schema.socialLinks)
+      .set(data)
+      .where(eq(schema.socialLinks.id, id))
       .returning();
     return updated;
   }
 
   async deleteSocialLink(id: number): Promise<boolean> {
-    const result = await db.delete(schema.socialLink).where(eq(schema.socialLink.id, id));
+    const result = await db.delete(schema.socialLinks).where(eq(schema.socialLinks.id, id));
     return !!result;
   }
 

@@ -359,6 +359,7 @@ export function FooterEditor() {
                         <Button 
                           type="submit"
                           disabled={createCategoryMutation.isPending}
+                          className="bg-blue-600 hover:bg-blue-700"
                         >
                           {createCategoryMutation.isPending ? (
                             <>
@@ -508,6 +509,7 @@ export function FooterEditor() {
                         <Button 
                           type="submit"
                           disabled={createLinkMutation.isPending}
+                          className="bg-blue-600 hover:bg-blue-700"
                         >
                           {createLinkMutation.isPending ? (
                             <>
@@ -634,6 +636,7 @@ export function FooterEditor() {
                         <Button 
                           type="submit"
                           disabled={createSocialLinkMutation.isPending}
+                          className="bg-blue-600 hover:bg-blue-700"
                         >
                           {createSocialLinkMutation.isPending ? (
                             <>
