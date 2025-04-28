@@ -13,6 +13,7 @@ import { Loader2, Plus, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Schema for footer category
 const footerCategorySchema = z.object({
@@ -328,7 +329,7 @@ export function FooterEditor() {
               
               {/* Add Category Dialog */}
               <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
-                <DialogContent>
+                <DialogContent className="bg-white">
                   <DialogHeader>
                     <DialogTitle>Add Category</DialogTitle>
                   </DialogHeader>
@@ -440,7 +441,7 @@ export function FooterEditor() {
               
               {/* Add Link Dialog */}
               <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
-                <DialogContent>
+                <DialogContent className="bg-white">
                   <DialogHeader>
                     <DialogTitle>Add Link</DialogTitle>
                   </DialogHeader>
@@ -550,7 +551,7 @@ export function FooterEditor() {
                     className="flex items-center justify-between p-3 border rounded-md"
                   >
                     <div>
-                      <p className="font-medium text-capitalize">{link.type}</p>
+                      <p className="font-medium text-capitalize">{link.platform}</p>
                       <p className="text-xs text-muted-foreground">
                         URL: {link.url}
                       </p>
@@ -559,7 +560,7 @@ export function FooterEditor() {
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        if (confirm(`Are you sure you want to delete "${link.type}" social link?`)) {
+                        if (confirm(`Are you sure you want to delete "${link.platform}" social link?`)) {
                           deleteSocialLinkMutation.mutate(link.id);
                         }
                       }}
@@ -572,7 +573,7 @@ export function FooterEditor() {
               
               {/* Add Social Link Dialog */}
               <Dialog open={isAddingSocialLink} onOpenChange={setIsAddingSocialLink}>
-                <DialogContent>
+                <DialogContent className="bg-white">
                   <DialogHeader>
                     <DialogTitle>Add Social Link</DialogTitle>
                   </DialogHeader>
@@ -580,23 +581,31 @@ export function FooterEditor() {
                     <form onSubmit={socialLinkForm.handleSubmit(onSocialLinkSubmit)} className="space-y-4">
                       <FormField
                         control={socialLinkForm.control}
-                        name="type"
+                        name="platform"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Platform</FormLabel>
-                            <FormControl>
-                              <select
-                                className="w-full p-2 rounded-md border"
-                                {...field}
-                              >
-                                <option value="">Select platform</option>
-                                <option value="facebook">Facebook</option>
-                                <option value="twitter">Twitter</option>
-                                <option value="instagram">Instagram</option>
-                                <option value="linkedin">LinkedIn</option>
-                                <option value="youtube">YouTube</option>
-                              </select>
-                            </FormControl>
+                            <Select 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select platform" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="facebook">Facebook</SelectItem>
+                                <SelectItem value="twitter">Twitter</SelectItem>
+                                <SelectItem value="instagram">Instagram</SelectItem>
+                                <SelectItem value="linkedin">LinkedIn</SelectItem>
+                                <SelectItem value="youtube">YouTube</SelectItem>
+                                <SelectItem value="tiktok">TikTok</SelectItem>
+                                <SelectItem value="spotify">Spotify</SelectItem>
+                                <SelectItem value="applepodcast">Apple Podcast</SelectItem>
+                                <SelectItem value="rumble">Rumble</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
