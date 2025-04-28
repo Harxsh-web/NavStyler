@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { SeoMetadata } from "@shared/schema";
-import { useLocation } from "wouter";
+import { Helmet } from 'react-helmet';
+import { useSeoMetadata } from '@/hooks/use-seo-metadata';
 
 interface SEOHeadProps {
   pagePath?: string;
@@ -11,142 +10,53 @@ interface SEOHeadProps {
 }
 
 export function SEOHead({ 
-  pagePath,
+  pagePath = '/', 
   title,
   description,
   image,
-  children
+  children 
 }: SEOHeadProps) {
-  const [location] = useLocation();
-  const [metadata, setMetadata] = useState<SeoMetadata | null>(null);
-  const path = pagePath || location;
+  const { data: seo, isLoading, error } = useSeoMetadata(pagePath);
   
-  // Fetch SEO metadata for the current page
-  useEffect(() => {
-    const fetchMetadata = async () => {
-      try {
-        const encodedPath = encodeURIComponent(path);
-        const response = await fetch(`/api/seo/page/${encodedPath}`);
-        
-        if (response.ok) {
-          const data: SeoMetadata = await response.json();
-          setMetadata(data);
-        } else {
-          // If no specific metadata is found for this page, try to get the default
-          const defaultResponse = await fetch('/api/seo/default');
-          if (defaultResponse.ok) {
-            const defaultData: SeoMetadata = await defaultResponse.json();
-            setMetadata(defaultData);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching SEO metadata:", error);
-      }
-    };
-    
-    fetchMetadata();
-  }, [path]);
+  // Use provided props or fall back to SEO data from the database
+  const metaTitle = title || seo?.metaTitle || 'Feel-Good Productivity';
+  const metaDescription = description || seo?.metaDescription || 'Learn how to be productive without burning out';
+  const metaImage = image || seo?.ogImage || '/images/default-og-image.jpg';
   
-  // Set document title based on metadata or props
-  useEffect(() => {
-    const pageTitle = title || metadata?.metaTitle || "Feel-Good Productivity - Luke Mikic";
-    document.title = pageTitle;
-  }, [title, metadata]);
+  const url = typeof window !== 'undefined' ? window.location.origin + pagePath : '';
   
-  // If no metadata and no props, return only children
-  if (!metadata && !title && !description) {
-    return children ? <>{children}</> : null;
-  }
-  
-  // Extract the final values to use, prioritizing props over metadata
-  const finalTitle = title || metadata?.metaTitle || "Feel-Good Productivity - Luke Mikic";
-  const finalDescription = description || metadata?.metaDescription || "Discover how to achieve success without burning out. In his book 'Feel-Good Productivity', Luke Mikic shares practical strategies for sustainable productivity with joy.";
-  const finalImageUrl = image || metadata?.ogImageUrl || "/images/book-cover.jpg";
-  
-  // Generate the meta tags
   return (
-    <>
-      {/* Insert meta tags into document head */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            // Basic SEO
-            document.querySelector('meta[name="description"]')?.remove();
-            const metaDesc = document.createElement('meta');
-            metaDesc.name = 'description';
-            metaDesc.content = ${JSON.stringify(finalDescription)};
-            document.head.appendChild(metaDesc);
-            
-            // Canonical URL
-            document.querySelector('link[rel="canonical"]')?.remove();
-            if (${JSON.stringify(metadata?.canonicalUrl || null)}) {
-              const canonicalLink = document.createElement('link');
-              canonicalLink.rel = 'canonical';
-              canonicalLink.href = ${JSON.stringify(metadata?.canonicalUrl || '')};
-              document.head.appendChild(canonicalLink);
-            }
-            
-            // Keywords
-            document.querySelector('meta[name="keywords"]')?.remove();
-            if (${JSON.stringify(metadata?.keywords || null)}) {
-              const keywordsTag = document.createElement('meta');
-              keywordsTag.name = 'keywords';
-              keywordsTag.content = ${JSON.stringify(metadata?.keywords || '')};
-              document.head.appendChild(keywordsTag);
-            }
-            
-            // Open Graph tags
-            const ogTags = {
-              'og:title': ${JSON.stringify(metadata?.ogTitle || finalTitle)},
-              'og:description': ${JSON.stringify(metadata?.ogDescription || finalDescription)},
-              'og:image': ${JSON.stringify(metadata?.ogImageUrl || finalImageUrl)},
-              'og:url': window.location.href,
-              'og:type': 'website'
-            };
-            
-            for (const [property, content] of Object.entries(ogTags)) {
-              document.querySelector(\`meta[property="\${property}"]\`)?.remove();
-              const tag = document.createElement('meta');
-              tag.setAttribute('property', property);
-              tag.content = content;
-              document.head.appendChild(tag);
-            }
-            
-            // Twitter Card tags
-            const twitterTags = {
-              'twitter:card': 'summary_large_image',
-              'twitter:title': ${JSON.stringify(metadata?.twitterTitle || metadata?.ogTitle || finalTitle)},
-              'twitter:description': ${JSON.stringify(metadata?.twitterDescription || metadata?.ogDescription || finalDescription)},
-              'twitter:image': ${JSON.stringify(metadata?.twitterImageUrl || metadata?.ogImageUrl || finalImageUrl)}
-            };
-            
-            for (const [name, content] of Object.entries(twitterTags)) {
-              document.querySelector(\`meta[name="\${name}"]\`)?.remove();
-              const tag = document.createElement('meta');
-              tag.name = name;
-              tag.content = content;
-              document.head.appendChild(tag);
-            }
-            
-            // Structured Data
-            document.querySelector('script[type="application/ld+json"]')?.remove();
-            if (${JSON.stringify(metadata?.structuredData || null)}) {
-              try {
-                const structuredDataJson = ${JSON.stringify(metadata?.structuredData || '')};
-                if (structuredDataJson) {
-                  const script = document.createElement('script');
-                  script.type = 'application/ld+json';
-                  script.textContent = structuredDataJson;
-                  document.head.appendChild(script);
-                }
-              } catch (e) {
-                console.error('Error parsing structured data JSON:', e);
-              }
-            }
-          `,
-        }}
-      />
+    <Helmet>
+      {/* Basic metadata */}
+      <title>{metaTitle}</title>
+      <meta name="description" content={metaDescription} />
+      
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={url} />
+      <meta property="og:title" content={seo?.ogTitle || metaTitle} />
+      <meta property="og:description" content={seo?.ogDescription || metaDescription} />
+      <meta property="og:image" content={metaImage} />
+      
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={url} />
+      <meta name="twitter:title" content={seo?.twitterTitle || metaTitle} />
+      <meta name="twitter:description" content={seo?.twitterDescription || metaDescription} />
+      <meta name="twitter:image" content={seo?.twitterImage || metaImage} />
+      
+      {/* Canonical URL */}
+      {seo?.canonicalUrl && <link rel="canonical" href={seo.canonicalUrl} />}
+      
+      {/* Structured data */}
+      {seo?.structuredData && (
+        <script type="application/ld+json">
+          {seo.structuredData}
+        </script>
+      )}
+      
+      {/* Additional metadata */}
       {children}
-    </>
+    </Helmet>
   );
 }
