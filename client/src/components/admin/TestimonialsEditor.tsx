@@ -372,7 +372,7 @@ export function TestimonialsEditor() {
                 Add Testimonial
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[550px] bg-white">
+            <DialogContent className="sm:max-w-[550px] bg-white max-h-[70vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add Testimonial</DialogTitle>
                 <DialogDescription>
@@ -557,7 +557,7 @@ export function TestimonialsEditor() {
               setSelectedTestimonial(null);
             }
           }}>
-            <DialogContent className="sm:max-w-[550px] bg-white">
+            <DialogContent className="sm:max-w-[550px] bg-white max-h-[70vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Edit Testimonial</DialogTitle>
                 <DialogDescription>

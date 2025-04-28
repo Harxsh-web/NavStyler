@@ -108,17 +108,16 @@ export const insertTestimonialSectionSchema = createInsertSchema(testimonialSect
 export type InsertTestimonialSection = z.infer<typeof insertTestimonialSectionSchema>;
 
 // ----- Testimonials Schema -----
-export const testimonials = pgTable("testimonials", {
+export const testimonials = pgTable("testimonial", {
   id: serial("id").primaryKey(),
-  sectionId: integer("section_id")
-    .references(() => testimonialSection.id)
-    .notNull(),
+  name: text("name").notNull(),
+  title: text("title"),
   quote: text("quote").notNull(),
-  author: text("author").notNull(),
-  position: text("position"),
   imageUrl: text("image_url"),
   videoUrl: text("video_url"),
-  order: integer("order").notNull(),
+  mediaType: text("media_type").default("image").notNull(),
+  showMobile: boolean("show_mobile").default(true).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export type Testimonial = typeof testimonials.$inferSelect;
