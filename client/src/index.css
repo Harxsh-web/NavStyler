@@ -97,6 +97,16 @@
     background-color: #1d4ed8 !important; /* blue-700 */
   }
   
+  /* Delete button styling */
+  .delete-button {
+    background-color: #e11d48 !important; /* red-600 */
+    color: white !important;
+  }
+  
+  .delete-button:hover:not(:disabled) {
+    background-color: #be123c !important; /* red-700 */
+  }
+  
   /* Apply admin button styling to all regular buttons in admin sections */
   [data-admin-section] button:not([variant="outline"]):not([variant="link"]):not([variant="ghost"]):not([variant="destructive"]) {
     @apply admin-primary-button;

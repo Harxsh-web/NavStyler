@@ -324,9 +324,8 @@ export function TestimonialsEditor() {
                           <AlertDialog >
                             <AlertDialogTrigger asChild>
                               <Button 
-                                variant="destructive"
                                 size="icon"
-                                className="bg-red-600 border-red-600 text-white hover:bg-red-700 hover:border-red-700 hover:text-white"
+                                className="delete-button"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -344,7 +343,7 @@ export function TestimonialsEditor() {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction 
                                   onClick={() => handleDelete(testimonial.id)}
-                                  className="bg-red-600 text-white hover:bg-red-700"
+                                  className="delete-button"
                                 >
                                   Delete
                                 </AlertDialogAction>
