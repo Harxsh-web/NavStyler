@@ -414,3 +414,20 @@ export const insertYoutubeFrameworkSectionSchema = createInsertSchema(youtubeFra
   id: true,
 });
 export type InsertYoutubeFrameworkSection = z.infer<typeof insertYoutubeFrameworkSectionSchema>;
+
+// ----- Questions Section Schema -----
+export const questionsSection = pgTable("questions_section", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  contactText: text("contact_text"),
+  contactEmail: text("contact_email"),
+  description: text("description"),
+  backgroundColor: text("background_color"),
+});
+
+export type QuestionsSection = typeof questionsSection.$inferSelect;
+export const insertQuestionsSectionSchema = createInsertSchema(questionsSection).omit({
+  id: true,
+});
+export type InsertQuestionsSection = z.infer<typeof insertQuestionsSectionSchema>;

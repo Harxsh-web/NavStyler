@@ -33,6 +33,7 @@ export default function HomePage() {
   const { data: guaranteeSectionData, isLoading: guaranteeSectionLoading } = usePublicGuaranteeSection();
   const { data: scholarshipSectionData, isLoading: scholarshipSectionLoading } = usePublicScholarshipSection();
   const { data: youtubeFrameworkSectionData, isLoading: youtubeFrameworkSectionLoading } = usePublicYoutubeFrameworkSection();
+  const { data: questionsSectionData, isLoading: questionsSectionLoading } = usePublicQuestionsSection();
   
   // Content refresh mutation
   const refreshMutation = useRefreshPublicContent();
@@ -169,6 +170,13 @@ export default function HomePage() {
         {!scholarshipSectionLoading && (
           <ScholarshipSection 
             scholarshipSection={scholarshipSectionData}
+          />
+        )}
+        
+        {/* Questions Section */}
+        {!questionsSectionLoading && (
+          <QuestionsSection 
+            questionsSection={questionsSectionData}
           />
         )}
         {/* About Book Section */}

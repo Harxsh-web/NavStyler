@@ -318,3 +318,13 @@ contentRouter.get("/youtube-framework-section", async (req, res, next) => {
     next(error);
   }
 });
+
+// Questions section route
+contentRouter.get("/questions-section", async (req, res, next) => {
+  try {
+    const questionsSection = await storage.getQuestionsSection();
+    res.json(questionsSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
