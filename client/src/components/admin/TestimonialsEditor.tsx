@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, Edit, Trash2, Video, ImageIcon } from "lucide-react";
+import { MediaUploader } from "@/components/ui/MediaUploader";
 import {
   Table,
   TableBody,

@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
+import express from "express";
 import { setupAuth } from "./auth";
 import { adminRouter } from "./adminRoutes";
 import { contentRouter } from "./contentRoutes";
@@ -7,6 +9,7 @@ import analyticsRouter from "./analyticsRoutes";
 import stripeRouter from "./stripeRoutes";
 import themeRouter from "./themeRoutes";
 import seoRouter from "./seoRoutes";
+import { uploadRouter } from "./uploadRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -29,6 +32,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // SEO Metadata routes
   app.use("/api/seo", seoRouter);
+  
+  // Upload routes
+  app.use("/api/upload", uploadRouter);
+  
+  // Serve uploaded files
+  app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
   
   // Initialize database
   await initializeDatabase();
