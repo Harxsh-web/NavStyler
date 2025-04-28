@@ -324,12 +324,13 @@ export function TestimonialsEditor() {
                           <AlertDialog >
                             <AlertDialogTrigger asChild>
                               <Button 
-                                variant="outline" 
+                                variant="destructive"
                                 size="icon"
-                                className="bg-red-600 border-red-700 text-white hover:bg-red-700 hover:text-white"
+                                className="bg-red-600 border-red-600 text-white hover:bg-red-700 hover:border-red-700 hover:text-white"
                               >
-                                <Trash2 className="h-4 w-4 " />
+                                <Trash2 className="h-4 w-4" />
                               </Button>
+
                             </AlertDialogTrigger>
                             <AlertDialogContent className="bg-white">
                               <AlertDialogHeader>
