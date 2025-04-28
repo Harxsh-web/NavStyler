@@ -834,11 +834,7 @@ export class DatabaseStorage implements IStorage {
   // Social links
   async getSocialLinks(): Promise<schema.SocialLink[]> {
     try {
-      const result = await query(
-        `SELECT id, platform, url, icon_name as "iconName", active, updated_at as "updatedAt" 
-         FROM social_link`
-      );
-      return result.rows as schema.SocialLink[];
+      return await db.select().from(schema.socialLinks);
     } catch (error) {
       console.error('Error in getSocialLinks:', error);
       return [];
@@ -846,7 +842,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSocialLink(id: number): Promise<schema.SocialLink | undefined> {
-    const [link] = await db.select().from(schema.socialLink).where(eq(schema.socialLink.id, id));
+    const [link] = await db.select().from(schema.socialLinks).where(eq(schema.socialLinks.id, id));
     return link;
   }
 
