@@ -355,8 +355,8 @@ export function TestimonialsEditor() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-6">
-                      No testimonials found. Add your first one.
+                    <TableCell colSpan={5} className="h-24 text-center">
+                      No testimonials found. Add one below.
                     </TableCell>
                   </TableRow>
                 )}
@@ -366,51 +366,48 @@ export function TestimonialsEditor() {
 
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
             <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700">
-                <Plus className="h-4 w-4 mr-2" />
+              <Button className="w-full sm:w-auto">
+                <Plus className="mr-2 h-4 w-4" />
                 Add Testimonial
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg bg-white">
+            <DialogContent className="sm:max-w-[550px]">
               <DialogHeader>
                 <DialogTitle>Add Testimonial</DialogTitle>
                 <DialogDescription>
-                  Add a new customer testimonial about the book.
+                  Add a new testimonial to showcase on the website.
                 </DialogDescription>
               </DialogHeader>
-              
               <Form {...testimonialForm}>
-                <form onSubmit={testimonialForm.handleSubmit(onAddTestimonialSubmit)} className="space-y-6 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={testimonialForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={testimonialForm.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Title (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., CEO, Clinical Psychologist" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
+                <form onSubmit={testimonialForm.handleSubmit(onAddTestimonialSubmit)} className="space-y-4">
+                  <FormField
+                    control={testimonialForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title/Position (optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="CEO, Company Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={testimonialForm.control}
                     name="quote"
@@ -419,8 +416,8 @@ export function TestimonialsEditor() {
                         <FormLabel>Testimonial Quote</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Enter testimonial quote" 
-                            className="min-h-32"
+                            placeholder="This book changed my life..." 
+                            className="min-h-24" 
                             {...field} 
                           />
                         </FormControl>
@@ -428,45 +425,37 @@ export function TestimonialsEditor() {
                       </FormItem>
                     )}
                   />
-                  
-                  <div className="border rounded-md p-4 bg-gray-50">
-                    <h3 className="text-sm font-medium mb-3">Media Type</h3>
-                    <FormField
-                      control={testimonialForm.control}
-                      name="mediaType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="radio"
-                                id="image-type"
-                                checked={field.value === 'image'}
-                                onChange={() => field.onChange('image')}
-                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
-                              />
-                              <label htmlFor="image-type" className="text-sm font-medium text-gray-700">
-                                Image
-                              </label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="radio"
-                                id="video-type"
-                                checked={field.value === 'video'}
-                                onChange={() => field.onChange('video')}
-                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
-                              />
-                              <label htmlFor="video-type" className="text-sm font-medium text-gray-700">
-                                Video
-                              </label>
-                            </div>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="mediaType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Media Type</FormLabel>
+                        <div className="flex items-center space-x-4">
+                          <Button
+                            type="button"
+                            variant={field.value === 'image' ? 'default' : 'outline'}
+                            className={field.value === 'image' ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
+                            onClick={() => field.onChange('image')}
+                          >
+                            <ImageIcon className="mr-2 h-4 w-4" />
+                            Image
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={field.value === 'video' ? 'default' : 'outline'}
+                            className={field.value === 'video' ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
+                            onClick={() => field.onChange('video')}
+                          >
+                            <Video className="mr-2 h-4 w-4" />
+                            Video
+                          </Button>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   
                   {testimonialForm.watch('mediaType') === 'image' && (
                     <FormField
@@ -474,9 +463,14 @@ export function TestimonialsEditor() {
                       name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Image URL</FormLabel>
+                          <FormLabel>Testimonial Image</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/image.jpg" {...field} />
+                            <MediaUploader 
+                              value={field.value || ''} 
+                              onChange={field.onChange}
+                              accept="image/*"
+                              maxSize={5}
+                            />
                           </FormControl>
                           <FormMessage />
                           {field.value && (
@@ -505,9 +499,9 @@ export function TestimonialsEditor() {
                             <Input placeholder="https://youtube.com/watch?v=..." {...field} />
                           </FormControl>
                           <FormMessage />
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Enter a direct video URL or YouTube/Vimeo embed link
-                          </p>
+                          <FormDescription>
+                            Supports YouTube and YouTube Shorts URLs
+                          </FormDescription>
                         </FormItem>
                       )}
                     />
@@ -517,14 +511,12 @@ export function TestimonialsEditor() {
                     control={testimonialForm.control}
                     name="showMobile"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                         <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Show on Mobile
-                          </FormLabel>
-                          <div className="text-[0.8rem] text-muted-foreground">
-                            Displayed on mobile devices when enabled
-                          </div>
+                          <FormLabel>Show on Mobile</FormLabel>
+                          <FormDescription>
+                            Display this testimonial in the mobile view
+                          </FormDescription>
                         </div>
                         <FormControl>
                           <Switch
@@ -532,16 +524,16 @@ export function TestimonialsEditor() {
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <DialogFooter>
-                    <Button
-                      type="submit"
-                      disabled={createTestimonialMutation.isPending}
-                      className="bg-blue-600 text-white hover:bg-blue-700"
-                    >
+                    <Button type="button" variant="outline" onClick={() => setShowAddDialog(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={createTestimonialMutation.isPending} className="bg-blue-600 hover:bg-blue-700">
                       {createTestimonialMutation.isPending ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -558,46 +550,43 @@ export function TestimonialsEditor() {
           </Dialog>
 
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-            <DialogContent className="max-w-lg bg-white">
+            <DialogContent className="sm:max-w-[550px]">
               <DialogHeader>
                 <DialogTitle>Edit Testimonial</DialogTitle>
                 <DialogDescription>
-                  Edit the testimonial details.
+                  Update this testimonial information.
                 </DialogDescription>
               </DialogHeader>
-              
               <Form {...testimonialForm}>
-                <form onSubmit={testimonialForm.handleSubmit(onEditTestimonialSubmit)} className="space-y-6 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={testimonialForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={testimonialForm.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Title (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., CEO, Clinical Psychologist" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
+                <form onSubmit={testimonialForm.handleSubmit(onEditTestimonialSubmit)} className="space-y-4">
+                  <FormField
+                    control={testimonialForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title/Position (optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="CEO, Company Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={testimonialForm.control}
                     name="quote"
@@ -606,8 +595,8 @@ export function TestimonialsEditor() {
                         <FormLabel>Testimonial Quote</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Enter testimonial quote" 
-                            className="min-h-32"
+                            placeholder="This book changed my life..." 
+                            className="min-h-24" 
                             {...field} 
                           />
                         </FormControl>
@@ -615,45 +604,37 @@ export function TestimonialsEditor() {
                       </FormItem>
                     )}
                   />
-                  
-                  <div className="border rounded-md p-4 bg-gray-50">
-                    <h3 className="text-sm font-medium mb-3">Media Type</h3>
-                    <FormField
-                      control={testimonialForm.control}
-                      name="mediaType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="radio"
-                                id="edit-image-type"
-                                checked={field.value === 'image'}
-                                onChange={() => field.onChange('image')}
-                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
-                              />
-                              <label htmlFor="edit-image-type" className="text-sm font-medium text-gray-700">
-                                Image
-                              </label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="radio"
-                                id="edit-video-type"
-                                checked={field.value === 'video'}
-                                onChange={() => field.onChange('video')}
-                                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
-                              />
-                              <label htmlFor="edit-video-type" className="text-sm font-medium text-gray-700">
-                                Video
-                              </label>
-                            </div>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+
+                  <FormField
+                    control={testimonialForm.control}
+                    name="mediaType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Media Type</FormLabel>
+                        <div className="flex items-center space-x-4">
+                          <Button
+                            type="button"
+                            variant={field.value === 'image' ? 'default' : 'outline'}
+                            className={field.value === 'image' ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
+                            onClick={() => field.onChange('image')}
+                          >
+                            <ImageIcon className="mr-2 h-4 w-4" />
+                            Image
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={field.value === 'video' ? 'default' : 'outline'}
+                            className={field.value === 'video' ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
+                            onClick={() => field.onChange('video')}
+                          >
+                            <Video className="mr-2 h-4 w-4" />
+                            Video
+                          </Button>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   
                   {testimonialForm.watch('mediaType') === 'image' && (
                     <FormField
@@ -661,9 +642,14 @@ export function TestimonialsEditor() {
                       name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Image URL</FormLabel>
+                          <FormLabel>Testimonial Image</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/image.jpg" {...field} />
+                            <MediaUploader 
+                              value={field.value || ''} 
+                              onChange={field.onChange}
+                              accept="image/*"
+                              maxSize={5}
+                            />
                           </FormControl>
                           <FormMessage />
                           {field.value && (
@@ -692,9 +678,9 @@ export function TestimonialsEditor() {
                             <Input placeholder="https://youtube.com/watch?v=..." {...field} />
                           </FormControl>
                           <FormMessage />
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Enter a direct video URL or YouTube/Vimeo embed link
-                          </p>
+                          <FormDescription>
+                            Supports YouTube and YouTube Shorts URLs
+                          </FormDescription>
                         </FormItem>
                       )}
                     />
@@ -704,14 +690,12 @@ export function TestimonialsEditor() {
                     control={testimonialForm.control}
                     name="showMobile"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                         <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Show on Mobile
-                          </FormLabel>
-                          <div className="text-[0.8rem] text-muted-foreground">
-                            Displayed on mobile devices when enabled
-                          </div>
+                          <FormLabel>Show on Mobile</FormLabel>
+                          <FormDescription>
+                            Display this testimonial in the mobile view
+                          </FormDescription>
                         </div>
                         <FormControl>
                           <Switch
@@ -719,23 +703,23 @@ export function TestimonialsEditor() {
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <DialogFooter>
-                    <Button
-                      type="submit"
-                      disabled={updateTestimonialMutation.isPending}
-                      className="bg-blue-600 text-white hover:bg-blue-700"
-                    >
+                    <Button type="button" variant="outline" onClick={() => setShowEditDialog(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={updateTestimonialMutation.isPending} className="bg-blue-600 hover:bg-blue-700">
                       {updateTestimonialMutation.isPending ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Saving...
+                          Updating...
                         </>
                       ) : (
-                        "Save Changes"
+                        "Update Testimonial"
                       )}
                     </Button>
                   </DialogFooter>
@@ -748,3 +732,4 @@ export function TestimonialsEditor() {
     </div>
   );
 }
+

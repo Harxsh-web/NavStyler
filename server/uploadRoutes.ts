@@ -1,89 +1,62 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'path';
 import fs from 'fs';
-import { isAdmin } from './auth';
+import path from 'path';
 
-export const uploadRouter = express.Router();
-
-// Ensure upload directory exists
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 // Configure storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
+  destination: (_req, _file, cb) => {
+    cb(null, uploadsDir);
   },
-  filename: (req, file, cb) => {
-    // Create a unique filename with original extension
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+  filename: (_req, file, cb) => {
+    // Create unique filename with original extension
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     cb(null, `${uniqueSuffix}${ext}`);
   }
 });
 
-// File filter to allow only images
-const fileFilter = (req: express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-  
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, GIF and WebP are allowed.'));
-  }
-};
-
-// Configure upload
+// Create upload middleware
 const upload = multer({
   storage,
-  fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 5 * 1024 * 1024, // 5MB max file size
+  },
+  fileFilter: (_req, file, cb) => {
+    // Accept images and videos
+    const allowedTypes = /jpeg|jpg|png|gif|webp|mp4|webm|mov/;
+    const ext = path.extname(file.originalname).toLowerCase();
+    const mimetype = file.mimetype;
+    
+    if (allowedTypes.test(ext) || allowedTypes.test(mimetype)) {
+      return cb(null, true);
+    }
+    
+    cb(new Error('Invalid file type. Only images and videos are allowed.'));
   }
 });
 
-// Handle file upload - only admins can upload files
-uploadRouter.post('/', isAdmin, upload.single('file'), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+export const uploadRouter = express.Router();
 
-    // Generate the URL path for the uploaded file
-    const filePath = `/uploads/${req.file.filename}`;
-    
-    res.json({
-      url: filePath,
-      filename: req.file.filename,
-      originalname: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size
-    });
-  } catch (error: any) {
-    console.error('Error uploading file:', error);
-    res.status(500).json({ error: error.message || 'Error uploading file' });
+// Define route for file uploads
+uploadRouter.post('/file', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
   }
-});
-
-// Handle file deletion - only admins can delete files
-uploadRouter.delete('/:filename', isAdmin, (req, res) => {
-  try {
-    const filePath = path.join(UPLOAD_DIR, req.params.filename);
-    
-    // Check if file exists
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'File not found' });
-    }
-    
-    // Delete the file
-    fs.unlinkSync(filePath);
-    
-    res.status(200).json({ success: true, message: 'File deleted successfully' });
-  } catch (error: any) {
-    console.error('Error deleting file:', error);
-    res.status(500).json({ error: error.message || 'Error deleting file' });
-  }
+  
+  const filePath = `/uploads/${req.file.filename}`;
+  
+  return res.status(200).json({
+    url: filePath,
+    filename: req.file.filename,
+    originalname: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size
+  });
 });
