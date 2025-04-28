@@ -108,12 +108,14 @@ export interface IStorage {
   createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings>;
   
   // SEO Metadata
-  getSeoMetadata(id?: number): Promise<schema.SeoMetadata[]>;
+  getAllSeoMetadata(): Promise<schema.SeoMetadata[]>;
+  getSeoMetadata(id: number): Promise<schema.SeoMetadata | undefined>;
   getSeoMetadataByPage(pagePath: string): Promise<schema.SeoMetadata | undefined>;
   getDefaultSeoMetadata(): Promise<schema.SeoMetadata | undefined>;
   createSeoMetadata(data: schema.InsertSeoMetadata): Promise<schema.SeoMetadata>;
   updateSeoMetadata(id: number, data: Partial<schema.InsertSeoMetadata>): Promise<schema.SeoMetadata | undefined>;
   deleteSeoMetadata(id: number): Promise<boolean>;
+  unsetDefaultSeoMetadata(): Promise<void>;
   
   // Theme settings
   getThemeSettings(): Promise<schema.ThemeSettings[]>;
@@ -1442,6 +1444,91 @@ export class DatabaseStorage implements IStorage {
       }
     } catch (error) {
       console.error('Error in updateQuestionsSection:', error);
+      throw error;
+    }
+  }
+
+  // ----- SEO Metadata Methods -----
+  async getAllSeoMetadata(): Promise<schema.SeoMetadata[]> {
+    try {
+      const result = await db.select().from(schema.seoMetadata).orderBy(desc(schema.seoMetadata.isDefault));
+      return result;
+    } catch (error) {
+      console.error('Error in getAllSeoMetadata:', error);
+      return [];
+    }
+  }
+
+  async getSeoMetadata(id: number): Promise<schema.SeoMetadata | undefined> {
+    try {
+      const [result] = await db.select().from(schema.seoMetadata).where(eq(schema.seoMetadata.id, id));
+      return result;
+    } catch (error) {
+      console.error(`Error in getSeoMetadata(${id}):`, error);
+      return undefined;
+    }
+  }
+
+  async getSeoMetadataByPage(pagePath: string): Promise<schema.SeoMetadata | undefined> {
+    try {
+      const [result] = await db.select().from(schema.seoMetadata).where(eq(schema.seoMetadata.pagePath, pagePath));
+      return result;
+    } catch (error) {
+      console.error(`Error in getSeoMetadataByPage(${pagePath}):`, error);
+      return undefined;
+    }
+  }
+
+  async getDefaultSeoMetadata(): Promise<schema.SeoMetadata | undefined> {
+    try {
+      const [result] = await db.select().from(schema.seoMetadata).where(eq(schema.seoMetadata.isDefault, true));
+      return result;
+    } catch (error) {
+      console.error('Error in getDefaultSeoMetadata:', error);
+      return undefined;
+    }
+  }
+
+  async createSeoMetadata(data: schema.InsertSeoMetadata): Promise<schema.SeoMetadata> {
+    try {
+      const [result] = await db.insert(schema.seoMetadata).values(data).returning();
+      return result;
+    } catch (error) {
+      console.error('Error in createSeoMetadata:', error);
+      throw error;
+    }
+  }
+
+  async updateSeoMetadata(id: number, data: Partial<schema.InsertSeoMetadata>): Promise<schema.SeoMetadata | undefined> {
+    try {
+      const [result] = await db.update(schema.seoMetadata)
+        .set(data)
+        .where(eq(schema.seoMetadata.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error(`Error in updateSeoMetadata(${id}):`, error);
+      throw error;
+    }
+  }
+
+  async deleteSeoMetadata(id: number): Promise<boolean> {
+    try {
+      const result = await db.delete(schema.seoMetadata).where(eq(schema.seoMetadata.id, id));
+      return true;
+    } catch (error) {
+      console.error(`Error in deleteSeoMetadata(${id}):`, error);
+      return false;
+    }
+  }
+
+  async unsetDefaultSeoMetadata(): Promise<void> {
+    try {
+      await db.update(schema.seoMetadata)
+        .set({ isDefault: false })
+        .where(eq(schema.seoMetadata.isDefault, true));
+    } catch (error) {
+      console.error('Error in unsetDefaultSeoMetadata:', error);
       throw error;
     }
   }
