@@ -6,6 +6,7 @@ import { contentRouter } from "./contentRoutes";
 import analyticsRouter from "./analyticsRoutes";
 import stripeRouter from "./stripeRoutes";
 import themeRouter from "./themeRoutes";
+import seoRouter from "./seoRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -25,6 +26,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Theme routes
   app.use("/api/themes", themeRouter);
+  
+  // SEO Metadata routes
+  app.use("/api/seo", seoRouter);
   
   // Initialize database
   await initializeDatabase();
