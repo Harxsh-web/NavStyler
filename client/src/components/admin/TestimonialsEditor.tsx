@@ -20,6 +20,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -207,7 +208,7 @@ export function TestimonialsEditor() {
   return (
     <div className="space-y-8">
       {/* Section Editor */}
-      <Card className="h-[80vh] over">
+      <Card className="h-[80vh] overflow-auto">
         <CardHeader>
           <CardTitle>Testimonials Section</CardTitle>
           <CardDescription>Edit the section title and description</CardDescription>
@@ -549,7 +550,13 @@ export function TestimonialsEditor() {
             </DialogContent>
           </Dialog>
 
-          <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <Dialog open={showEditDialog} onOpenChange={(open) => {
+            setShowEditDialog(open);
+            if (!open) {
+              // When dialog is closing, reset the state
+              setSelectedTestimonial(null);
+            }
+          }}>
             <DialogContent className="sm:max-w-[550px]">
               <DialogHeader>
                 <DialogTitle>Edit Testimonial</DialogTitle>
@@ -709,7 +716,14 @@ export function TestimonialsEditor() {
                   />
 
                   <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setShowEditDialog(false)}>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => {
+                        setShowEditDialog(false);
+                        setSelectedTestimonial(null);
+                      }}
+                    >
                       Cancel
                     </Button>
                     <Button type="submit" disabled={updateTestimonialMutation.isPending} className="bg-blue-600 hover:bg-blue-700">
