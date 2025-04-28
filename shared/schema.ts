@@ -186,6 +186,8 @@ export const footerCategories = pgTable("footer_categories", {
 export type FooterCategory = typeof footerCategories.$inferSelect;
 export const insertFooterCategorySchema = createInsertSchema(footerCategories).omit({
   id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 export type InsertFooterCategory = z.infer<typeof insertFooterCategorySchema>;
 
@@ -197,12 +199,16 @@ export const footerLinks = pgTable("footer_links", {
     .notNull(),
   label: text("label").notNull(),
   url: text("url").notNull(),
-  order: integer("order").notNull(),
+  order_index: integer("order_index").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export type FooterLink = typeof footerLinks.$inferSelect;
 export const insertFooterLinkSchema = createInsertSchema(footerLinks).omit({
   id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 export type InsertFooterLink = z.infer<typeof insertFooterLinkSchema>;
 
