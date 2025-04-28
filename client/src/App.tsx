@@ -9,6 +9,7 @@ import CheckoutPage from "@/pages/checkout";
 import PaymentSuccessPage from "@/pages/payment-success";
 import AnalyticsPage from "@/pages/admin/analytics";
 import Navbar from "@/components/Navbar";
+import { SEOHead } from "@/components/SEOHead";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
@@ -107,6 +108,7 @@ export default function App() {
         <AuthProvider>
           <ThemeSettingsProvider>
             <PageTransitionProvider>
+              <SEOHead />
               <Navbar />
               <div className="pt-20">
                 <Router />

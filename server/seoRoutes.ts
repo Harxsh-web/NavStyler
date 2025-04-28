@@ -1,141 +1,157 @@
-import { Router } from 'express';
-import { z } from 'zod';
-import { insertSeoMetadataSchema } from '@shared/schema';
-import { storage } from './storage';
-import { isAdmin, isAuthenticated } from './auth';
+import { Router } from "express";
+import { storage } from "./storage";
+import { isAdmin, isAuthenticated } from "./auth";
+import { insertSeoMetadataSchema } from "@shared/schema";
+import { z } from "zod";
 
-export const seoRouter = Router();
+const seoRouter = Router();
 
-// Get all SEO metadata - admin only
-seoRouter.get('/', isAuthenticated, isAdmin, async (req, res) => {
+// Get all SEO metadata (admin only)
+seoRouter.get("/", isAuthenticated, isAdmin, async (req, res) => {
   try {
-    const metadata = await storage.getSeoMetadata();
-    res.json(metadata);
+    const allMetadata = await storage.getAllSeoMetadata();
+    res.json(allMetadata);
   } catch (error: any) {
-    console.error('Error fetching SEO metadata:', error);
+    console.error("Error fetching SEO metadata:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get SEO metadata by page path - public
-seoRouter.get('/page/:path(*)', async (req, res) => {
+// Get default SEO metadata (public)
+seoRouter.get("/default", async (req, res) => {
   try {
-    // URL decode the path parameter
+    const defaultMetadata = await storage.getDefaultSeoMetadata();
+    if (!defaultMetadata) {
+      return res.status(404).json({ error: "Default SEO metadata not found" });
+    }
+    res.json(defaultMetadata);
+  } catch (error: any) {
+    console.error("Error fetching default SEO metadata:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get SEO metadata for a specific page (public)
+seoRouter.get("/page/:path", async (req, res) => {
+  try {
     const pagePath = decodeURIComponent(req.params.path);
-    let metadata = await storage.getSeoMetadataByPage(pagePath);
-    
-    // If no metadata exists for this page, use the default
-    if (!metadata) {
-      metadata = await storage.getDefaultSeoMetadata();
-    }
-    
-    // If still no metadata, return a 404
-    if (!metadata) {
-      return res.status(404).json({ error: 'No SEO metadata found for this page' });
-    }
-    
-    res.json(metadata);
-  } catch (error: any) {
-    console.error('Error fetching SEO metadata for page:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get default SEO metadata - public
-seoRouter.get('/default', async (req, res) => {
-  try {
-    const metadata = await storage.getDefaultSeoMetadata();
+    const metadata = await storage.getSeoMetadataByPage(pagePath);
     
     if (!metadata) {
-      return res.status(404).json({ error: 'No default SEO metadata found' });
+      // If no specific metadata for this page, return default
+      const defaultMetadata = await storage.getDefaultSeoMetadata();
+      if (!defaultMetadata) {
+        return res.status(404).json({ error: "SEO metadata not found" });
+      }
+      return res.json(defaultMetadata);
     }
     
     res.json(metadata);
   } catch (error: any) {
-    console.error('Error fetching default SEO metadata:', error);
+    console.error("Error fetching SEO metadata for page:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get SEO metadata by ID - admin only
-seoRouter.get('/:id', isAuthenticated, isAdmin, async (req, res) => {
+// Get SEO metadata by ID (admin only)
+seoRouter.get("/:id", isAuthenticated, isAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID format" });
+    }
+    
     const metadata = await storage.getSeoMetadata(id);
-    
-    if (!metadata || metadata.length === 0) {
-      return res.status(404).json({ error: 'SEO metadata not found' });
+    if (!metadata) {
+      return res.status(404).json({ error: "SEO metadata not found" });
     }
     
-    res.json(metadata[0]);
+    res.json(metadata);
   } catch (error: any) {
-    console.error('Error fetching SEO metadata:', error);
+    console.error("Error fetching SEO metadata by ID:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Create new SEO metadata - admin only
-seoRouter.post('/', isAuthenticated, isAdmin, async (req, res) => {
+// Create new SEO metadata (admin only)
+seoRouter.post("/", isAuthenticated, isAdmin, async (req, res) => {
   try {
+    // Validate request body
     const validatedData = insertSeoMetadataSchema.parse(req.body);
-    const metadata = await storage.createSeoMetadata(validatedData);
-    res.status(201).json(metadata);
+    
+    // If setting this as default, unset any existing default
+    if (validatedData.isDefault) {
+      await storage.unsetDefaultSeoMetadata();
+    }
+    
+    // Create new metadata
+    const newMetadata = await storage.createSeoMetadata(validatedData);
+    res.status(201).json(newMetadata);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ 
-        error: 'Invalid SEO metadata', 
-        details: error.errors 
-      });
+      return res.status(400).json({ error: error.errors });
     }
-    console.error('Error creating SEO metadata:', error);
+    console.error("Error creating SEO metadata:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Update SEO metadata - admin only
-seoRouter.patch('/:id', isAuthenticated, isAdmin, async (req, res) => {
+// Update SEO metadata (admin only)
+seoRouter.patch("/:id", isAuthenticated, isAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    
-    // Validate the update data
-    const validatedData = insertSeoMetadataSchema.partial().parse(req.body);
-    
-    console.log(`Updating SEO metadata ID ${id} with data:`, validatedData);
-    
-    const updated = await storage.updateSeoMetadata(id, validatedData);
-    
-    if (!updated) {
-      return res.status(404).json({ error: 'SEO metadata not found' });
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID format" });
     }
     
-    res.json(updated);
+    // Validate request body (partial update allowed)
+    const partialSchema = insertSeoMetadataSchema.partial();
+    const validatedData = partialSchema.parse(req.body);
+    
+    // If setting this as default, unset any existing default
+    if (validatedData.isDefault) {
+      await storage.unsetDefaultSeoMetadata();
+    }
+    
+    // Update metadata
+    const updatedMetadata = await storage.updateSeoMetadata(id, validatedData);
+    if (!updatedMetadata) {
+      return res.status(404).json({ error: "SEO metadata not found" });
+    }
+    
+    res.json(updatedMetadata);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ 
-        error: 'Invalid SEO metadata', 
-        details: error.errors 
-      });
+      return res.status(400).json({ error: error.errors });
     }
-    console.error('Error updating SEO metadata:', error);
+    console.error("Error updating SEO metadata:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Delete SEO metadata - admin only
-seoRouter.delete('/:id', isAuthenticated, isAdmin, async (req, res) => {
+// Delete SEO metadata (admin only)
+seoRouter.delete("/:id", isAuthenticated, isAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await storage.deleteSeoMetadata(id);
-    
-    if (!result) {
-      return res.status(400).json({ 
-        error: 'Cannot delete this SEO metadata - it may be the default'
-      });
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID format" });
     }
     
-    res.status(204).end();
+    // Check if metadata exists and is not default
+    const metadata = await storage.getSeoMetadata(id);
+    if (!metadata) {
+      return res.status(404).json({ error: "SEO metadata not found" });
+    }
+    
+    if (metadata.isDefault) {
+      return res.status(400).json({ error: "Cannot delete default SEO metadata" });
+    }
+    
+    // Delete metadata
+    await storage.deleteSeoMetadata(id);
+    res.status(204).send();
   } catch (error: any) {
-    console.error('Error deleting SEO metadata:', error);
+    console.error("Error deleting SEO metadata:", error);
     res.status(500).json({ error: error.message });
   }
 });
