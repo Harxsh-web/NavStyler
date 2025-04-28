@@ -62,9 +62,16 @@ export default function TestimonialsDisplay() {
             {testimonial.mediaType === 'video' ? (
               <div className="w-full max-w-[240px] aspect-video rounded-lg overflow-hidden">
                 {/* Handle YouTube or direct video URLs */}
-                {testimonial.videoUrl && testimonial.videoUrl.includes('youtube.com') ? (
+                {testimonial.videoUrl && testimonial.videoUrl.includes('youtube.com/watch') ? (
                   <iframe
                     src={testimonial.videoUrl.replace('watch?v=', 'embed/')}
+                    title={`Testimonial by ${testimonial.name}`}
+                    allowFullScreen
+                    className="w-full h-full border-0"
+                  ></iframe>
+                ) : testimonial.videoUrl && testimonial.videoUrl.includes('youtube.com/shorts') ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${testimonial.videoUrl.split('/shorts/')[1].split('?')[0]}`}
                     title={`Testimonial by ${testimonial.name}`}
                     allowFullScreen
                     className="w-full h-full border-0"
