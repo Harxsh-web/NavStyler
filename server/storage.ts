@@ -865,29 +865,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Site settings
-  async getSiteSettings(): Promise<schema.SiteSetting[]> {
-    return db.select().from(schema.siteSetting);
+  async getSiteSettings(): Promise<schema.SiteSettings[]> {
+    return db.select().from(schema.siteSettings);
   }
 
-  async getSiteSetting(name: string): Promise<schema.SiteSetting | undefined> {
-    const [setting] = await db.select().from(schema.siteSetting).where(eq(schema.siteSetting.name, name));
-    return setting;
+  async getSiteSetting(id: number): Promise<schema.SiteSettings | undefined> {
+    const [settings] = await db.select().from(schema.siteSettings).where(eq(schema.siteSettings.id, id));
+    return settings;
+  }
+  
+  async createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings> {
+    const [settings] = await db.insert(schema.siteSettings).values(data).returning();
+    return settings;
   }
 
-  async updateSiteSetting(name: string, value: string): Promise<schema.SiteSetting> {
-    const existing = await this.getSiteSetting(name);
-    if (existing) {
-      const [updated] = await db.update(schema.siteSetting)
-        .set({ value, updatedAt: new Date() })
-        .where(eq(schema.siteSetting.name, name))
-        .returning();
-      return updated;
-    } else {
-      const [newSetting] = await db.insert(schema.siteSetting)
-        .values({ name, value })
-        .returning();
-      return newSetting;
-    }
+  async updateSiteSettings(id: number, data: Partial<schema.InsertSiteSettings>): Promise<schema.SiteSettings | undefined> {
+    const [updated] = await db.update(schema.siteSettings)
+      .set({...data, updatedAt: new Date()})
+      .where(eq(schema.siteSettings.id, id))
+      .returning();
+    return updated;
   }
   
   // Theme settings

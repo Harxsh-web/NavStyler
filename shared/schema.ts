@@ -209,12 +209,18 @@ export const socialLinks = pgTable("social_links", {
   id: serial("id").primaryKey(),
   platform: text("platform").notNull(),
   url: text("url").notNull(),
-  order: integer("order").notNull(),
+  order_index: integer("order_index").notNull().default(0),
+  icon_name: text("icon_name"),
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export type SocialLink = typeof socialLinks.$inferSelect;
 export const insertSocialLinkSchema = createInsertSchema(socialLinks).omit({
   id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 export type InsertSocialLink = z.infer<typeof insertSocialLinkSchema>;
 
