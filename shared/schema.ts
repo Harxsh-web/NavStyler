@@ -178,7 +178,9 @@ export type InsertAuthorSection = z.infer<typeof insertAuthorSectionSchema>;
 export const footerCategories = pgTable("footer_categories", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  order: integer("order").notNull(),
+  order_index: integer("order_index").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export type FooterCategory = typeof footerCategories.$inferSelect;
