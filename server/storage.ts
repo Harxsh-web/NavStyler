@@ -104,7 +104,9 @@ export interface IStorage {
   // Site settings
   getSiteSettings(): Promise<schema.SiteSettings[]>;
   getSiteSetting(id: number): Promise<schema.SiteSettings | undefined>;
+  getSiteSetting(name: string): Promise<any | undefined>;
   updateSiteSettings(id: number, data: Partial<schema.InsertSiteSettings>): Promise<schema.SiteSettings | undefined>;
+  updateSiteSetting(name: string, value: string): Promise<any>;
   createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings>;
   
   // SEO Metadata
