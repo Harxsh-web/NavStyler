@@ -328,3 +328,13 @@ contentRouter.get("/questions-section", async (req, res, next) => {
     next(error);
   }
 });
+
+// Social links route
+contentRouter.get("/social-links", async (req, res, next) => {
+  try {
+    const socialLinks = await storage.getSocialLinks();
+    res.json(socialLinks);
+  } catch (error) {
+    next(error);
+  }
+});

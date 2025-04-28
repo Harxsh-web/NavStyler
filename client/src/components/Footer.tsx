@@ -16,9 +16,9 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   
   const { data: socialLinks } = useQuery<SocialLink[]>({
-    queryKey: ["/api/admin/social-links"],
+    queryKey: ["/api/content/social-links"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/social-links");
+      const response = await fetch("/api/content/social-links");
       if (!response.ok) {
         return [];
       }
@@ -26,8 +26,41 @@ export default function Footer() {
     }
   });
 
-  // Map platform names to their respective icon components
-  const getIconForPlatform = (platform: string) => {
+  // Get icon component based on icon_name or fallback to platform name
+  const getIconComponent = (socialLink: SocialLink) => {
+    // If we have an icon_name field, use it
+    if (socialLink.icon_name) {
+      switch (socialLink.icon_name) {
+        case 'FaYoutube':
+          return <FaYoutube className="text-gray-700" />;
+        case 'FaInstagram':
+          return <FaInstagram className="text-gray-700" />;
+        case 'FaLinkedin':
+          return <FaLinkedin className="text-gray-700" />;
+        case 'FaTiktok':
+          return <FaTiktok className="text-gray-700" />;
+        case 'FaTwitter':
+          return <FaTwitter className="text-gray-700" />;
+        case 'FaFacebook':
+          return <FaFacebook className="text-gray-700" />;
+        case 'FaSpotify':
+          return <FaSpotify className="text-gray-700" />;
+        case 'SiApplepodcasts':
+          return <SiApplepodcasts className="text-gray-700" />;
+        case 'SiRumble':
+          return <SiRumble className="text-gray-700" />;
+        default:
+          // Fallback to platform name-based icons
+          return platformToIcon(socialLink.platform);
+      }
+    }
+    
+    // If icon_name is not available, fallback to platform
+    return platformToIcon(socialLink.platform);
+  };
+  
+  // Map platform names to their respective icon components (fallback method)
+  const platformToIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
       case 'youtube':
         return <FaYoutube className="text-gray-700" />;
@@ -78,7 +111,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition"
                 >
-                  {getIconForPlatform(link.platform)}
+                  {getIconComponent(link)}
                 </a>
               ))
             ) : (
