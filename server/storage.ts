@@ -103,8 +103,7 @@ export interface IStorage {
   
   // Site settings
   getSiteSettings(): Promise<schema.SiteSettings[]>;
-  getSiteSetting(id: number): Promise<schema.SiteSettings | undefined>;
-  getSiteSetting(name: string): Promise<any | undefined>;
+  getSiteSetting(idOrName: number | string): Promise<any | undefined>;
   updateSiteSettings(id: number, data: Partial<schema.InsertSiteSettings>): Promise<schema.SiteSettings | undefined>;
   updateSiteSetting(name: string, value: string): Promise<any>;
   createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings>;
@@ -871,9 +870,24 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(schema.siteSettings);
   }
 
-  async getSiteSetting(id: number): Promise<schema.SiteSettings | undefined> {
-    const [settings] = await db.select().from(schema.siteSettings).where(eq(schema.siteSettings.id, id));
-    return settings;
+  async getSiteSetting(idOrName: number | string): Promise<any | undefined> {
+    try {
+      if (typeof idOrName === 'number') {
+        // Get by ID from siteSettings table
+        const [settings] = await db.select().from(schema.siteSettings).where(eq(schema.siteSettings.id, idOrName));
+        return settings;
+      } else {
+        // Get by name from site_setting table (name-value pairs)
+        const result = await query(
+          `SELECT name, value FROM site_setting WHERE name = $1`,
+          [idOrName]
+        );
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error(`Error getting site setting ${idOrName}:`, error);
+      return undefined;
+    }
   }
   
   async createSiteSettings(data: schema.InsertSiteSettings): Promise<schema.SiteSettings> {
@@ -887,6 +901,32 @@ export class DatabaseStorage implements IStorage {
       .where(eq(schema.siteSettings.id, id))
       .returning();
     return updated;
+  }
+  
+  async updateSiteSetting(name: string, value: string): Promise<any> {
+    try {
+      // Check if the setting exists
+      const existingSetting = await this.getSiteSetting(name);
+      
+      if (existingSetting) {
+        // Update existing setting
+        const result = await query(
+          `UPDATE site_setting SET value = $1, updated_at = NOW() WHERE name = $2 RETURNING name, value`,
+          [value, name]
+        );
+        return result.rows[0];
+      } else {
+        // Create new setting
+        const result = await query(
+          `INSERT INTO site_setting (name, value) VALUES ($1, $2) RETURNING name, value`,
+          [name, value]
+        );
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error(`Error updating site setting ${name}:`, error);
+      throw error;
+    }
   }
   
   // Theme settings
