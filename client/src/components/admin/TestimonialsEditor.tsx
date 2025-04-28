@@ -206,7 +206,7 @@ export function TestimonialsEditor() {
   return (
     <div className="space-y-8">
       {/* Section Editor */}
-      <Card>
+      <Card className="h-[80vh] over">
         <CardHeader>
           <CardTitle>Testimonials Section</CardTitle>
           <CardDescription>Edit the section title and description</CardDescription>
@@ -319,20 +319,20 @@ export function TestimonialsEditor() {
                             <Edit className="h-4 w-4" />
                           </Button>
                           
-                          <AlertDialog>
+                          <AlertDialog >
                             <AlertDialogTrigger asChild>
                               <Button 
                                 variant="outline" 
                                 size="icon"
-                                className="bg-red-50 border-red-200 text-red-600 hover:bg-red-100 hover:text-red-700"
+                                className="bg-red-600 border-red-700 text-white hover:bg-red-700 hover:text-white"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-4 w-4 " />
                               </Button>
                             </AlertDialogTrigger>
-                            <AlertDialogContent>
+                            <AlertDialogContent className="bg-white">
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogDescription >
                                   This will permanently delete the testimonial from {testimonial.name}.
                                   This action cannot be undone.
                                 </AlertDialogDescription>

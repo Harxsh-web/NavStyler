@@ -645,8 +645,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteTestimonial(id: number): Promise<boolean> {
-    const result = await db.delete(schema.testimonial).where(eq(schema.testimonial.id, id));
-    return !!result;
+    try {
+      console.log('Deleting testimonial with ID:', id);
+      const result = await query(
+        `DELETE FROM testimonial WHERE id = $1 RETURNING id`,
+        [id]
+      );
+      return result.rowCount > 0;
+    } catch (error) {
+      console.error(`Error deleting testimonial ${id}:`, error);
+      throw error;
+    }
   }
 
   // Book sections
