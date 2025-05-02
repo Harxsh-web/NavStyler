@@ -3,6 +3,57 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
 /**
+ * Hook for fetching articles for the public page
+ */
+export function usePublicArticles() {
+  return useQuery({
+    queryKey: ["/api/content/articles"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/articles");
+      if (!response.ok) {
+        return []; // Return empty array instead of throwing
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook for fetching videos for the public page
+ */
+export function usePublicVideos() {
+  return useQuery({
+    queryKey: ["/api/content/videos"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/videos");
+      if (!response.ok) {
+        return []; // Return empty array instead of throwing
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook for fetching site settings for the public page
+ */
+export function usePublicSiteSettings() {
+  return useQuery({
+    queryKey: ["/api/content/site-settings"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/site-settings");
+      if (!response.ok) {
+        return {}; // Return empty object instead of throwing
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for fetching the hero section content for the public page
  */
 export function usePublicHeroSection() {
