@@ -114,7 +114,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {videosData?.slice(0, 3).map((video) => (
+                {videosData?.slice(0, 3).map((video: any) => (
                   <div key={video.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
                     {video.thumbnailUrl && (
                       <img 
@@ -170,7 +170,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {articlesData?.slice(0, 4).map((article) => (
+                {articlesData?.slice(0, 4).map((article: any) => (
                   <div key={article.id} className="bg-gray-50 rounded-lg p-6 shadow-md transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
                     <h3 className="text-xl font-semibold mb-3 text-gray-900">{article.title}</h3>
                     <p className="text-gray-600 mb-4 line-clamp-3">{article.excerpt}</p>

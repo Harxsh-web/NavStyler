@@ -167,7 +167,7 @@ export default function BookPage() {
         {!bonusSectionLoading && !bonusItemsLoading && (
           <BonusSection 
             bonusSection={bonusSectionData} 
-            bonusItems={bonusItemsData?.sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))} 
+            bonusItems={bonusItemsData?.sort((a: any, b: any) => (a.orderIndex || 0) - (b.orderIndex || 0))} 
           />
         )}
 

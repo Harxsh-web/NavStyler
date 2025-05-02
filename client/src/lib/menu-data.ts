@@ -78,8 +78,8 @@ export const resourcesByTopic: ResourceItem[] = [
 
 export const navLinks = [
   {
-    label: "My Book",
-    href: "#",
+    label: "YouTube Masterclass",
+    href: "/my-book",
   },
   {
     label: "Free Resources",
