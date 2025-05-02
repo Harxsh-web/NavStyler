@@ -65,11 +65,11 @@ export default function BookPage() {
                   <div className="mt-8">
                     <Button 
                       size="lg" 
-                      className="font-medium text-md px-8 py-6"
+                      className="font-bold text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700"
                       asChild
                     >
                       <a href={heroData?.ctaLink || "#buy"}>
-                        {heroData?.ctaText || "Enroll Now"}
+                        {heroData?.ctaText || "Enroll Now - $995"}
                       </a>
                     </Button>
                   </div>
@@ -151,15 +151,27 @@ export default function BookPage() {
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
               Ready to improve your life with the YouTube Masterclass method?
             </h2>
-            <Button 
-              size="lg" 
-              className="font-medium px-8 py-6"
-              asChild
-            >
-              <a href="https://www.youtube.com/@LukeMikic/featured" target="_blank" rel="noopener noreferrer">
-                Join 270k+ subscribers
-              </a>
-            </Button>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button 
+                size="lg" 
+                className="font-bold text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700"
+                asChild
+              >
+                <a href="#buy">
+                  Enroll Now - $995
+                </a>
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg" 
+                className="font-medium px-8 py-6"
+                asChild
+              >
+                <a href="https://www.youtube.com/@LukeMikic/featured" target="_blank" rel="noopener noreferrer">
+                  Join 270k+ subscribers
+                </a>
+              </Button>
+            </div>
           </div>
         </section>
 
