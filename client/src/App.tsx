@@ -2,6 +2,7 @@ import { Switch, Route, useLocation } from "wouter";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/toaster";
 import HomePage from "@/pages/home-page";
+import BookPage from "@/pages/book-page";
 import AuthPage from "@/pages/auth-page";
 import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
@@ -33,6 +34,11 @@ function Router() {
         <Route path="/">
           <PageTransition>
             <HomePage />
+          </PageTransition>
+        </Route>
+        <Route path="/my-book">
+          <PageTransition>
+            <BookPage />
           </PageTransition>
         </Route>
         <Route path="/auth">
