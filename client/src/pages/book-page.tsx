@@ -87,61 +87,39 @@ export default function BookPage() {
         <TestimonialsDisplay />
 
         {/* YouTube Framework Section */}
-        {youtubeFrameworkSectionLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          youtubeFrameworkSectionData && (
-            <YoutubeFrameworkSection data={youtubeFrameworkSectionData} />
-          )
+        {!youtubeFrameworkSectionLoading && (
+          <YoutubeFrameworkSection
+            youtubeFrameworkSection={youtubeFrameworkSectionData}
+          />
         )}
 
         {/* Bonus Section */}
-        {bonusSectionLoading || bonusItemsLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          bonusSectionData && bonusItemsData && (
-            <BonusSection 
-              sectionData={bonusSectionData} 
-              bonusItems={bonusItemsData}
-            />
-          )
+        {!bonusSectionLoading && !bonusItemsLoading && bonusSectionData && bonusItemsData && (
+          <BonusSection 
+            bonusSection={bonusSectionData} 
+            bonusItems={bonusItemsData?.sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))} 
+          />
         )}
 
         {/* Guarantee Section */}
-        {guaranteeSectionLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          guaranteeSectionData && (
-            <GuaranteeSection data={guaranteeSectionData} />
-          )
+        {!guaranteeSectionLoading && (
+          <GuaranteeSection
+            guaranteeSection={guaranteeSectionData}
+          />
         )}
 
         {/* Scholarship Section */}
-        {scholarshipSectionLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          scholarshipSectionData && (
-            <ScholarshipSection data={scholarshipSectionData} />
-          )
+        {!scholarshipSectionLoading && (
+          <ScholarshipSection 
+            scholarshipSection={scholarshipSectionData}
+          />
         )}
 
         {/* Questions Section */}
-        {questionsSectionLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          questionsSectionData && (
-            <QuestionsSection data={questionsSectionData} />
-          )
+        {!questionsSectionLoading && (
+          <QuestionsSection 
+            questionsSection={questionsSectionData}
+          />
         )}
 
         {/* CTA Section */}
