@@ -38,11 +38,11 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     size="lg" 
-                    className="font-medium px-8 py-6"
+                    className="font-bold px-8 py-6 bg-blue-600 hover:bg-blue-700 text-lg"
                     asChild
                   >
                     <Link href="/my-book">
-                      YouTube Masterclass
+                      Enroll Now - $995
                     </Link>
                   </Button>
                   <Button 
@@ -51,9 +51,9 @@ export default function HomePage() {
                     className="font-medium px-8 py-6"
                     asChild
                   >
-                    <a href="https://www.youtube.com/@LukeMikic/featured" target="_blank" rel="noopener noreferrer">
-                      Watch My Videos
-                    </a>
+                    <Link href="/my-book">
+                      Learn More
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -88,11 +88,11 @@ export default function HomePage() {
               <div className="mt-8 text-center">
                 <Button 
                   size="lg"
-                  className="font-medium"
+                  className="font-bold bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6"
                   asChild
                 >
                   <Link href="/my-book">
-                    Learn About My YouTube Masterclass
+                    Enroll Now - $995
                   </Link>
                 </Button>
               </div>
@@ -197,16 +197,27 @@ export default function HomePage() {
             <p className="text-xl mb-8 max-w-3xl mx-auto">
               Learn my proven strategies to quit your 9-5 and succeed on YouTube with my comprehensive masterclass.
             </p>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="font-medium px-8 py-6 bg-white text-blue-700 hover:bg-gray-100"
-              asChild
-            >
-              <Link href="/my-book">
-                Explore the Masterclass
-              </Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button 
+                size="lg" 
+                className="font-bold text-lg px-8 py-6 bg-white text-blue-700 hover:bg-gray-100"
+                asChild
+              >
+                <Link href="/my-book">
+                  Enroll Now - $995
+                </Link>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="font-medium px-8 py-6 border-white text-white hover:bg-blue-600"
+                asChild
+              >
+                <Link href="/my-book">
+                  Learn More
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
 
