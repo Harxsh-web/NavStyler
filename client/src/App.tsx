@@ -5,8 +5,7 @@ import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
-import CheckoutPage from "@/pages/checkout";
-import PaymentSuccessPage from "@/pages/payment-success";
+import CheckoutWrapper from "@/pages/checkout";
 import AnalyticsPage from "@/pages/admin/analytics";
 import Navbar from "@/components/Navbar";
 import { SEOHead } from "@/components/SEOHead";
@@ -47,12 +46,12 @@ function Router() {
         )} />
         <Route path="/checkout">
           <PageTransition>
-            <CheckoutPage />
+            <CheckoutWrapper />
           </PageTransition>
         </Route>
-        <Route path="/payment-success">
+        <Route path="/checkout/success">
           <PageTransition>
-            <PaymentSuccessPage />
+            <CheckoutWrapper />
           </PageTransition>
         </Route>
         <ProtectedRoute 
