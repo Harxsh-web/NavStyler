@@ -99,6 +99,7 @@ export function FooterEditor() {
       toast({
         title: "Success",
         description: "Category created successfully",
+        variant:'success'
       });
       categoryForm.reset();
       setIsAddingCategory(false);

@@ -35,6 +35,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
       toast({
         title: "Subscribed!",
         description: "Thank you for subscribing to the newsletter.",
+         className: "bg-green-500 text-white"
       });
       setEmail('');
     } catch (error) {

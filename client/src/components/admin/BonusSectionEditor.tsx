@@ -152,6 +152,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       toast({
         title: 'Item updated',
         description: 'Bonus item has been successfully updated',
+        variant:'success',
       });
     },
     onError: (error: Error) => {
