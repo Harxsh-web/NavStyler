@@ -2,6 +2,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useRefreshPublicContent } from "@/hooks/use-public-content";
+import { LandingSection } from "@shared/schema";
 
 /**
  * Hook for refreshing content in admin components
@@ -797,6 +798,58 @@ export function useScholarshipSection() {
       toast({
         title: "Error",
         description: error.message || "Failed to update Scholarship section",
+        variant: "destructive",
+      });
+    },
+  });
+
+  return {
+    data,
+    isLoading,
+    error,
+    updateMutation
+  };
+}
+
+/**
+ * Hook for managing landing section content
+ */
+export function useLandingSection() {
+  const { toast } = useToast();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["/api/admin/landing"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/landing");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch landing section");
+      }
+      return await response.json();
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (values: any) => {
+      const res = await apiRequest("PUT", "/api/admin/landing", values);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to update landing section");
+      }
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/landing"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/landing"] });
+      toast({
+        title: "Success",
+        description: "Landing section updated successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update landing section",
         variant: "destructive",
       });
     },
