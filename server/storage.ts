@@ -31,17 +31,21 @@ export interface IStorage {
   deleteVideo(id: number): Promise<boolean>;
   
   // Content management
+  // Landing section
+  getLandingSection(): Promise<schema.LandingSection | undefined>;
+  updateLandingSection(data: Partial<schema.InsertLandingSection>): Promise<schema.LandingSection>;
+  
   // Hero section
-  getHeroSection(): Promise<schema.Hero | undefined>;
-  updateHeroSection(data: Partial<schema.InsertHero>): Promise<schema.Hero>;
+  getHeroSection(): Promise<schema.HeroSection | undefined>;
+  updateHeroSection(data: Partial<schema.InsertHeroSection>): Promise<schema.HeroSection>;
   
   // Featured section
-  getFeaturedSection(): Promise<schema.Featured | undefined>;
-  updateFeaturedSection(data: Partial<schema.InsertFeatured>): Promise<schema.Featured>;
+  getFeaturedSection(): Promise<schema.FeaturedSection | undefined>;
+  updateFeaturedSection(data: Partial<schema.InsertFeaturedSection>): Promise<schema.FeaturedSection>;
   
   // Quote section
-  getQuoteSection(): Promise<schema.Quote | undefined>;
-  updateQuoteSection(data: Partial<schema.InsertQuote>): Promise<schema.Quote>;
+  getQuoteSection(): Promise<schema.QuoteSection | undefined>;
+  updateQuoteSection(data: Partial<schema.InsertQuoteSection>): Promise<schema.QuoteSection>;
   
   // Learning points section
   getLearningPointsSection(): Promise<schema.LearningPointsSection | undefined>;
@@ -306,8 +310,93 @@ export class DatabaseStorage implements IStorage {
     return !!result;
   }
 
+  // Landing section
+  async getLandingSection(): Promise<schema.LandingSection | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, heading, subheading, image_url as "imageUrl", 
+         newsletter_heading as "newsletterHeading", newsletter_subheading as "newsletterSubheading", 
+         newsletter_cta as "newsletterCta", subscribers_count as "subscribersCount", 
+         reviews_count as "reviewsCount", background_color as "backgroundColor", updated_at as "updatedAt"
+         FROM landing_section LIMIT 1`
+      );
+      return result.rows[0] as schema.LandingSection | undefined;
+    } catch (error) {
+      console.error('Error in getLandingSection:', error);
+      return undefined;
+    }
+  }
+
+  async updateLandingSection(data: Partial<schema.InsertLandingSection>): Promise<schema.LandingSection> {
+    try {
+      const existing = await this.getLandingSection();
+      
+      console.log('Updating landing section with data:', data);
+      
+      if (existing) {
+        const result = await query(
+          `UPDATE landing_section 
+           SET heading = $1, subheading = $2, image_url = $3, 
+           newsletter_heading = $4, newsletter_subheading = $5, newsletter_cta = $6,
+           subscribers_count = $7, reviews_count = $8, background_color = $9,
+           updated_at = NOW()
+           WHERE id = $10
+           RETURNING id, heading, subheading, image_url as "imageUrl",
+           newsletter_heading as "newsletterHeading", newsletter_subheading as "newsletterSubheading",
+           newsletter_cta as "newsletterCta", subscribers_count as "subscribersCount",
+           reviews_count as "reviewsCount", background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.heading ?? existing.heading,
+            data.subheading ?? existing.subheading,
+            data.imageUrl ?? existing.imageUrl,
+            data.newsletterHeading ?? existing.newsletterHeading,
+            data.newsletterSubheading ?? existing.newsletterSubheading,
+            data.newsletterCta ?? existing.newsletterCta,
+            data.subscribersCount ?? existing.subscribersCount,
+            data.reviewsCount ?? existing.reviewsCount,
+            data.backgroundColor ?? existing.backgroundColor,
+            existing.id
+          ]
+        );
+        
+        console.log('Landing section updated successfully:', result.rows[0]);
+        
+        return result.rows[0] as schema.LandingSection;
+      } else {
+        const result = await query(
+          `INSERT INTO landing_section (heading, subheading, image_url, 
+           newsletter_heading, newsletter_subheading, newsletter_cta,
+           subscribers_count, reviews_count, background_color)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           RETURNING id, heading, subheading, image_url as "imageUrl",
+           newsletter_heading as "newsletterHeading", newsletter_subheading as "newsletterSubheading",
+           newsletter_cta as "newsletterCta", subscribers_count as "subscribersCount",
+           reviews_count as "reviewsCount", background_color as "backgroundColor", updated_at as "updatedAt"`,
+          [
+            data.heading || 'Hey Friends 👋',
+            data.subheading || 'I\'m Luke, I\'m an Entrepreneur, YouTuber, and the author of the New York Times bestseller, YouTube Masterclass.',
+            data.imageUrl || '',
+            data.newsletterHeading || 'Subscribe to LifeNotes ✍️',
+            data.newsletterSubheading || 'Each week, I share actionable productivity tips, practical life advice, and highlights from my favourite books, directly to your inbox.',
+            data.newsletterCta || 'Subscribe',
+            data.subscribersCount || '277,000 friendly readers',
+            data.reviewsCount || '200+ reviews',
+            data.backgroundColor || '#F9F6F3'
+          ]
+        );
+        
+        console.log('New landing section created:', result.rows[0]);
+        
+        return result.rows[0] as schema.LandingSection;
+      }
+    } catch (error) {
+      console.error('Error in updateLandingSection:', error);
+      throw error;
+    }
+  }
+
   // Hero section
-  async getHeroSection(): Promise<schema.Hero | undefined> {
+  async getHeroSection(): Promise<schema.HeroSection | undefined> {
     try {
       // Using a direct query to ensure field mappings are correct
       const result = await query(
@@ -315,14 +404,14 @@ export class DatabaseStorage implements IStorage {
          image_url as "imageUrl", updated_at as "updatedAt"
          FROM hero_section LIMIT 1`
       );
-      return result.rows[0] as schema.Hero | undefined;
+      return result.rows[0] as schema.HeroSection | undefined;
     } catch (error) {
       console.error('Error in getHeroSection:', error);
       return undefined;
     }
   }
 
-  async updateHeroSection(data: Partial<schema.InsertHero>): Promise<schema.Hero> {
+  async updateHeroSection(data: Partial<schema.InsertHeroSection>): Promise<schema.HeroSection> {
     try {
       const existing = await this.getHeroSection();
       

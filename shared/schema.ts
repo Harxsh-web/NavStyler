@@ -2,6 +2,28 @@ import { z } from "zod";
 import { pgTable, serial, text, integer, boolean, timestamp, uniqueIndex, varchar, json } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
+// ----- Landing Section Schema -----
+export const landingSection = pgTable("landing_section", {
+  id: serial("id").primaryKey(),
+  heading: text("heading").notNull(),
+  subheading: text("subheading").notNull(),
+  imageUrl: text("image_url"),
+  newsletterHeading: text("newsletter_heading"),
+  newsletterSubheading: text("newsletter_subheading"),
+  newsletterCta: text("newsletter_cta"),
+  subscribersCount: text("subscribers_count"),
+  reviewsCount: text("reviews_count"),
+  backgroundColor: text("background_color").default('#F9F6F3'),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type LandingSection = typeof landingSection.$inferSelect;
+export const insertLandingSectionSchema = createInsertSchema(landingSection).omit({
+  id: true,
+  updatedAt: true,
+});
+export type InsertLandingSection = z.infer<typeof insertLandingSectionSchema>;
+
 // ----- User Schema -----
 export const users = pgTable(
   "users",
