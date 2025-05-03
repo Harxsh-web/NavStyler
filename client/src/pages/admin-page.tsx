@@ -86,17 +86,7 @@ export default function AdminPage() {
               Dashboard
             </button>
             
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                activeTab === "landing" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
-              }`}
-              onClick={() => {
-                setActiveTab("landing");
-                if (window.innerWidth < 1024) setShowSidebar(false);
-              }}
-            >
-              Landing Section
-            </button>
+            {/* Landing section removed as requested */}
             
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
@@ -235,14 +225,7 @@ export default function AdminPage() {
         
         {/* Content Area */}
         <main className="flex-grow p-6" data-admin-section>
-          {activeTab === "landing" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Landing Section</h1>
-              <div className="mb-6">
-                <LandingEditor data={useLandingSection().data} />
-              </div>
-            </div>
-          )}
+          {/* Landing section editor removed as requested */}
           
           {activeTab === "dashboard" && (
             <div>
@@ -266,13 +249,7 @@ export default function AdminPage() {
               
               {/* Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Landing Section</span>
-                    <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
-                    <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
-                  </div>
-                </div>
+                {/* Landing section stats card removed as requested */}
                 
                 <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
@@ -304,15 +281,7 @@ export default function AdminPage() {
               {/* Quick Actions */}
               <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                <button 
-                  onClick={() => setActiveTab("landing")}
-                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-                >
-                  <div className="text-left">
-                    <h3 className="font-medium">Edit Landing Section</h3>
-                    <p className="text-sm text-gray-500">Update intro and email signup</p>
-                  </div>
-                </button>
+                {/* Landing section quick action removed as requested */}
                 
                 <button 
                   onClick={() => setActiveTab("hero")}
@@ -342,18 +311,7 @@ export default function AdminPage() {
                   <p className="text-lg font-medium">Landing Page Content</p>
                 </div>
                 <div className="divide-y divide-gray-200">
-                  <div className="px-6 py-4 flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium">Landing Section</h3>
-                      <p className="text-sm text-gray-500">Email signup and introduction</p>
-                    </div>
-                    <button 
-                      onClick={() => setActiveTab("landing")}
-                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </div>
+                  {/* Landing section overview removed as requested */}
                 
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
