@@ -111,7 +111,7 @@ export default function Footer() {
                   href={link.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition"
+                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 hover:scale-125 transition"
                 >
                   {getIconComponent(link)}
                 </a>
