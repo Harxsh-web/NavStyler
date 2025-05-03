@@ -3,6 +3,24 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
 /**
+ * Hook for fetching the landing section content for the public page
+ */
+export function usePublicLandingSection() {
+  return useQuery({
+    queryKey: ["/api/content/landing"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/content/landing");
+      if (!response.ok) {
+        return null; // Return null instead of throwing to handle gracefully on the frontend
+      }
+      return await response.json();
+    },
+    // Keep cached data for 5 minutes but always refetch in the background
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for fetching the hero section content for the public page
  */
 export function usePublicHeroSection() {
@@ -239,6 +257,7 @@ export function useRefreshPublicContent() {
     onSuccess: () => {
       // Invalidate all content queries to force a fresh fetch
       queryClient.invalidateQueries({ queryKey: ["/api/content"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/landing"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/hero"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/quote"] });
       queryClient.invalidateQueries({ queryKey: ["/api/content/learning-points"] });

@@ -3,6 +3,7 @@ import { FaAward, FaBook } from "react-icons/fa";
 import { TbHeartHandshake } from "react-icons/tb";
 import { Loader2 } from "lucide-react";
 import { 
+  usePublicLandingSection,
   usePublicHeroSection, 
   usePublicQuoteSection, 
   usePublicAboutBookSection,
@@ -21,9 +22,11 @@ import GuaranteeSection from "@/components/GuaranteeSection";
 import ScholarshipSection from "@/components/ScholarshipSection";
 import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
 import QuestionsSection from "@/components/QuestionsSection";
+import LandingSection from "@/components/LandingSection";
 
 export default function HomePage() {
   // Fetch data from the API
+  const { data: landingData, isLoading: landingLoading } = usePublicLandingSection();
   const { data: heroData, isLoading: heroLoading } = usePublicHeroSection();
   const { data: quoteData, isLoading: quoteLoading } = usePublicQuoteSection();
   const { data: authorData, isLoading: authorLoading } = usePublicAuthorSection();
@@ -37,6 +40,15 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
+        {/* Landing Section */}
+        {landingLoading ? (
+          <div className="flex justify-center items-center py-20 bg-[#F9F6F3]">
+            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+          </div>
+        ) : landingData ? (
+          <LandingSection data={landingData} />
+        ) : null}
+        
         {/* Hero Section */}
         <section className="py-12 md:py-24 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">

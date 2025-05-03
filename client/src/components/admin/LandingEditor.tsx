@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputColor } from "react-colorful";
 import { insertLandingSectionSchema, LandingSection } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import MediaUploader from "@/components/ui/MediaUploader";
+import { MediaUploader } from "@/components/ui/MediaUploader";
 
 interface LandingEditorProps {
   data: LandingSection | undefined;
@@ -148,9 +147,9 @@ export default function LandingEditor({ data }: LandingEditorProps) {
                       <FormControl>
                         <div className="space-y-2">
                           <MediaUploader 
-                            endpoint="image" 
-                            onUploaded={handleImageUploaded} 
-                            currentUrl={field.value} 
+                            value={field.value} 
+                            onChange={handleImageUploaded} 
+                            accept="image/*"
                           />
                           <Input {...field} className="hidden" />
                         </div>
