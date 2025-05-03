@@ -68,7 +68,7 @@ export default function Navbar() {
   // Define the sections for navigation
   const navSections = [
     { id: 'book-section', label: 'My Book' },
-    { id: 'author-section', label: 'About Author' },
+    { id: 'author-section', label: 'About' },
     { id: 'testimonials', label: 'Testimonials' },
     { id: 'bonus-section', label: 'Bonuses' }
   ];
