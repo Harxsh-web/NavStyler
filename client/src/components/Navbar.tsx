@@ -195,7 +195,7 @@ export default function Navbar() {
           
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Menu">
                   <Menu className="h-6 w-6" />
@@ -219,12 +219,9 @@ export default function Navbar() {
                     <button 
                       key={index}
                       onClick={(e) => {
-                        // First close the mobile menu using SheetClose
-                        const closeButton = document.querySelector('[aria-label="Close"]');
-                        if (closeButton instanceof HTMLElement) {
-                          closeButton.click();
-                        }
-                        // Then scroll to section after a short delay
+                        // Close the sheet first
+                        setIsSheetOpen(false);
+                        // Then scroll to section after a delay
                         setTimeout(() => scrollToSection(section.id, e), 300);
                       }}
                       className="w-full text-left font-medium py-2 text-lg text-gray-800 dark:text-gray-200 hover:text-cyan-500 cursor-pointer"
@@ -234,7 +231,7 @@ export default function Navbar() {
                   ))}
                   
                   {/* Newsletter external link */}
-                  <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
+                  <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer" onClick={() => setIsSheetOpen(false)}>
                     <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                       Join 15k+ Subscribers
                     </Button>
