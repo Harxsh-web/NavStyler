@@ -81,7 +81,7 @@ const testimonialSchema = z.object({
   title: z.string().optional(),
   quote: z.string().min(1, "Testimonial quote is required"),
   mediaType: z.enum(['image', 'video']).default('image'),
-  imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  imageUrl: z.string().optional().or(z.literal("")),
   videoUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   showMobile: z.boolean().default(true),
 });
