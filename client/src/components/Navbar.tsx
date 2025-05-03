@@ -143,7 +143,7 @@ export default function Navbar() {
             </TransitionLink>
             
             {/* Resources Dropdown */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="flex items-center font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
                   <span>Free Resources</span>
@@ -199,7 +199,7 @@ export default function Navbar() {
                   </TransitionLink>
                 </div>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
             
             {/* YouTube Academy */}
             <TransitionLink href="/youtube-academy" transitionType="slide-left">

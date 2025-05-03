@@ -70,7 +70,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full"
+                  className="w-full bg-[#f97316] hover:bg-[#ea580c]"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Subscribing..." : data.newsletterCta}
@@ -84,14 +84,27 @@ export default function LandingSection({ data }: LandingSectionProps) {
             </div>
           </div>
           
-          <div className="order-first md:order-last">
-            {data.imageUrl && (
-              <img 
-                src={data.imageUrl}
-                alt="Luke Mikic"
-                className="w-full h-auto rounded-lg shadow-md"
-              />
-            )}
+          <div className="order-first md:order-last flex justify-center">
+            <div className="max-w-[350px] rounded-xl overflow-hidden shadow-lg">
+              <div className="bg-yellow-400 p-5 text-center rounded-t-xl">
+                <p className="text-xs font-medium mb-1">The world's most-followed productivity expert</p>
+                <h3 className="text-2xl md:text-3xl font-bold">Luke Mikic</h3>
+              </div>
+              <div className="grid grid-cols-2">
+                <div className="bg-[#30B8C4] text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                  Feel
+                </div>
+                <div className="bg-red-500 text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                  Good
+                </div>
+              </div>
+              <div className="bg-pink-400 text-white p-5 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                Productivity
+              </div>
+              <div className="bg-green-500 text-white p-4 rounded-b-xl text-center">
+                <p className="font-medium text-sm md:text-base">How to Do More of<br/>What Matters to You</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
