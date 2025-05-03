@@ -282,6 +282,7 @@ export function useFooterLinks() {
       toast({
         title: "Success",
         description: "Footer link updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -307,6 +308,7 @@ export function useFooterLinks() {
       toast({
         title: "Success",
         description: "Footer link deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -360,6 +362,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link created successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -385,6 +388,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -410,6 +414,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -466,6 +471,7 @@ export function useQuoteSection() {
       toast({
         title: "Success",
         description: "Quote section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -524,6 +530,7 @@ export function useTestimonialSection() {
       toast({
         title: "Success",
         description: "Testimonial section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -578,6 +585,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial created successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -606,6 +614,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -634,6 +643,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
