@@ -68,9 +68,19 @@ export default function LandingSection({ data }: LandingSectionProps) {
           </div>
           <div className="space-y-6">
             <div className="relative">
-              <h2 className="text-5xl font-bold">Hey Friends <span className="inline-block ml-2 transform rotate-12">👋</span></h2>
-              <div className="absolute bottom-0 left-0 w-56 h-1 bg-[#47c1e1]"></div>
+              <h2
+                className="text-5xl font-bold inline-flex whitespace-nowrap items-center"
+              >
+                <span
+                  className="underline underline-offset-8"
+                  style={{ textDecorationColor: '#47c1e1' }}
+                >
+                  Hey Friends
+                </span>
+                <span className="ml-2 transform rotate-12">👋</span>
+              </h2>
             </div>
+
             <p className="text-xl">
               I'm Luke. I'm a Doctor turned Entrepreneur, YouTuber, and the author of the New York Times bestseller, <span className="font-bold">Feel-Good Productivity</span>.
             </p>

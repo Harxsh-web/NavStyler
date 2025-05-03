@@ -179,10 +179,10 @@ export default function Footer() {
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200">
-          <div className="mb-4 md:mb-0 flex items-center">
+          {/* <div className="mb-4 md:mb-0 flex items-center">
             <img src="https://assets-global.website-files.com/60bec8a24b1b0aa818759fa7/60bec9d71b7ad0e33af8e77a_rockbase.svg" alt="Rockbase" className="h-5 mr-2" />
             <span className="text-gray-500 text-sm">Powered by Rockbase</span>
-          </div>
+          </div> */}
           
           <div className="flex space-x-4">
             <a href="#" className="text-gray-500 text-sm hover:text-gray-700 transition">Privacy Policy</a>

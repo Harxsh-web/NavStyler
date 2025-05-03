@@ -3,6 +3,8 @@ import { storage } from "./storage";
 import { isAdmin } from "./auth";
 import * as schema from "@shared/schema";
 import { z } from "zod";
+import fs from 'fs';
+import path from 'path';
 
 // Extend Express Request interface
 declare global {
@@ -72,8 +74,6 @@ adminRouter.put("/hero", validateRequest(schema.insertHeroSectionSchema.partial(
     
     // Validate image URL if provided
     if (heroData.imageUrl && heroData.imageUrl.startsWith('/uploads/')) {
-      const fs = require('fs');
-      const path = require('path');
       const filePath = path.join(process.cwd(), 'public', heroData.imageUrl.substring(1));
       
       console.log('Verifying file exists at path:', filePath);
