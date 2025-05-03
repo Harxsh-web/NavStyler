@@ -38,25 +38,32 @@ const upload = multer({
       return cb(null, true);
     }
     
-    cb(new Error('Invalid file type. Only images and videos are allowed.'));
+    cb(new Error('Invalid file type. Only JPG, PNG, GIF, WebP images or MP4, WebM, MOV videos are allowed.'));
   }
 });
 
 export const uploadRouter = express.Router();
 
 // Define route for file uploads
-uploadRouter.post('/file', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' });
-  }
-  
-  const filePath = `/uploads/${req.file.filename}`;
-  
-  return res.status(200).json({
-    url: filePath,
-    filename: req.file.filename,
-    originalname: req.file.originalname,
-    mimetype: req.file.mimetype,
-    size: req.file.size
+uploadRouter.post('/file', (req, res) => {
+  upload.single('file')(req, res, (err) => {
+    if (err) {
+      console.error('Upload error:', err.message);
+      return res.status(400).json({ error: err.message });
+    }
+    
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const filePath = `/uploads/${req.file.filename}`;
+    
+    return res.status(200).json({
+      url: filePath,
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size
+    });
   });
 });
