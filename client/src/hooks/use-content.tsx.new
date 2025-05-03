@@ -34,7 +34,6 @@ export function useRefreshAdminContent() {
       toast({
         title: "Content refreshed",
         description: "All content has been refreshed from the database.",
-        variant: "success",
       });
     },
     onError: (error) => {
@@ -98,6 +97,7 @@ export function useSiteSettings() {
       toast({
         title: "Success",
         description: "Site setting updated successfully",
+        variant: "success",
         variant: "success",
       });
     },
@@ -282,6 +282,7 @@ export function useFooterLinks() {
       toast({
         title: "Success",
         description: "Footer link updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -307,6 +308,7 @@ export function useFooterLinks() {
       toast({
         title: "Success",
         description: "Footer link deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -360,6 +362,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link created successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -385,6 +388,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -410,6 +414,7 @@ export function useSocialLinks() {
       toast({
         title: "Success",
         description: "Social link deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -466,6 +471,7 @@ export function useQuoteSection() {
       toast({
         title: "Success",
         description: "Quote section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -524,6 +530,7 @@ export function useTestimonialSection() {
       toast({
         title: "Success",
         description: "Testimonial section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -578,6 +585,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial created successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -606,6 +614,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -634,6 +643,7 @@ export function useTestimonials() {
       toast({
         title: "Success",
         description: "Testimonial deleted successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -690,6 +700,7 @@ export function useAuthorSection() {
       toast({
         title: "Success",
         description: "Author section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -744,6 +755,7 @@ export function useYoutubeFrameworkSection() {
       toast({
         title: "Success",
         description: "YouTube Framework section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -798,6 +810,7 @@ export function useScholarshipSection() {
       toast({
         title: "Success",
         description: "Scholarship section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -869,6 +882,7 @@ export function useLandingSection() {
       toast({
         title: "Success",
         description: "Landing section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -925,6 +939,7 @@ export function useHeroSection() {
       toast({
         title: "Success",
         description: "Hero section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
