@@ -30,7 +30,7 @@ export default function LandingEditor({ data }: LandingEditorProps) {
       imageUrl: data?.imageUrl || "",
       newsletterHeading: data?.newsletterHeading || "",
       newsletterSubheading: data?.newsletterSubheading || "",
-      newsletterCta: data?.newsletterCta || "",
+      newsletterCta: data?.newsletterCta || "Subscribe",
       subscribersCount: data?.subscribersCount || "",
       reviewsCount: data?.reviewsCount || "",
       backgroundColor: data?.backgroundColor || "#F9F6F3",
@@ -39,6 +39,7 @@ export default function LandingEditor({ data }: LandingEditorProps) {
 
   const updateMutation = useMutation({
     mutationFn: async (values: Partial<LandingSection>) => {
+      console.log("Submitting values:", values);
       const response = await apiRequest("PUT", "/api/admin/landing", values);
       return response.json();
     },
@@ -143,7 +144,7 @@ export default function LandingEditor({ data }: LandingEditorProps) {
                   name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image</FormLabel>
+                      <FormLabel>Author Image</FormLabel>
                       <FormControl>
                         <div className="space-y-2">
                           <MediaUploader 
@@ -154,6 +155,9 @@ export default function LandingEditor({ data }: LandingEditorProps) {
                           <Input {...field} className="hidden" />
                         </div>
                       </FormControl>
+                      <FormDescription>
+                        This is the circular image that appears in the "Hey Friends" section
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -168,7 +172,7 @@ export default function LandingEditor({ data }: LandingEditorProps) {
                     <FormItem>
                       <FormLabel>Newsletter Heading</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter newsletter heading" {...field} />
+                        <Input placeholder="Subscribe to LifeNotes" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -182,7 +186,11 @@ export default function LandingEditor({ data }: LandingEditorProps) {
                     <FormItem>
                       <FormLabel>Newsletter Subheading</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter newsletter subheading" {...field} rows={3} />
+                        <Textarea 
+                          placeholder="Each week, I share actionable productivity tips..." 
+                          {...field} 
+                          rows={3} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
