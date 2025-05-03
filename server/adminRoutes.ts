@@ -36,6 +36,25 @@ const validateRequest = (schema: z.ZodType<any, any>) => {
   };
 };
 
+// Landing Section
+adminRouter.get("/landing", async (req, res, next) => {
+  try {
+    const landing = await storage.getLandingSection();
+    res.json(landing || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put("/landing", validateRequest(schema.insertLandingSectionSchema.partial()), async (req, res, next) => {
+  try {
+    const updated = await storage.updateLandingSection(req.validatedBody);
+    res.json(updated);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Hero Section
 adminRouter.get("/hero", async (req, res, next) => {
   try {

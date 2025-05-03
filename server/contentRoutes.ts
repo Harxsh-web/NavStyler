@@ -7,6 +7,7 @@ export const contentRouter = Router();
 contentRouter.get("/content", async (req, res, next) => {
   try {
     const [
+      landing,
       hero,
       featured,
       quote,
@@ -27,6 +28,7 @@ contentRouter.get("/content", async (req, res, next) => {
       scholarshipSection,
       youtubeFrameworkSection
     ] = await Promise.all([
+      storage.getLandingSection(),
       storage.getHeroSection(),
       storage.getFeaturedSection(),
       storage.getQuoteSection(),
@@ -67,6 +69,7 @@ contentRouter.get("/content", async (req, res, next) => {
     }, {} as Record<string, string>);
 
     res.json({
+      landing,
       hero,
       featured,
       quote,
@@ -95,6 +98,15 @@ contentRouter.get("/content", async (req, res, next) => {
 });
 
 // Individual content endpoints
+contentRouter.get("/landing", async (req, res, next) => {
+  try {
+    const landing = await storage.getLandingSection();
+    res.json(landing || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
 contentRouter.get("/hero", async (req, res, next) => {
   try {
     const hero = await storage.getHeroSection();
