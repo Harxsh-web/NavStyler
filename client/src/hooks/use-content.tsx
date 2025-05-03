@@ -817,23 +817,42 @@ export function useScholarshipSection() {
 export function useLandingSection() {
   const { toast } = useToast();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["/api/admin/landing"],
     queryFn: async () => {
-      const response = await apiRequest("GET", "/api/admin/landing");
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch landing section");
+      try {
+        const response = await apiRequest("GET", "/api/admin/landing");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Failed to fetch landing section:", errorData);
+          throw new Error(errorData.error || "Failed to fetch landing section");
+        }
+        const data = await response.json();
+        console.log("Landing section data loaded successfully:", data);
+        return data;
+      } catch (error) {
+        console.error("Error in useLandingSection hook:", error);
+        throw error; // Re-throw to let React Query handle it
       }
-      return await response.json();
+    },
+    // Don't keep trying on 401/403 errors
+    retry: (failureCount, error: any) => {
+      // If API returns 401/403, stop retrying
+      if (error.status === 401 || error.status === 403) {
+        return false;
+      }
+      // Otherwise retry a few times
+      return failureCount < 3;
     }
   });
 
   const updateMutation = useMutation({
     mutationFn: async (values: any) => {
+      console.log("Updating landing section with values:", values);
       const res = await apiRequest("PUT", "/api/admin/landing", values);
       if (!res.ok) {
         const errorData = await res.json();
+        console.error("Failed to update landing section:", errorData);
         throw new Error(errorData.error || "Failed to update landing section");
       }
       return await res.json();
@@ -847,6 +866,7 @@ export function useLandingSection() {
       });
     },
     onError: (error: Error) => {
+      console.error("Error in landing section update mutation:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to update landing section",
@@ -859,6 +879,7 @@ export function useLandingSection() {
     data,
     isLoading,
     error,
+    refetch,
     updateMutation
   };
 }
