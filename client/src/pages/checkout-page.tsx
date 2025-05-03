@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, CheckCircle, CreditCard, HelpCircle, Info, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, CreditCard, HelpCircle, Info, Loader2, AlertCircle } from 'lucide-react';
 import { useLocation } from 'wouter';
 
 // Check for the Stripe public key
@@ -99,10 +99,30 @@ const CheckoutForm = () => {
     setLoading(true);
     setError(null);
 
+    // We use the retrieve method to get the payment intent's client_secret
+    const paymentResponse = await stripe.retrievePaymentIntent(clientSecret!);
+    if (paymentResponse.error) {
+      setError(paymentResponse.error.message || 'Payment failed. Please try again.');
+      setLoading(false);
+      toast({
+        title: "Payment Failed",
+        description: paymentResponse.error.message || "An error occurred during payment processing",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    const paymentIntentId = paymentResponse.paymentIntent?.id;
+    if (!paymentIntentId) {
+      setError('Payment failed. No payment intent found.');
+      setLoading(false);
+      return;
+    }
+    
     const { error: submitError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/checkout/success`,
+        return_url: `${window.location.origin}/checkout/success?payment_intent_id=${paymentIntentId}`,
         receipt_email: billingDetails.email,
         payment_method_data: {
           billing_details: {
@@ -118,7 +138,6 @@ const CheckoutForm = () => {
           }
         }
       },
-      redirect: 'if_required',
     });
 
     if (submitError) {
@@ -130,13 +149,13 @@ const CheckoutForm = () => {
         variant: "destructive",
       });
     } else {
-      // If no redirect happened, payment succeeded
+      // This code may not execute as Stripe will redirect the user to the return_url
       try {
         // Record the successful payment and add to subscribers
         await apiRequest('POST', '/api/payment-success', {
           email: billingDetails.email,
           name: `${billingDetails.firstName} ${billingDetails.lastName}`,
-          paymentIntentId: 'pi_success', // This would normally come from the payment
+          paymentIntentId: paymentIntentId,
         });
         
         setLocation('/checkout/success');
@@ -365,20 +384,103 @@ export default function CheckoutPage() {
   }, []);
   
   // Handle success page display
-  if (location === '/checkout/success') {
+  if (location.startsWith('/checkout/success')) {
+    const [paymentSuccessStatus, setPaymentSuccessStatus] = useState<'processing' | 'success' | 'error'>('processing');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    
+    useEffect(() => {
+      const processSuccessfulPayment = async () => {
+        try {
+          // Extract payment_intent_id from URL if it exists
+          const urlParams = new URLSearchParams(window.location.search);
+          const paymentIntentId = urlParams.get('payment_intent_id');
+          
+          if (!paymentIntentId) {
+            setPaymentSuccessStatus('error');
+            setErrorMessage('No payment information found.');
+            return;
+          }
+          
+          // Get the stored billing details from localStorage if available
+          const storedBillingDetails = localStorage.getItem('billingDetails');
+          let billingInfo = {};
+          
+          if (storedBillingDetails) {
+            try {
+              billingInfo = JSON.parse(storedBillingDetails);
+            } catch (e) {
+              console.error('Error parsing billing details', e);
+            }
+          }
+          
+          // Record the successful payment on our backend
+          const response = await apiRequest('POST', '/api/payment-success', {
+            paymentIntentId,
+            email: billingInfo.email || '',
+            name: billingInfo.firstName && billingInfo.lastName 
+              ? `${billingInfo.firstName} ${billingInfo.lastName}`
+              : ''
+          });
+          
+          if (response.ok) {
+            setPaymentSuccessStatus('success');
+            // Clear the stored billing details
+            localStorage.removeItem('billingDetails');
+          } else {
+            // Payment was processed but we couldn't record it
+            setPaymentSuccessStatus('success');
+            console.error('Could not record successful payment on backend', await response.text());
+          }
+        } catch (err) {
+          console.error('Error processing successful payment:', err);
+          setPaymentSuccessStatus('error');
+          setErrorMessage('There was an error processing your payment confirmation.');
+        }
+      };
+      
+      processSuccessfulPayment();
+    }, []);
+    
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
         <div className="max-w-md w-full mx-auto p-8 rounded-xl bg-white shadow-md text-center">
-          <div className="mb-6">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
-          </div>
-          <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
-          <p className="text-gray-600 mb-6">
-            Thank you for your purchase! We've sent a confirmation email with details on how to access your book.
-          </p>
-          <Button onClick={() => window.location.href = '/'} className="w-full">
-            Return to Home
-          </Button>
+          {paymentSuccessStatus === 'processing' ? (
+            <>
+              <div className="mb-6">
+                <Loader2 className="h-16 w-16 text-primary animate-spin mx-auto" />
+              </div>
+              <h1 className="text-2xl font-bold mb-4">Processing Your Payment</h1>
+              <p className="text-gray-600 mb-6">
+                Please wait while we confirm your payment...
+              </p>
+            </>
+          ) : paymentSuccessStatus === 'error' ? (
+            <>
+              <div className="mb-6">
+                <AlertCircle className="h-16 w-16 text-red-500 mx-auto" />
+              </div>
+              <h1 className="text-2xl font-bold mb-4">Oops, Something Went Wrong</h1>
+              <p className="text-gray-600 mb-6">
+                {errorMessage || 'There was an issue confirming your payment. Please contact support.'}
+              </p>
+              <Button onClick={() => window.location.href = '/'} className="w-full">
+                Return to Home
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="mb-6">
+                <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+              </div>
+              <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
+              <p className="text-gray-600 mb-6">
+                Thank you for your purchase! We've sent a confirmation email with details on how to access your book.
+              </p>
+              <Button onClick={() => window.location.href = '/'} className="w-full">
+                Return to Home
+              </Button>
+            </>
+          )}
         </div>
       </div>
     );

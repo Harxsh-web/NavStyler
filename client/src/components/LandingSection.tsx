@@ -60,7 +60,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
             <div className="absolute inset-0 bg-yellow-300 rounded-full transform -translate-x-4 translate-y-4"></div>
             <div className="relative z-10">
               <img 
-                src={data.imageUrl || "/images/authors/luke_mikic.png"}
+                src={ "https://aliabdaal.com/wp-content/uploads/2024/09/hero-ali.png"}
                 alt="Luke Mikic"
                 className="rounded-full w-full max-w-md"
               />
