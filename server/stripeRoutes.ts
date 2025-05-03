@@ -21,17 +21,26 @@ stripeRouter.post('/create-payment-intent', async (req, res) => {
       return res.status(400).json({ error: 'Valid amount is required' });
     }
     
+    // Create a timestamp and unique identifier for the purchase
+    const timestamp = new Date().toISOString();
+    const purchaseId = `book_purchase_${Date.now()}`;
+    
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency: "usd",
       metadata: {
         productType: 'book',
-        bookTitle: 'Feel-Good Productivity'
-      }
+        bookTitle: 'Feel-Good Productivity',
+        purchaseId: purchaseId,
+        timestamp: timestamp,
+        platform: 'website'
+      },
+      description: 'Feel-Good Productivity Book Purchase'
     });
     
     res.json({ 
-      clientSecret: paymentIntent.client_secret 
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id
     });
   } catch (error: any) {
     console.error('Error creating payment intent:', error);
@@ -47,21 +56,46 @@ stripeRouter.post('/payment-success', async (req, res) => {
   try {
     const { paymentIntentId, email, name } = req.body;
     
-    if (!paymentIntentId || !email) {
-      return res.status(400).json({ error: 'Payment intent ID and email are required' });
+    if (!paymentIntentId) {
+      return res.status(400).json({ error: 'Payment intent ID is required' });
     }
     
-    // Verify payment intent was successful
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    
-    if (paymentIntent.status !== 'succeeded') {
-      return res.status(400).json({ error: 'Payment has not been completed' });
+    // Verify payment intent exists and check its status
+    let paymentIntent;
+    try {
+      paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    } catch (stripeError: any) {
+      console.error('Error retrieving payment intent:', stripeError);
+      return res.status(400).json({ 
+        error: 'Invalid payment intent ID', 
+        message: stripeError.message 
+      });
     }
     
-    // Add customer to subscribers with 'customer' source
-    await storage.addSubscriber(email, name || null, 'customer');
+    // Check payment status
+    if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
+      return res.status(400).json({ 
+        error: 'Payment has not been completed', 
+        status: paymentIntent.status 
+      });
+    }
     
-    res.json({ success: true });
+    // If we have an email, add the customer to subscribers with 'customer' source
+    if (email) {
+      try {
+        await storage.addSubscriber(email, name || null, 'customer');
+      } catch (subscriberError: any) {
+        console.error('Error adding subscriber:', subscriberError);
+        // Don't fail the request if we couldn't add the subscriber
+        // We still want to acknowledge the payment success
+      }
+    }
+    
+    res.json({ 
+      success: true, 
+      paymentStatus: paymentIntent.status,
+      message: 'Payment processed successfully'
+    });
   } catch (error: any) {
     console.error('Error processing successful payment:', error);
     res.status(500).json({ 

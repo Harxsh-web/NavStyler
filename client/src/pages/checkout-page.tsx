@@ -40,7 +40,7 @@ interface BillingDetails {
   state: string;
 }
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [billingDetails, setBillingDetails] = useState<BillingDetails>({
@@ -99,30 +99,20 @@ const CheckoutForm = () => {
     setLoading(true);
     setError(null);
 
-    // We use the retrieve method to get the payment intent's client_secret
-    const paymentResponse = await stripe.retrievePaymentIntent(clientSecret!);
-    if (paymentResponse.error) {
-      setError(paymentResponse.error.message || 'Payment failed. Please try again.');
-      setLoading(false);
-      toast({
-        title: "Payment Failed",
-        description: paymentResponse.error.message || "An error occurred during payment processing",
-        variant: "destructive",
-      });
-      return;
+    // Store billing details for the success page
+    try {
+      localStorage.setItem('billingDetails', JSON.stringify(billingDetails));
+    } catch (e) {
+      console.error('Error storing billing details', e);
     }
     
-    const paymentIntentId = paymentResponse.paymentIntent?.id;
-    if (!paymentIntentId) {
-      setError('Payment failed. No payment intent found.');
-      setLoading(false);
-      return;
-    }
+    // Get payment intent ID from the client secret
+    const intentId = clientSecret.split('_secret_')[0];
     
     const { error: submitError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/checkout/success?payment_intent_id=${paymentIntentId}`,
+        return_url: `${window.location.origin}/checkout/success?payment_intent_id=${intentId}`,
         receipt_email: billingDetails.email,
         payment_method_data: {
           billing_details: {
@@ -155,7 +145,7 @@ const CheckoutForm = () => {
         await apiRequest('POST', '/api/payment-success', {
           email: billingDetails.email,
           name: `${billingDetails.firstName} ${billingDetails.lastName}`,
-          paymentIntentId: paymentIntentId,
+          paymentIntentId: intentId,
         });
         
         setLocation('/checkout/success');
@@ -393,7 +383,15 @@ export default function CheckoutPage() {
         try {
           // Extract payment_intent_id from URL if it exists
           const urlParams = new URLSearchParams(window.location.search);
-          const paymentIntentId = urlParams.get('payment_intent_id');
+          
+          // Check for both possible parameter names Stripe might use
+          let paymentIntentId = urlParams.get('payment_intent_id') || urlParams.get('payment_intent');
+          
+          if (!paymentIntentId) {
+            // Try to extract from the URL fragment (Stripe sometimes adds as #payment_intent=pi_...)
+            const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+            paymentIntentId = hashParams.get('payment_intent');
+          }
           
           if (!paymentIntentId) {
             setPaymentSuccessStatus('error');
@@ -403,11 +401,14 @@ export default function CheckoutPage() {
           
           // Get the stored billing details from localStorage if available
           const storedBillingDetails = localStorage.getItem('billingDetails');
-          let billingInfo = {};
+          let billingInfo: BillingDetails | Record<string, never> = {};
           
           if (storedBillingDetails) {
             try {
-              billingInfo = JSON.parse(storedBillingDetails);
+              const parsedDetails = JSON.parse(storedBillingDetails);
+              if (typeof parsedDetails === 'object' && parsedDetails !== null) {
+                billingInfo = parsedDetails as BillingDetails;
+              }
             } catch (e) {
               console.error('Error parsing billing details', e);
             }
@@ -416,8 +417,8 @@ export default function CheckoutPage() {
           // Record the successful payment on our backend
           const response = await apiRequest('POST', '/api/payment-success', {
             paymentIntentId,
-            email: billingInfo.email || '',
-            name: billingInfo.firstName && billingInfo.lastName 
+            email: 'email' in billingInfo ? billingInfo.email : '',
+            name: 'firstName' in billingInfo && 'lastName' in billingInfo 
               ? `${billingInfo.firstName} ${billingInfo.lastName}`
               : ''
           });
@@ -522,7 +523,7 @@ export default function CheckoutPage() {
                 },
               }}
             >
-              <CheckoutForm />
+              <CheckoutForm clientSecret={clientSecret} />
             </Elements>
           ) : (
             <div className="text-center py-20 bg-white rounded-lg shadow-sm border border-gray-200">
