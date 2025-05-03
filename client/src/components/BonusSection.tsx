@@ -14,6 +14,7 @@ const BonusSection: React.FC<BonusSectionProps> = ({ bonusSection, bonusItems = 
 
   return (
     <section 
+      id="bonus-section"
       className="py-16 px-4 sm:px-6 lg:px-8" 
       style={{ backgroundColor: bonusSection.backgroundColor || '#E6F1FE' }}
     >
