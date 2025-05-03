@@ -63,9 +63,10 @@ export function MediaUploader({
         variant: "default"
       });
     } catch (error) {
+      console.error("Upload error:", error);
       toast({
         title: "Upload failed",
-        description: error instanceof Error ? error.message : "Something went wrong.",
+        description: error instanceof Error ? error.message : "Something went wrong. Make sure you're uploading an image in jpg, png, gif or webp format.",
         variant: "destructive",
       });
     } finally {
