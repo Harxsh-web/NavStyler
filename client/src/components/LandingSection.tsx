@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useLocation } from 'wouter';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { ShoppingCart } from 'lucide-react';
 import { LandingSection as LandingSectionType } from "@shared/schema";
 
 interface LandingSectionProps {
@@ -12,6 +14,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
   const [email, setEmail] = useState('');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, navigate] = useLocation();
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +77,26 @@ export default function LandingSection({ data }: LandingSectionProps) {
             <div className="flex items-center">
               <div className="h-10 w-1 bg-orange-400 mr-4"></div>
               <p className="text-lg">{data.subheading}</p>
+            </div>
+            
+            <div className="flex space-x-4 mt-2">
+              <Button
+                size="lg"
+                className="bg-[#F9966B] hover:bg-[#f8845a] text-white rounded-full px-8"
+                onClick={() => navigate('/checkout')}
+              >
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                Buy the Book
+              </Button>
+              
+              <Button
+                size="lg"
+                variant="outline"
+                className="rounded-full px-8"
+                onClick={() => window.open('https://www.youtube.com/c/LukeMikic', '_blank')}
+              >
+                Join YouTube 
+              </Button>
             </div>
           </div>
         </div>

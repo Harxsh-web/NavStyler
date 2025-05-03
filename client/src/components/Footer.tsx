@@ -5,11 +5,13 @@ import {
   FaYoutube, 
   FaTiktok, 
   FaTwitter,
-  FaSpotify
+  FaSpotify,
+  FaShoppingCart
 } from "react-icons/fa";
 import { SiRumble } from "react-icons/si";
 import { SiApplepodcasts } from "react-icons/si";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { SocialLink } from "@shared/schema";
 
 export default function Footer() {
@@ -164,7 +166,12 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-gray-800 mb-4">Products</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">My Book</a></li>
+              <li>
+                <Link to="/checkout" className="text-gray-600 hover:text-gray-900 transition flex items-center">
+                  <FaShoppingCart className="mr-1 h-3 w-3" />
+                  <span className="font-medium text-[#F9966B]">Buy Feel-Good Productivity Book</span>
+                </Link>
+              </li>
               <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">YouTuber Academy</a></li>
               <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">LifeOS</a></li>
             </ul>
