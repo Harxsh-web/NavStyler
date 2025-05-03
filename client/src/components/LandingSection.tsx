@@ -115,22 +115,24 @@ export default function LandingSection({ data }: LandingSectionProps) {
                   {data.newsletterSubheading}
                 </p>
                 
-                <form onSubmit={handleSubscribe} className="space-y-4">
-                  <Input 
-                    type="email" 
-                    placeholder="Your email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border-gray-300 rounded-md"
-                    required
-                  />
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-[#47c1e1] hover:bg-[#38a3c3] text-white rounded-md px-6 py-3"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Subscribing..." : data.newsletterCta}
-                  </Button>
+                <form onSubmit={handleSubscribe} className="mt-2">
+                  <div className="flex h-[60px] rounded-full overflow-hidden bg-gray-100">
+                    <Input 
+                      type="email" 
+                      placeholder="Your email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      required
+                    />
+                    <Button 
+                      type="submit" 
+                      className="rounded-full bg-[#47c1e1] hover:bg-[#38a3c3] text-white px-8 h-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Subscribing..." : data.newsletterCta}
+                    </Button>
+                  </div>
                 </form>
                 
                 <p className="text-xs text-gray-500">
