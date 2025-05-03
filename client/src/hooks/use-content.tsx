@@ -97,6 +97,7 @@ export function useSiteSettings() {
       toast({
         title: "Success",
         description: "Site setting updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
