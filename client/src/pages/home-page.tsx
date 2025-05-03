@@ -50,7 +50,7 @@ export default function HomePage() {
         ) : null}
         
         {/* Hero Section */}
-        <section className="py-12 md:py-24 bg-white">
+        <section id="book-section" className="py-12 md:py-24 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">
             {heroLoading ? (
               <div className="flex justify-center items-center py-20">
@@ -79,7 +79,7 @@ export default function HomePage() {
                   
                   <div className="flex items-center gap-4">
                     <a
-                      href={heroData?.buttonUrl || "#buy"} 
+                      href={heroData?.buttonUrl || "/checkout"} 
                       className="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-200"
                     >
                       {heroData?.buttonText || "Get the Book"}
@@ -136,7 +136,7 @@ export default function HomePage() {
         </section>
 
         {/* Author Section */}
-        <section className="py-16 bg-gray-50">
+        <section id="author-section" className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-10">
               <TbHeartHandshake className="text-cyan-500 text-4xl mx-auto mb-4" />

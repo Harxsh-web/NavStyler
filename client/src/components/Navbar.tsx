@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { ChevronDown, X, Menu } from 'lucide-react';
 import { TransitionLink } from './TransitionLink';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -22,6 +22,33 @@ import { BsLightningCharge, BsYoutube, BsBook, BsLaptop, BsTools } from 'react-i
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [location] = useLocation();
+  
+  // Smooth scroll to section helper function
+  const scrollToSection = (sectionId: string, event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    
+    // Only scroll if we're on the homepage
+    if (location !== '/') {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Calculate header height to offset scroll position
+      const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
   
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +64,14 @@ export default function Navbar() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  
+  // Define the sections for navigation
+  const navSections = [
+    { id: 'book-section', label: 'My Book' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'author-section', label: 'About Author' },
+    { id: 'bonus-section', label: 'Bonuses' }
+  ];
   
   // These are used for the Free Resources dropdown content in both desktop and mobile views
   const resourcesByType = [
@@ -135,87 +170,18 @@ export default function Navbar() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {/* Book Link */}
-            <TransitionLink href="/my-book" transitionType="slide-left">
-              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
-                My Book
-              </div>
-            </TransitionLink>
+            {/* Section links - uses smooth scroll on home page */}
+            {navSections.map((section, index) => (
+              <button 
+                key={index}
+                onClick={(e) => scrollToSection(section.id, e)}
+                className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer"
+              >
+                {section.label}
+              </button>
+            ))}
             
-            {/* Resources Dropdown */}
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex items-center font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
-                  <span>Free Resources</span>
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-[350px] p-4">
-                <DropdownMenuLabel className="text-center text-lg font-medium mb-3">
-                  Free Resources
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-3">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
-                    <div className="space-y-3">
-                      {resourcesByType.map((resource, index) => (
-                        <TransitionLink key={`type-${index}`} href={resource.href} transitionType="slide-left">
-                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer">
-                            <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                              {resource.icon}
-                            </span>
-                            <span>{resource.label}</span>
-                          </div>
-                        </TransitionLink>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by topic:</h3>
-                    <div className="space-y-3">
-                      {resourcesByTopic.map((resource, index) => (
-                        <TransitionLink key={`topic-${index}`} href={resource.href} transitionType="slide-left">
-                          <div className="flex items-center text-gray-700 hover:text-black cursor-pointer">
-                            <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                              {resource.icon}
-                            </span>
-                            <span>{resource.label}</span>
-                          </div>
-                        </TransitionLink>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-4 border-t border-gray-100 pt-3 text-center">
-                  <TransitionLink href="/all-categories" transitionType="slide-up">
-                    <div className="flex items-center justify-center text-gray-700 hover:text-black cursor-pointer">
-                      <span className="font-medium">all categories</span>
-                      <span className="ml-1">→</span>
-                    </div>
-                  </TransitionLink>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu> */}
-            
-            {/* YouTube Academy */}
-            <TransitionLink href="/youtube-academy" transitionType="slide-left">
-              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
-                YouTube Academy
-              </div>
-            </TransitionLink>
-            
-            {/* LifeOS */}
-            <TransitionLink href="/lifeos" transitionType="slide-up">
-              <div className="font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer">
-                LifeOS System
-              </div>
-            </TransitionLink>
-            
-            {/* Newsletter */}
+            {/* Newsletter - This is kept as an external link as per requirements */}
             <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
               <Button className="rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                 Join 15k+ Subscribers
@@ -247,74 +213,26 @@ export default function Navbar() {
                 </SheetHeader>
                 
                 <div className="mt-8 space-y-6">
-                  <TransitionLink href="/my-book" transitionType="slide-left">
-                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                      My Book
-                    </div>
-                  </TransitionLink>
-                  
-                  <div>
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start p-2 font-medium text-lg text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" 
-                      onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
+                  {/* Section links with smooth scrolling */}
+                  {navSections.map((section, index) => (
+                    <button 
+                      key={index}
+                      onClick={(e) => {
+                        // First close the mobile menu
+                        const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]');
+                        if (closeButton instanceof HTMLElement) {
+                          closeButton.click();
+                        }
+                        // Then scroll to section with a slight delay
+                        setTimeout(() => scrollToSection(section.id, e), 300);
+                      }}
+                      className="w-full text-left font-medium py-2 text-lg text-gray-800 dark:text-gray-200 hover:text-cyan-500 cursor-pointer"
                     >
-                      <span>Free Resources</span>
-                      <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
-                    </Button>
-                    
-                    {mobileResourcesOpen && (
-                      <div className="mt-2 pl-2">
-                        <h3 className="text-sm font-semibold text-gray-500 mb-3">Browse by type:</h3>
-                        <div className="space-y-3">
-                          {resourcesByType.map((resource, index) => (
-                            <TransitionLink key={`mobile-type-${index}`} href={resource.href} transitionType="slide-left">
-                              <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
-                                <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                                  {resource.icon}
-                                </span>
-                                <span>{resource.label}</span>
-                              </div>
-                            </TransitionLink>
-                          ))}
-                        </div>
-                        
-                        <h3 className="text-sm font-semibold text-gray-500 mb-3 mt-6">Browse by topic:</h3>
-                        <div className="space-y-3">
-                          {resourcesByTopic.map((resource, index) => (
-                            <TransitionLink key={`mobile-topic-${index}`} href={resource.href} transitionType="slide-left">
-                              <div className="flex items-center text-gray-700 hover:text-black cursor-pointer py-1">
-                                <span className={`${resource.bgColor} p-1.5 rounded mr-2 ${resource.textColor}`}>
-                                  {resource.icon}
-                                </span>
-                                <span>{resource.label}</span>
-                              </div>
-                            </TransitionLink>
-                          ))}
-                        </div>
-                        
-                        <TransitionLink href="/all-categories" transitionType="slide-up">
-                          <div className="flex items-center text-gray-700 hover:text-black mt-3 cursor-pointer">
-                            <span className="font-medium">all categories</span>
-                            <span className="ml-1">→</span>
-                          </div>
-                        </TransitionLink>
-                      </div>
-                    )}
-                  </div>
+                      {section.label}
+                    </button>
+                  ))}
                   
-                  <TransitionLink href="/youtube-academy" transitionType="slide-left">
-                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                      YouTube Academy
-                    </div>
-                  </TransitionLink>
-                  
-                  <TransitionLink href="/lifeos" transitionType="slide-up">
-                    <div className="text-gray-800 dark:text-gray-200 font-medium py-2 text-lg cursor-pointer">
-                      LifeOS Productivity System
-                    </div>
-                  </TransitionLink>
-                  
+                  {/* Newsletter external link */}
                   <a href="https://youtube.com/@lukemikic21?si=9MqveJLGr8HNhApV" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full rounded-full bg-cyan-400 hover:bg-cyan-500 text-white">
                       Join 15k+ Subscribers
