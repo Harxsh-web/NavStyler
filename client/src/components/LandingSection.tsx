@@ -83,35 +83,37 @@ export default function LandingSection({ data }: LandingSectionProps) {
           <div className="p-8 md:p-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Left side - Subscription info */}
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <h2 className="text-4xl font-bold">Subscribe to <br />LifeNotes</h2>
-                  <img src="/images/pen.svg" alt="Pen" className="h-16 ml-2" />
+              <div className="space-y-4 ">
+                <div className="flex justify-center items-center">
+                  <h2 className="text-6xl font-semi-bold ">Subscribe to <br /><span className='font-bold'>LifeNotes</span> </h2>
+                  <img src="https://cdn-icons-png.flaticon.com/128/16273/16273684.png" alt="Pen" className="h-16 ml-2" />
                 </div>
                 
+                
+                <div className="flex items-center justify-center flex-col">
                 <p className="font-medium">
                   Join a growing community of more than<br />
                   <span className="font-bold">{data.subscribersCount}</span>
                 </p>
-                
-                <div className="flex items-center">
+                <div className='flex '>
                   <div className="flex -space-x-2 mr-4">
-                    <img src="/images/avatar1.png" alt="Avatar" className="h-8 w-8 rounded-full border-2 border-white" />
-                    <img src="/images/avatar2.png" alt="Avatar" className="h-8 w-8 rounded-full border-2 border-white" />
-                    <img src="/images/avatar3.png" alt="Avatar" className="h-8 w-8 rounded-full border-2 border-white" />
+                    <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-20 w-full rounded-full border-2 border-white" />
+
                   </div>
                   <div>
-                    <div className="flex text-yellow-400">
+                    <div className="flex text-yellow-400 size-md">
                       ★★★★★
                     </div>
-                    <p className="text-sm">{data.reviewsCount}</p>
+                    <p className="text-md text-[#8D8A91]">{data.reviewsCount}</p>
+                </div>
+                
                   </div>
                 </div>
               </div>
               
               {/* Right side - Form */}
               <div className="space-y-4">
-                <p className="text-gray-700">
+                <p className="text-gray-700 font-semibold text-xl">
                   {data.newsletterSubheading}
                 </p>
                 
@@ -127,7 +129,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                     />
                     <Button 
                       type="submit" 
-                      className="rounded-full bg-[#47c1e1] hover:bg-[#38a3c3] text-white px-8 h-full"
+                      className="rounded-full bg-[#5DCDF1] hover:bg-[#1B1624] text-black hover:text-white px-8 h-full"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Subscribing..." : data.newsletterCta}
@@ -144,15 +146,15 @@ export default function LandingSection({ data }: LandingSectionProps) {
             </div>
           </div>
           
-          <div className="border-t border-gray-200 p-4 bg-gray-50">
+          <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-center items-center space-x-2">
             <p className="text-sm text-gray-600 text-center md:text-left">As featured in:</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-2">
-              <img src="/images/business-insider.svg" alt="Business Insider" className="h-6" />
-              <img src="/images/nyt.svg" alt="New York Times" className="h-6" />
-              <img src="/images/good-morning-america.svg" alt="Good Morning America" className="h-6" />
-              <img src="/images/financial-times.svg" alt="Financial Times" className="h-6" />
-              <img src="/images/bbc.svg" alt="BBC Radio" className="h-6" />
-              <img src="/images/mens-health.svg" alt="Men's Health" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2024/09/image-264.png" alt="Business Insider" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2024/09/new_york_times.png" alt="New York Times" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2025/01/good-morning-america-logo.png" alt="Good Morning America" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2025/01/financial-times.png" alt="Financial Times" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2024/09/bbc.png" alt="BBC Radio" className="h-6" />
+              <img src="https://aliabdaal.com/wp-content/uploads/2024/09/mens_health.png" alt="Men's Health" className="h-6" />
             </div>
           </div>
         </div>
