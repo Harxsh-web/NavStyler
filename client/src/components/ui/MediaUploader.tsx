@@ -46,7 +46,8 @@ export function MediaUploader({
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "Upload failed");
       }
 
       const data = await response.json();
