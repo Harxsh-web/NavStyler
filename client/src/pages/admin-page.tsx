@@ -268,6 +268,14 @@ export default function AdminPage() {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Landing Section</span>
+                    <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
+                    <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex flex-col">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Hero Section</span>
                     <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
                     <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
@@ -297,6 +305,16 @@ export default function AdminPage() {
               <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <button 
+                  onClick={() => setActiveTab("landing")}
+                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                >
+                  <div className="text-left">
+                    <h3 className="font-medium">Edit Landing Section</h3>
+                    <p className="text-sm text-gray-500">Update intro and email signup</p>
+                  </div>
+                </button>
+                
+                <button 
                   onClick={() => setActiveTab("hero")}
                   className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
                 >
@@ -305,8 +323,6 @@ export default function AdminPage() {
                     <p className="text-sm text-gray-500">Update headlines and CTAs</p>
                   </div>
                 </button>
-                
-
                 
                 <button 
                   onClick={() => setActiveTab("testimonials")}
@@ -326,6 +342,19 @@ export default function AdminPage() {
                   <p className="text-lg font-medium">Landing Page Content</p>
                 </div>
                 <div className="divide-y divide-gray-200">
+                  <div className="px-6 py-4 flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium">Landing Section</h3>
+                      <p className="text-sm text-gray-500">Email signup and introduction</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab("landing")}
+                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
                       <h3 className="font-medium">Hero Section</h3>
