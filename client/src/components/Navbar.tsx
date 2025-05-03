@@ -22,6 +22,7 @@ import { BsLightningCharge, BsYoutube, BsBook, BsLaptop, BsTools } from 'react-i
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [location] = useLocation();
   
   // Smooth scroll to section helper function
