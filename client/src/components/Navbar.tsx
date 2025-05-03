@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
 import { HiOutlineDocument, HiOutlineBookOpen, HiOutlineVideoCamera } from 'react-icons/hi';
@@ -218,12 +218,12 @@ export default function Navbar() {
                     <button 
                       key={index}
                       onClick={(e) => {
-                        // First close the mobile menu
-                        const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]');
+                        // First close the mobile menu using SheetClose
+                        const closeButton = document.querySelector('[aria-label="Close"]');
                         if (closeButton instanceof HTMLElement) {
                           closeButton.click();
                         }
-                        // Then scroll to section with a slight delay
+                        // Then scroll to section after a short delay
                         setTimeout(() => scrollToSection(section.id, e), 300);
                       }}
                       className="w-full text-left font-medium py-2 text-lg text-gray-800 dark:text-gray-200 hover:text-cyan-500 cursor-pointer"
