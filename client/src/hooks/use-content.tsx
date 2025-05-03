@@ -700,6 +700,7 @@ export function useAuthorSection() {
       toast({
         title: "Success",
         description: "Author section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -754,6 +755,7 @@ export function useYoutubeFrameworkSection() {
       toast({
         title: "Success",
         description: "YouTube Framework section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -808,6 +810,7 @@ export function useScholarshipSection() {
       toast({
         title: "Success",
         description: "Scholarship section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -879,6 +882,7 @@ export function useLandingSection() {
       toast({
         title: "Success",
         description: "Landing section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
@@ -935,6 +939,7 @@ export function useHeroSection() {
       toast({
         title: "Success",
         description: "Hero section updated successfully",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
