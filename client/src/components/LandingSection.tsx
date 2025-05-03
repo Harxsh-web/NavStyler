@@ -158,7 +158,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                       placeholder="Your email" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className={`flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0 ${email ? 'text-[#76737C]' : ''}`}
                       required
                     />
                     <Button 
