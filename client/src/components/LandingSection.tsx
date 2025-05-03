@@ -131,11 +131,11 @@ export default function LandingSection({ data }: LandingSectionProps) {
                 </p>
                 <div className='flex '>
                   <div className="flex -space-x-2 mr-4">
-                    <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-20 w-full rounded-full border-2 border-white" />
+                    <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-10 w-[80] rounded-full border-2 border-white" />
 
                   </div>
                   <div>
-                    <div className="flex text-yellow-400 size-md">
+                    <div className="flex text-yellow-400 text-2xl">
                       ★★★★★
                     </div>
                     <p className="text-md text-[#8D8A91]">{data.reviewsCount}</p>
@@ -158,7 +158,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                       placeholder="Your email" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={`flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0 ${email ? 'text-[#76737C]' : ''}`}
+                      className="flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0"
                       required
                     />
                     <Button 
