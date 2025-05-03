@@ -14,6 +14,11 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<schema.User | undefined>;
   createUser(user: schema.InsertUser): Promise<schema.User>;
   
+  // Subscribers
+  addSubscriber(email: string, name?: string, source?: string): Promise<schema.Subscriber>;
+  getSubscriberByEmail(email: string): Promise<schema.Subscriber | undefined>;
+  getSubscribers(limit?: number): Promise<schema.Subscriber[]>;
+  
   // Articles
   getArticles(limit?: number): Promise<schema.Article[]>;
   getArticle(id: number): Promise<schema.Article | undefined>;
@@ -215,6 +220,54 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error('Error in createUser:', error);
       throw error;
+    }
+  }
+  
+  // Subscribers
+  async addSubscriber(email: string, name?: string, source?: string): Promise<schema.Subscriber> {
+    try {
+      const result = await query(
+        `INSERT INTO subscribers(email, name, source)
+         VALUES($1, $2, $3)
+         RETURNING id, email, name, created_at as "createdAt", status, source`,
+        [
+          email,
+          name || null,
+          source || 'website'
+        ]
+      );
+      return result.rows[0] as schema.Subscriber;
+    } catch (error) {
+      console.error('Error in addSubscriber:', error);
+      throw error;
+    }
+  }
+  
+  async getSubscriberByEmail(email: string): Promise<schema.Subscriber | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, email, name, created_at as "createdAt", status, source
+         FROM subscribers WHERE email = $1`,
+        [email]
+      );
+      return result.rows[0] as schema.Subscriber | undefined;
+    } catch (error) {
+      console.error('Error in getSubscriberByEmail:', error);
+      return undefined;
+    }
+  }
+  
+  async getSubscribers(limit: number = 100): Promise<schema.Subscriber[]> {
+    try {
+      const result = await query(
+        `SELECT id, email, name, created_at as "createdAt", status, source
+         FROM subscribers ORDER BY created_at DESC LIMIT $1`,
+        [limit]
+      );
+      return result.rows as schema.Subscriber[];
+    } catch (error) {
+      console.error('Error in getSubscribers:', error);
+      return [];
     }
   }
   

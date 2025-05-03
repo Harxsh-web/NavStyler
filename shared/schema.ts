@@ -397,6 +397,23 @@ export const insertAnalyticsSchema = createInsertSchema(analytics).omit({
 });
 export type InsertAnalytics = z.infer<typeof insertAnalyticsSchema>;
 
+// ----- Newsletter Subscribers Schema -----
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  name: text("name"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  status: text("status").default("active").notNull(),
+  source: text("source").default("website").notNull(),
+});
+
+export type Subscriber = typeof subscribers.$inferSelect;
+export const insertSubscriberSchema = createInsertSchema(subscribers).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;
+
 // ----- Bonus Section Schema -----
 export const bonusSection = pgTable("bonus_section", {
   id: serial("id").primaryKey(),

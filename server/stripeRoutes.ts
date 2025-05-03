@@ -1,108 +1,143 @@
-import { Router } from 'express';
+import express from 'express';
 import Stripe from 'stripe';
+import { storage } from "./storage";
 
-export const stripeRouter = Router();
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
 
-// Initialize Stripe with the secret key if available
-const getStripe = () => {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('Missing Stripe secret key');
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2025-03-31.basil'
-  });
-};
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
+
+export const stripeRouter = express.Router();
 
 // Create a payment intent for one-time payments
 stripeRouter.post('/create-payment-intent', async (req, res) => {
   try {
-    const { amount, productName } = req.body;
+    const { amount } = req.body;
     
-    if (!amount) {
-      return res.status(400).json({ error: 'Amount is required' });
+    if (!amount || isNaN(amount)) {
+      return res.status(400).json({ error: 'Valid amount is required' });
     }
-
-    // If we don't have a Stripe key, return a mock response for testing
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(200).json({ 
-        clientSecret: 'test_client_secret_' + Math.random().toString(36).substring(2),
-        message: 'Test mode: Add your Stripe keys to create real payment intents'
-      });
-    }
-
-    // Create a real payment intent with Stripe
-    const stripe = getStripe();
+    
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
-      currency: 'usd',
-      // Add metadata for your own tracking
+      currency: "usd",
       metadata: {
-        productName: productName || 'Feel-Good Productivity Book',
-      },
-      // You can also add automatic payment methods
-      automatic_payment_methods: {
-        enabled: true,
-      },
+        productType: 'book',
+        bookTitle: 'Feel-Good Productivity'
+      }
     });
-
-    res.json({
-      clientSecret: paymentIntent.client_secret,
+    
+    res.json({ 
+      clientSecret: paymentIntent.client_secret 
     });
   } catch (error: any) {
-    console.error('Payment intent error:', error);
+    console.error('Error creating payment intent:', error);
     res.status(500).json({ 
-      error: 'Failed to create payment intent', 
+      error: 'Error creating payment intent', 
       message: error.message 
     });
   }
 });
 
-// Handle webhook notifications from Stripe
-stripeRouter.post('/webhook', async (req, res) => {
+// Handle successful payments and add customer to subscribers list
+stripeRouter.post('/payment-success', async (req, res) => {
   try {
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(200).end();
-    }
-
-    const stripe = getStripe();
-    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const { paymentIntentId, email, name } = req.body;
     
-    let event;
-
-    if (endpointSecret) {
-      // Verify the event came from Stripe
-      const signature = req.headers['stripe-signature'] as string;
-      
-      try {
-        event = stripe.webhooks.constructEvent(
-          req.body,
-          signature,
-          endpointSecret
-        );
-      } catch (err: any) {
-        console.log(`⚠️ Webhook signature verification failed: ${err.message}`);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-      }
-    } else {
-      // If no signing secret, assume the event is legitimate (not secure for production)
-      event = req.body;
+    if (!paymentIntentId || !email) {
+      return res.status(400).json({ error: 'Payment intent ID and email are required' });
     }
-
-    // Handle the event
-    switch (event.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object;
-        console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`);
-        // Here you would fulfill the order
-        break;
-      default:
-        console.log(`Unhandled event type ${event.type}`);
+    
+    // Verify payment intent was successful
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    
+    if (paymentIntent.status !== 'succeeded') {
+      return res.status(400).json({ error: 'Payment has not been completed' });
     }
-
-    res.status(200).end();
+    
+    // Add customer to subscribers with 'customer' source
+    await storage.addSubscriber(email, name || null, 'customer');
+    
+    res.json({ success: true });
   } catch (error: any) {
-    console.error('Webhook error:', error);
-    res.status(500).json({ error: 'Webhook handler failed', message: error.message });
+    console.error('Error processing successful payment:', error);
+    res.status(500).json({ 
+      error: 'Error processing payment', 
+      message: error.message 
+    });
+  }
+});
+
+// Process a subscription sign-up
+stripeRouter.post('/subscribe', async (req, res) => {
+  try {
+    const { email, name } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+    
+    // Check if the subscriber already exists
+    const existingSubscriber = await storage.getSubscriberByEmail(email);
+    
+    if (existingSubscriber) {
+      return res.json({ 
+        success: true, 
+        message: 'Already subscribed', 
+        subscriber: existingSubscriber 
+      });
+    }
+    
+    // Add new subscriber
+    const subscriber = await storage.addSubscriber(email, name || null);
+    
+    res.json({ 
+      success: true, 
+      message: 'Successfully subscribed', 
+      subscriber 
+    });
+  } catch (error: any) {
+    console.error('Error creating subscriber:', error);
+    res.status(500).json({ 
+      error: 'Error subscribing', 
+      message: error.message 
+    });
+  }
+});
+
+// Redirect to checkout
+stripeRouter.post('/redirect-to-checkout', async (req, res) => {
+  try {
+    const { priceId } = req.body;
+    
+    if (!priceId) {
+      return res.status(400).json({ error: 'Price ID is required' });
+    }
+    
+    // Create a checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${req.protocol}://${req.get('host')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.protocol}://${req.get('host')}/checkout/cancel`,
+    });
+    
+    res.json({ url: session.url });
+  } catch (error: any) {
+    console.error('Error creating checkout session:', error);
+    res.status(500).json({ 
+      error: 'Error creating checkout session', 
+      message: error.message 
+    });
   }
 });
 
