@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,20 +20,37 @@ interface LandingEditorProps {
 export default function LandingEditor({ data }: LandingEditorProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [selectedColor, setSelectedColor] = useState<string>(data?.backgroundColor || "#F9F6F3");
+  const [selectedColor, setSelectedColor] = useState<string>("#F9F6F3");
+  
+  useEffect(() => {
+    if (data) {
+      setSelectedColor(data.backgroundColor || "#F9F6F3");
+      form.reset({
+        heading: data.heading || "",
+        subheading: data.subheading || "",
+        imageUrl: data.imageUrl || "",
+        newsletterHeading: data.newsletterHeading || "",
+        newsletterSubheading: data.newsletterSubheading || "",
+        newsletterCta: data.newsletterCta || "Subscribe",
+        subscribersCount: data.subscribersCount || "",
+        reviewsCount: data.reviewsCount || "",
+        backgroundColor: data.backgroundColor || "#F9F6F3",
+      });
+    }
+  }, [data]);
 
   const form = useForm({
     resolver: zodResolver(insertLandingSectionSchema.partial()),
     defaultValues: {
-      heading: data?.heading || "",
-      subheading: data?.subheading || "",
-      imageUrl: data?.imageUrl || "",
-      newsletterHeading: data?.newsletterHeading || "",
-      newsletterSubheading: data?.newsletterSubheading || "",
-      newsletterCta: data?.newsletterCta || "Subscribe",
-      subscribersCount: data?.subscribersCount || "",
-      reviewsCount: data?.reviewsCount || "",
-      backgroundColor: data?.backgroundColor || "#F9F6F3",
+      heading: "",
+      subheading: "",
+      imageUrl: "",
+      newsletterHeading: "",
+      newsletterSubheading: "",
+      newsletterCta: "Subscribe",
+      subscribersCount: "",
+      reviewsCount: "",
+      backgroundColor: "#F9F6F3",
     },
   });
 
@@ -41,7 +58,11 @@ export default function LandingEditor({ data }: LandingEditorProps) {
     mutationFn: async (values: Partial<LandingSection>) => {
       console.log("Submitting values:", values);
       const response = await apiRequest("PUT", "/api/admin/landing", values);
-      return response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update landing section");
+      }
+      return await response.json();
     },
     onSuccess: () => {
       toast({
@@ -51,7 +72,7 @@ export default function LandingEditor({ data }: LandingEditorProps) {
       queryClient.invalidateQueries({ queryKey: ["/api/content/landing"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/landing"] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error updating landing section",
         description: error.message,
@@ -71,6 +92,20 @@ export default function LandingEditor({ data }: LandingEditorProps) {
   const handleImageUploaded = (url: string) => {
     form.setValue("imageUrl", url);
   };
+
+  if (!data) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Landing Section</CardTitle>
+          <CardDescription>Loading landing section data...</CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center py-6">
+          <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
