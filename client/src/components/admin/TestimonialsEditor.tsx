@@ -472,10 +472,10 @@ export function TestimonialsEditor() {
                               accept="image/jpeg,image/png,image/gif,image/webp"
                               maxSize={5}
                             />
-                            <FormDescription>
-                              Upload a JPG, PNG, GIF or WebP image (max 5MB)
-                            </FormDescription>
                           </FormControl>
+                          <FormDescription>
+                            Upload a JPG, PNG, GIF or WebP image (max 5MB)
+                          </FormDescription>
                           <FormMessage />
                           {field.value && (
                             <div className="mt-2">
