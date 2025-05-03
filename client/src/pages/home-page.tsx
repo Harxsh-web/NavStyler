@@ -85,7 +85,7 @@ export default function HomePage() {
                     >
                       {heroData?.buttonText || "Get the Book"}
                     </a>
-                    <a href="#learn-more" className="text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
+                    <a href="#bonus-section" className="text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
                       Learn More
                     </a>
                   </div>
