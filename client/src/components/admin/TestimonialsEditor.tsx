@@ -469,7 +469,7 @@ export function TestimonialsEditor() {
                             <MediaUploader 
                               value={field.value || ''} 
                               onChange={field.onChange}
-                              accept="image/*"
+                              accept="image/jpeg,image/png,image/gif,image/webp"
                               maxSize={5}
                             />
                             <FormDescription>
@@ -661,6 +661,9 @@ export function TestimonialsEditor() {
                               maxSize={5}
                             />
                           </FormControl>
+                          <FormDescription>
+                            Upload a JPG, PNG, GIF or WebP image (max 5MB)
+                          </FormDescription>
                           <FormMessage />
                           {field.value && (
                             <div className="mt-2">
