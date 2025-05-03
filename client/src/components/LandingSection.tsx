@@ -104,7 +104,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                 size="lg"
                 variant="outline"
                 className="rounded-full px-8"
-                onClick={() => window.open('https://www.youtube.com/c/LukeMikic', '_blank')}
+                onClick={() => window.open('https://www.youtube.com/@lukemikic21', '_blank')}
               >
                 Join YouTube 
               </Button>
@@ -129,7 +129,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                   Join a growing community of more than<br />
                   <span className="font-bold">{data.subscribersCount}</span>
                 </p>
-                <div className='flex '>
+                <div className='flex items-center'>
                   <div className="flex -space-x-2 mr-4">
                     <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-10 w-[80] rounded-full border-2 border-white" />
 
@@ -138,7 +138,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                     <div className="flex text-yellow-400 text-2xl">
                       ★★★★★
                     </div>
-                    <p className="text-md text-[#8D8A91]">{data.reviewsCount}</p>
+                    <p className="text-xl text-[#8D8A91] font-semibold">{data.reviewsCount}</p>
                 </div>
                 
                   </div>

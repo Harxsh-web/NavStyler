@@ -160,14 +160,20 @@ export default function Navbar() {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <TransitionLink href="/" transitionType="fade">
-            <div className="flex items-center cursor-pointer">
-              <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="font-bold text-xl">Luke Mikic</span>
-            </div>
-          </TransitionLink>
+          <div 
+            className="flex items-center cursor-pointer" 
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+            }}
+          >
+            <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+              <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="font-bold text-xl">Luke Mikic</span>
+          </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -204,7 +210,18 @@ export default function Navbar() {
               <SheetContent className="w-full pt-12 px-6 bg-white dark:bg-gray-900">
                 <SheetHeader>
                   <SheetTitle className="text-left">
-                    <div className="flex items-center">
+                    <div 
+                      className="flex items-center cursor-pointer"
+                      onClick={() => {
+                        setIsSheetOpen(false);
+                        setTimeout(() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                          });
+                        }, 300);
+                      }}
+                    >
                       <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
                         <path d="M8.5 32.5L27.5 8M20 8L32 27.5M8.5 14.5L14 8" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
