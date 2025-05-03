@@ -48,7 +48,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
   return (
     <section 
       style={{ backgroundColor: data.backgroundColor || '#F9F6F3' }}
-      className="py-12 md:py-16 px-12 mt-0 mb-12"
+      className="py-12 md:py-16 px-12 mt-0 mb-0"
     >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
