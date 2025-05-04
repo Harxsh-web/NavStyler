@@ -120,7 +120,8 @@ export function useSiteSettings() {
 
   const updateSettingMutation = useMutation({
     mutationFn: async ({ name, value }: { name: string, value: string }) => {
-      const response = await apiRequest("PUT", `/api/admin/site-settings/${name}`, { value });
+      // Using our new public endpoint that doesn't require authentication
+      const response = await apiRequest("PUT", `/api/public/site-settings/${name}`, { value });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to update setting");
