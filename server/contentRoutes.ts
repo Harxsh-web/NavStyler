@@ -341,6 +341,16 @@ contentRouter.get("/questions-section", async (req, res, next) => {
   }
 });
 
+// Milestones
+contentRouter.get("/milestones", async (req, res, next) => {
+  try {
+    const milestones = await storage.getMilestones();
+    res.json(milestones || []);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Social links route
 contentRouter.get("/social-links", async (req, res, next) => {
   try {
@@ -351,12 +361,3 @@ contentRouter.get("/social-links", async (req, res, next) => {
   }
 });
 
-// Milestones route - public access
-contentRouter.get("/milestones", async (req, res, next) => {
-  try {
-    const milestones = await storage.getMilestones();
-    res.json(milestones);
-  } catch (error) {
-    next(error);
-  }
-});
