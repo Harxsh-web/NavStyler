@@ -440,6 +440,7 @@ export const bonusItems = pgTable("bonus_items", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   imageUrl: text("image_url"),
+  backgroundColor: text("background_color"),
   order: integer("order").notNull(),
 });
 

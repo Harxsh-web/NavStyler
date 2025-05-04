@@ -19,7 +19,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 const bonusSectionFormSchema = insertBonusSectionSchema.extend({
   title: z.string().min(1, 'Title is required'),
   subtitle: z.string().optional(),
-  description: z.string().min(1, 'Description is required'),
+  description: z.string().optional(),
   buttonText: z.string().optional(),
   buttonUrl: z.string().optional(),
   backgroundColor: z.string().optional(),
@@ -116,6 +116,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
         order: items.length + 1,
         sectionId: bonusSection?.id || 0,
         imageUrl: null,
+        backgroundColor: '#FFE382',
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
@@ -151,6 +152,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
         order: items.length,
         sectionId: bonusSection?.id || 0,
         imageUrl: null,
+        backgroundColor: '#FFE382',
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
@@ -218,6 +220,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       imageUrl: item.imageUrl,
       order: item.order,
       sectionId: item.sectionId,
+      backgroundColor: item.backgroundColor || '#FFE382',
     });
     setActiveTab('add-item');
   };
@@ -230,6 +233,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       order: items.length,
       sectionId: bonusSection?.id || 0,
       imageUrl: null,
+      backgroundColor: '#FFE382',
     });
   };
 
@@ -417,7 +421,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <Card style={{ backgroundColor: '#FFE382' }}>
+                                  <Card style={{ backgroundColor: item.backgroundColor || '#FFE382' }}>
                                     <CardContent className="p-4">
                                       <div className="flex justify-between items-start">
                                         <div>
@@ -507,6 +511,26 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                           placeholder="https://example.com/image.jpg" 
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={itemForm.control}
+                  name="backgroundColor"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Background Color</FormLabel>
+                      <div className="flex items-center gap-2">
+                        <FormControl>
+                          <Input {...field} value={field.value || '#FFE382'} />
+                        </FormControl>
+                        <div 
+                          className="w-10 h-10 border rounded-md" 
+                          style={{ backgroundColor: field.value || '#FFE382' }}
+                        />
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
