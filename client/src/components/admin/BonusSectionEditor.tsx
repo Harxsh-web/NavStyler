@@ -18,12 +18,19 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 // Create extended schemas with validation
 const bonusSectionFormSchema = insertBonusSectionSchema.extend({
   title: z.string().min(1, 'Title is required'),
-  subtitle: z.string().min(1, 'Subtitle is required'),
+  subtitle: z.string().optional(),
+  description: z.string().min(1, 'Description is required'),
+  buttonText: z.string().optional(),
+  buttonUrl: z.string().optional(),
+  backgroundColor: z.string().optional(),
 });
 
 const bonusItemFormSchema = insertBonusItemSchema.extend({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
+  sectionId: z.number(),
+  order: z.number(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 type BonusSectionFormValues = z.infer<typeof bonusSectionFormSchema>;
@@ -60,12 +67,9 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     defaultValues: {
       title: '',
       description: '',
-      iconName: 'Gift',
-      buttonText: '',
-      buttonUrl: '',
-      backgroundColor: '#FFE382',
-      orderIndex: items.length,
-      sectionId: bonusSection?.id,
+      order: items.length,
+      sectionId: bonusSection?.id || 0,
+      imageUrl: null,
     },
   });
 
@@ -104,12 +108,9 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       itemForm.reset({
         title: '',
         description: '',
-        iconName: 'Gift',
-        buttonText: '',
-        buttonUrl: '',
-        backgroundColor: '#FFE382',
-        orderIndex: items.length + 1,
-        sectionId: bonusSection?.id,
+        order: items.length + 1,
+        sectionId: bonusSection?.id || 0,
+        imageUrl: null,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
@@ -142,12 +143,9 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       itemForm.reset({
         title: '',
         description: '',
-        iconName: 'Gift',
-        buttonText: '',
-        buttonUrl: '',
-        backgroundColor: '#FFE382',
-        orderIndex: items.length,
-        sectionId: bonusSection?.id,
+        order: items.length,
+        sectionId: bonusSection?.id || 0,
+        imageUrl: null,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
@@ -212,11 +210,8 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     itemForm.reset({
       title: item.title,
       description: item.description,
-      iconName: item.iconName || 'Gift',
-      buttonText: item.buttonText || '',
-      buttonUrl: item.buttonUrl || '',
-      backgroundColor: item.backgroundColor || '#FFE382',
-      orderIndex: item.orderIndex,
+      imageUrl: item.imageUrl,
+      order: item.order,
       sectionId: item.sectionId,
     });
     setActiveTab('add-item');
@@ -227,12 +222,9 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     itemForm.reset({
       title: '',
       description: '',
-      iconName: 'Gift',
-      buttonText: '',
-      buttonUrl: '',
-      backgroundColor: '#FFE382',
-      orderIndex: items.length,
-      sectionId: bonusSection?.id,
+      order: items.length,
+      sectionId: bonusSection?.id || 0,
+      imageUrl: null,
     });
   };
 
