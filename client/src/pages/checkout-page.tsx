@@ -109,36 +109,57 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
     // Get payment intent ID from the client secret
     const intentId = clientSecret.split('_secret_')[0];
     
-    const { error: submitError } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/checkout/success?payment_intent_id=${intentId}`,
-        receipt_email: billingDetails.email,
-        payment_method_data: {
-          billing_details: {
-            name: `${billingDetails.firstName} ${billingDetails.lastName}`,
-            email: billingDetails.email,
-            address: {
-              city: billingDetails.city,
-              country: billingDetails.country,
-              line1: billingDetails.streetAddress,
-              postal_code: billingDetails.postalCode,
-              state: billingDetails.state
+    try {
+      // Process payment with Stripe
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/success?payment_intent_id=${intentId}`,
+          receipt_email: billingDetails.email,
+          payment_method_data: {
+            billing_details: {
+              name: `${billingDetails.firstName} ${billingDetails.lastName}`,
+              email: billingDetails.email,
+              address: {
+                city: billingDetails.city,
+                country: billingDetails.country,
+                line1: billingDetails.streetAddress,
+                postal_code: billingDetails.postalCode,
+                state: billingDetails.state
+              }
             }
           }
-        }
-      },
-    });
+        },
+      });
 
-    if (submitError) {
-      setError(submitError.message || 'Payment failed. Please try again.');
+      // If we get here, it means there's a direct error without redirect
+      if (result.error) {
+        console.log("Payment confirmation error:", result.error);
+        setError(result.error.message || 'Payment failed. Please try again.');
+        setLoading(false);
+        toast({
+          title: "Payment Failed",
+          description: result.error.message || "An error occurred during payment processing",
+          variant: "destructive",
+          className: "bg-red-500 text-white"
+        });
+        return;
+      }
+    } catch (error) {
+      console.error("Exception during payment confirmation:", error);
+      setError('An unexpected error occurred during payment processing. Please try again.');
       setLoading(false);
       toast({
-        title: "Payment Failed",
-        description: submitError.message || "An error occurred during payment processing",
+        title: "Payment Error",
+        description: "An unexpected error occurred. Please try again or contact support.",
         variant: "destructive",
       });
-    } else {
+      return;
+    }
+
+    // This part may or may not run depending on if Stripe redirects
+    // Most errors are handled above, but we'll try to capture any successful local response
+    {
       // This code may not execute as Stripe will redirect the user to the return_url
       try {
         // Record the successful payment and add to subscribers
