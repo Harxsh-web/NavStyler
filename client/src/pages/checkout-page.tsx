@@ -109,7 +109,32 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
     // Get payment intent ID from the client secret
     const intentId = clientSecret.split('_secret_')[0];
     
+    // Store the payment intent ID in localStorage as a fallback
     try {
+      localStorage.setItem('lastPaymentIntentId', intentId);
+      localStorage.setItem('billingDetails', JSON.stringify(billingDetails));
+    } catch (e) {
+      console.error("Error storing payment data in localStorage:", e);
+    }
+    
+    try {
+      // First check if the PaymentIntent is still valid and processable
+      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+      
+      // Check if payment intent is already processed or in an invalid state
+      if (paymentIntent && (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing')) {
+        console.log("Payment is already being processed or completed", paymentIntent.status);
+        toast({
+          title: "Payment In Progress",
+          description: "Your payment is already being processed. Please wait for confirmation.",
+          className: "bg-yellow-500 text-white"
+        });
+        
+        // Redirect to success page
+        setLocation(`/checkout/success?payment_intent_id=${paymentIntent.id}`);
+        return;
+      }
+      
       // Process payment with Stripe
       const result = await stripe.confirmPayment({
         elements,
@@ -130,6 +155,7 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
             }
           }
         },
+        redirect: 'if_required'
       });
 
       // If we get here, it means there's a direct error without redirect
@@ -409,14 +435,25 @@ export default function CheckoutPage() {
           let paymentIntentId = urlParams.get('payment_intent_id') || urlParams.get('payment_intent');
           
           if (!paymentIntentId) {
+            console.log("Looking for payment_intent in URL fragment", window.location.hash);
             // Try to extract from the URL fragment (Stripe sometimes adds as #payment_intent=pi_...)
             const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
             paymentIntentId = hashParams.get('payment_intent');
           }
           
+          // Try to extract from localStorage as a fallback
           if (!paymentIntentId) {
+            const lastPaymentId = localStorage.getItem('lastPaymentIntentId');
+            if (lastPaymentId) {
+              console.log("Using stored payment intent ID:", lastPaymentId);
+              paymentIntentId = lastPaymentId;
+            }
+          }
+          
+          if (!paymentIntentId) {
+            console.error("No payment intent ID found in URL or storage");
             setPaymentSuccessStatus('error');
-            setErrorMessage('No payment information found.');
+            setErrorMessage('We could not locate your payment information. Please contact support if you believe your payment was processed.');
             return;
           }
           
