@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Tabs,
   TabsContent,
@@ -28,7 +30,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
 
 // Custom tooltip for charts
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -51,6 +53,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export function AnalyticsPanel() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [timeRange, setTimeRange] = useState("30");
   const [formattedPageViews, setFormattedPageViews] = useState<any[]>([]);
   const [formattedVisitors, setFormattedVisitors] = useState<any[]>([]);
@@ -179,11 +183,27 @@ export function AnalyticsPanel() {
     );
   }
 
+  const handleRefresh = () => {
+    // Create a local reference to the things we need
+    const qc = queryClient;
+    const showToast = toast;
+    
+    qc.invalidateQueries({ queryKey: ["/api/analytics/summary"] });
+    qc.invalidateQueries({ queryKey: ["/api/analytics/page-views", { days: timeRange }] });
+    qc.invalidateQueries({ queryKey: ["/api/analytics/visitors", { days: timeRange }] });
+    
+    showToast({
+      title: "Analytics refreshed",
+      description: "Data has been updated with the latest information",
+      className: "bg-green-50 border-green-200",
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Page Views Today</CardTitle>
           </CardHeader>
@@ -197,7 +217,7 @@ export function AnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Unique Visitors Today</CardTitle>
           </CardHeader>
@@ -211,12 +231,12 @@ export function AnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Top Page</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold truncate">
               {(summary && Array.isArray(summary.topPaths) && summary.topPaths.length > 0 
                 ? summary.topPaths[0].path || 'Home' : 'Home')}
             </div>
@@ -227,7 +247,7 @@ export function AnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Top Source</CardTitle>
           </CardHeader>
@@ -244,8 +264,18 @@ export function AnalyticsPanel() {
         </Card>
       </div>
 
-      {/* Time Range Selector */}
-      <div className="flex justify-end">
+      {/* Time Range Selector and Refresh Button */}
+      <div className="flex justify-between items-center">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={refreshData}
+          className="text-xs flex items-center gap-1"
+        >
+          <RefreshCw className="h-3 w-3" />
+          Refresh Data
+        </Button>
+        
         <select
           className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
           value={timeRange}

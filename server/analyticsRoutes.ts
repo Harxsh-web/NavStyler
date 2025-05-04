@@ -155,8 +155,8 @@ analyticsRouter.get("/summary", async (req, res) => {
     return res.json({
       pageViews,
       visitors,
-      topPaths,
-      topSources,
+      topPaths: topPaths || [],
+      topSources: topSources || [],
     });
   } catch (error) {
     console.error("Error fetching analytics summary:", error);
