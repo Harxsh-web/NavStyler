@@ -7,6 +7,7 @@ import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
 import CheckoutWrapper from "@/pages/checkout";
 import AnalyticsPage from "@/pages/admin/analytics";
+import MilestonesPage from "@/pages/milestones-page";
 import Navbar from "@/components/Navbar";
 import { SEOHead } from "@/components/SEOHead";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -62,6 +63,11 @@ function Router() {
             </PageTransition>
           )}
         />
+        <Route path="/milestones">
+          <PageTransition>
+            <MilestonesPage />
+          </PageTransition>
+        </Route>
         <Route>
           <PageTransition>
             <NotFound />
