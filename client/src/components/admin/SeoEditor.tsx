@@ -238,7 +238,7 @@ export function SeoEditor() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-4 mb-6">
+              <TabsList className="grid grid-cols-4 mb-6 space-x-4">
                 <TabsTrigger value="basic">Basic</TabsTrigger>
                 <TabsTrigger value="opengraph">Open Graph</TabsTrigger>
                 <TabsTrigger value="twitter">Twitter</TabsTrigger>

@@ -156,8 +156,8 @@ export function SiteSettingsEditor() {
         </Button>
       </div>
 
-      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6">
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full gap-4">
+        <TabsList className="mb-6 space-x-5">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
           <TabsTrigger value="preorders">Pre-orders</TabsTrigger>

@@ -241,9 +241,14 @@ export default function AdminPage() {
                   <a href="/" target="_blank" rel="noopener noreferrer" className="text-center text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                     View Live Site
                   </a>
-                  <button onClick={() => setActiveTab("hero")} className="text-center text-cyan-700 bg-white hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                  
+                  <button
+                    onClick={() => setActiveTab("hero")}
+                    className="  text-center text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
                     Edit Hero Section
                   </button>
+
                 </div>
               </div>
               
@@ -289,7 +294,7 @@ export default function AdminPage() {
                 >
                   <div className="text-left">
                     <h3 className="font-medium">Edit Hero Section</h3>
-                    <p className="text-sm text-gray-500">Update headlines and CTAs</p>
+                    <p className="text-sm text-white-800">Update headlines and CTAs</p>
                   </div>
                 </button>
                 
@@ -299,7 +304,7 @@ export default function AdminPage() {
                 >
                   <div className="text-left">
                     <h3 className="font-medium">Manage Testimonials</h3>
-                    <p className="text-sm text-gray-500">Update customer reviews</p>
+                    <p className="text-sm text-white">Update customer reviews</p>
                   </div>
                 </button>
               </div>

@@ -267,7 +267,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3 space-x-3">
             <TabsTrigger value="section">Section Settings</TabsTrigger>
             <TabsTrigger value="items">Bonus Items</TabsTrigger>
             <TabsTrigger value="add-item">
