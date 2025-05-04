@@ -432,7 +432,7 @@ export const insertBonusSectionSchema = createInsertSchema(bonusSection).omit({
 export type InsertBonusSection = z.infer<typeof insertBonusSectionSchema>;
 
 // ----- Bonus Items Schema -----
-export const bonusItems = pgTable("bonus_items", {
+export const bonusItems = pgTable("bonus_item", {
   id: serial("id").primaryKey(),
   sectionId: integer("section_id")
     .references(() => bonusSection.id)
