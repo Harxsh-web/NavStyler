@@ -239,7 +239,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     // Update order indices
     const updatedItems = reorderedItems.map((item, index) => ({
       ...item,
-      orderIndex: index
+      order: index
     }));
     
     setItems(updatedItems);
@@ -248,7 +248,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     updatedItems.forEach(item => {
       updateItemMutation.mutate({
         id: item.id,
-        data: { orderIndex: item.orderIndex }
+        data: { order: item.order }
       });
     });
   };
@@ -359,7 +359,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                         </div>
                       ) : (
                         items
-                          .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
+                          .sort((a, b) => (a.order || 0) - (b.order || 0))
                           .map((item, index) => (
                             <Draggable key={item.id} draggableId={`item-${item.id}`} index={index}>
                               {(provided) => (
@@ -368,7 +368,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <Card style={{ backgroundColor: item.backgroundColor || '#FFE382' }}>
+                                  <Card style={{ backgroundColor: '#FFE382' }}>
                                     <CardContent className="p-4">
                                       <div className="flex justify-between items-start">
                                         <div>
@@ -445,51 +445,15 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                   )}
                 />
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={itemForm.control}
-                    name="buttonText"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Button Text (optional)</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Learn More" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={itemForm.control}
-                    name="buttonUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Button URL (optional)</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="https://example.com/learn-more" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
                 <FormField
                   control={itemForm.control}
-                  name="backgroundColor"
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Background Color</FormLabel>
-                      <div className="flex items-center gap-2">
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <div 
-                          className="w-10 h-10 border rounded-md" 
-                          style={{ backgroundColor: field.value || '#FFE382' }}
-                        />
-                      </div>
+                      <FormLabel>Image URL (optional)</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="https://example.com/image.jpg" />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
