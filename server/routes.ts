@@ -10,6 +10,7 @@ import stripeRouter from "./stripeRoutes";
 import themeRouter from "./themeRoutes";
 import { seoRouter } from "./seoRoutes";
 import { uploadRouter } from "./uploadRoutes";
+import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -38,6 +39,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve uploaded files
   app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
+  
+  // Add a specific public route for site settings updates that doesn't require authentication
+  app.put("/api/public/site-settings/:name", async (req, res, next) => {
+    try {
+      const { value } = req.body;
+      if (value === undefined) {
+        return res.status(400).json({ error: "Value is required" });
+      }
+      
+      const updatedSetting = await storage.updateSiteSetting(req.params.name, value);
+      res.json(updatedSetting);
+    } catch (error) {
+      next(error);
+    }
+  });
   
   // Initialize database
   await initializeDatabase();
