@@ -149,6 +149,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
         orderIndex: items.length,
         sectionId: bonusSection?.id,
       });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content'] });
       toast({
@@ -173,6 +174,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     },
     onSuccess: (_, id) => {
       setItems(items.filter(item => item.id !== id));
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content'] });
       toast({
