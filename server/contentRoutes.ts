@@ -350,3 +350,13 @@ contentRouter.get("/social-links", async (req, res, next) => {
     next(error);
   }
 });
+
+// Milestones route - public access
+contentRouter.get("/milestones", async (req, res, next) => {
+  try {
+    const milestones = await storage.getMilestones();
+    res.json(milestones);
+  } catch (error) {
+    next(error);
+  }
+});
