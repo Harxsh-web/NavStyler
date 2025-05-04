@@ -57,14 +57,18 @@ export default function LandingSection({ data }: LandingSectionProps) {
       <div className="max-w-7xl mx-auto">
         {/* Hey Friends section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">
-          <div className="relative">
-            <div className="absolute inset-0 bg-yellow-300 rounded-full transform -translate-x-4 translate-y-4"></div>
-            <div className="relative z-10">
-              <img 
-                src={ "https://aliabdaal.com/wp-content/uploads/2024/09/hero-ali.png"}
-                alt="Luke Mikic"
-                className="rounded-full w-full max-w-md"
-              />
+          <div className="relative flex justify-center">
+            {/* Capsule shape with yellow background - slight offset for visual interest */}
+            <div className="absolute w-full h-full bg-yellow-300 rounded-[100px] max-w-md transform translate-x-4 translate-y-4"></div>
+            {/* Image container */}
+            <div className="relative z-10 w-full max-w-md">
+              <div className="aspect-[1.6/1] rounded-[100px] overflow-hidden">
+                <img 
+                  src={"https://upload.wikimedia.org/wikipedia/commons/c/ca/Machu_Picchu%2C_Peru_%282018%29.jpg"}
+                  alt="Luke Mikic"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
           <div className="space-y-6">

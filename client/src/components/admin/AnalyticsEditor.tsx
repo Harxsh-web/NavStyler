@@ -87,8 +87,8 @@ export function AnalyticsEditor() {
   }
 
   return (
-    <Tabs defaultValue="dashboard" className="w-full">
-      <TabsList className="mb-4">
+    <Tabs defaultValue="dashboard" className="w-full ">
+      <TabsList className="mb-4 space-x-3">
         <TabsTrigger value="dashboard">Analytics Dashboard</TabsTrigger>
         <TabsTrigger value="settings">Tracking Settings</TabsTrigger>
       </TabsList>
