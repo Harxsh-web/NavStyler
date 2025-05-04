@@ -1634,6 +1634,129 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
+  // ----- Milestones Methods -----
+  async getMilestones(): Promise<schema.Milestone[]> {
+    try {
+      const result = await query(
+        `SELECT id, title, description, date_reached as "dateReached", 
+        target_date as "targetDate", icon_name as "iconName", 
+        "order", completed, progress, color, updated_at as "updatedAt"
+        FROM milestones ORDER BY "order" ASC`
+      );
+      return result.rows as schema.Milestone[];
+    } catch (error) {
+      console.error("Error in getMilestones:", error);
+      return [];
+    }
+  }
+  
+  async getMilestone(id: number): Promise<schema.Milestone | undefined> {
+    try {
+      const result = await query(
+        `SELECT id, title, description, date_reached as "dateReached", 
+        target_date as "targetDate", icon_name as "iconName", 
+        "order", completed, progress, color, updated_at as "updatedAt"
+        FROM milestones WHERE id = $1`,
+        [id]
+      );
+      return result.rows[0] as schema.Milestone | undefined;
+    } catch (error) {
+      console.error(`Error in getMilestone(${id}):`, error);
+      return undefined;
+    }
+  }
+
+  async createMilestone(data: schema.InsertMilestone): Promise<schema.Milestone> {
+    try {
+      const result = await query(
+        `INSERT INTO milestones (title, description, date_reached, target_date, 
+         icon_name, "order", completed, progress, color)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         RETURNING id, title, description, date_reached as "dateReached", 
+         target_date as "targetDate", icon_name as "iconName", 
+         "order", completed, progress, color, updated_at as "updatedAt"`,
+        [
+          data.title,
+          data.description || '',
+          data.dateReached || null,
+          data.targetDate || null,
+          data.iconName || '',
+          data.order || 0,
+          data.completed ?? false,
+          data.progress || 0,
+          data.color || '#4f46e5'
+        ]
+      );
+      
+      return result.rows[0] as schema.Milestone;
+    } catch (error) {
+      console.error('Error creating milestone:', error);
+      throw error;
+    }
+  }
+
+  async updateMilestone(id: number, data: Partial<schema.InsertMilestone>): Promise<schema.Milestone | undefined> {
+    try {
+      const existing = await this.getMilestone(id);
+      
+      if (!existing) {
+        return undefined;
+      }
+      
+      const result = await query(
+        `UPDATE milestones 
+         SET title = COALESCE($1, title), 
+         description = COALESCE($2, description),
+         date_reached = COALESCE($3, date_reached),
+         target_date = COALESCE($4, target_date),
+         icon_name = COALESCE($5, icon_name),
+         "order" = COALESCE($6, "order"),
+         completed = COALESCE($7, completed),
+         progress = COALESCE($8, progress),
+         color = COALESCE($9, color),
+         updated_at = NOW()
+         WHERE id = $10
+         RETURNING id, title, description, date_reached as "dateReached", 
+         target_date as "targetDate", icon_name as "iconName", 
+         "order", completed, progress, color, updated_at as "updatedAt"`,
+        [
+          data.title || null,
+          data.description || null,
+          data.dateReached || null,
+          data.targetDate || null,
+          data.iconName || null,
+          data.order ?? null,
+          data.completed ?? null,
+          data.progress ?? null,
+          data.color || null,
+          id
+        ]
+      );
+      
+      if (result.rows.length === 0) {
+        return undefined;
+      }
+      
+      return result.rows[0] as schema.Milestone;
+    } catch (error) {
+      console.error(`Error updating milestone ${id}:`, error);
+      throw error;
+    }
+  }
+
+  async deleteMilestone(id: number): Promise<boolean> {
+    try {
+      const result = await query(
+        `DELETE FROM milestones WHERE id = $1 RETURNING id`,
+        [id]
+      );
+      return result.rowCount > 0;
+    } catch (error) {
+      console.error(`Error deleting milestone ${id}:`, error);
+      throw error;
+    }
+  }
+
   // ----- SEO Metadata Methods -----
   async getAllSeoMetadata(): Promise<schema.SeoMetadata[]> {
     try {
