@@ -91,7 +91,7 @@ analyticsRouter.get("/page-views", async (req, res) => {
       sql`SELECT * FROM page_view WHERE date >= ${startDate} ORDER BY date`
     );
     
-    return res.json(result);
+    return res.json(result.rows);
   } catch (error) {
     console.error("Error fetching page views:", error);
     return res.status(500).json({ error: "Failed to fetch page views" });
@@ -110,7 +110,7 @@ analyticsRouter.get("/visitors", async (req, res) => {
       sql`SELECT * FROM visitor WHERE date >= ${startDate} ORDER BY date`
     );
     
-    return res.json(result);
+    return res.json(result.rows);
   } catch (error) {
     console.error("Error fetching visitors:", error);
     return res.status(500).json({ error: "Failed to fetch visitors" });
@@ -139,16 +139,18 @@ analyticsRouter.get("/summary", async (req, res) => {
     const visitors = visitorsRows.length > 0 ? Number(visitorsRows[0].total) || 0 : 0;
     
     // Get top paths
-    const topPaths = await db.execute(
+    const topPathsQuery = await db.execute(
       sql`SELECT path, SUM(count) as total FROM page_view 
           GROUP BY path ORDER BY total DESC LIMIT 5`
     );
+    const topPaths = topPathsQuery.rows as any[];
     
     // Get top sources
-    const topSources = await db.execute(
+    const topSourcesQuery = await db.execute(
       sql`SELECT source, SUM(count) as total FROM visitor 
           GROUP BY source ORDER BY total DESC LIMIT 5`
     );
+    const topSources = topSourcesQuery.rows as any[];
     
     return res.json({
       pageViews,

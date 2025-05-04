@@ -57,34 +57,57 @@ export function AnalyticsPanel() {
   const [groupedByPath, setGroupedByPath] = useState<any[]>([]);
   const [groupedBySource, setGroupedBySource] = useState<any[]>([]);
 
+  // Define the summary type
+  type AnalyticsSummary = {
+    pageViews: number;
+    visitors: number;
+    topPaths: Array<{path: string; total: number}>;
+    topSources: Array<{source: string; total: number}>;
+  };
+
   // Fetch analytics summary
-  const { data: summary, isLoading: summaryLoading } = useQuery({
+  const { data: summary, isLoading: summaryLoading } = useQuery<AnalyticsSummary>({
     queryKey: ["/api/analytics/summary"],
     enabled: true,
   });
 
+  // Define page view and visitor types
+  type PageView = {
+    id: number;
+    date: string;
+    path: string;
+    count: number;
+  };
+
+  type Visitor = {
+    id: number;
+    date: string;
+    source: string;
+    count: number;
+  };
+
   // Fetch page views
-  const { data: pageViews, isLoading: pageViewsLoading } = useQuery({
+  const { data: pageViews, isLoading: pageViewsLoading } = useQuery<PageView[]>({
     queryKey: ["/api/analytics/page-views", { days: timeRange }],
     enabled: true,
   });
 
   // Fetch visitors
-  const { data: visitors, isLoading: visitorsLoading } = useQuery({
+  const { data: visitors, isLoading: visitorsLoading } = useQuery<Visitor[]>({
     queryKey: ["/api/analytics/visitors", { days: timeRange }],
     enabled: true,
   });
 
   // Process data when it's loaded
   useEffect(() => {
-    if (pageViews) {
+    if (pageViews && Array.isArray(pageViews)) {
       // Group by date and sum counts for each day
-      const groupedData = pageViews.reduce((acc: any, item: any) => {
+      const groupedData = pageViews.reduce((acc: Record<string, any>, item: any) => {
         const date = item.date.split('T')[0];
         if (!acc[date]) {
           acc[date] = { date, count: 0 };
         }
-        acc[date].count += item.count;
+        acc[date].count += Number(item.count);
         return acc;
       }, {});
 
@@ -95,11 +118,11 @@ export function AnalyticsPanel() {
       setFormattedPageViews(formattedData);
 
       // Group by path
-      const pathGroups = pageViews.reduce((acc: any, item: any) => {
+      const pathGroups = pageViews.reduce((acc: Record<string, any>, item: any) => {
         if (!acc[item.path]) {
           acc[item.path] = { path: item.path, count: 0 };
         }
-        acc[item.path].count += item.count;
+        acc[item.path].count += Number(item.count);
         return acc;
       }, {});
 
@@ -113,14 +136,14 @@ export function AnalyticsPanel() {
 
   // Process visitor data
   useEffect(() => {
-    if (visitors) {
+    if (visitors && Array.isArray(visitors)) {
       // Group by date and sum counts for each day
-      const groupedData = visitors.reduce((acc: any, item: any) => {
+      const groupedData = visitors.reduce((acc: Record<string, any>, item: any) => {
         const date = item.date.split('T')[0];
         if (!acc[date]) {
           acc[date] = { date, count: 0 };
         }
-        acc[date].count += item.count;
+        acc[date].count += Number(item.count);
         return acc;
       }, {});
 
@@ -131,11 +154,11 @@ export function AnalyticsPanel() {
       setFormattedVisitors(formattedData);
 
       // Group by source
-      const sourceGroups = visitors.reduce((acc: any, item: any) => {
+      const sourceGroups = visitors.reduce((acc: Record<string, any>, item: any) => {
         if (!acc[item.source]) {
           acc[item.source] = { source: item.source, count: 0 };
         }
-        acc[item.source].count += item.count;
+        acc[item.source].count += Number(item.count);
         return acc;
       }, {});
 
@@ -166,7 +189,7 @@ export function AnalyticsPanel() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {summary?.pageViews?.toLocaleString() || 0}
+              {(summary && typeof summary.pageViews === 'number' ? summary.pageViews.toLocaleString() : '0')}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               Total views across all pages
@@ -180,7 +203,7 @@ export function AnalyticsPanel() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {summary?.visitors?.toLocaleString() || 0}
+              {(summary && typeof summary.visitors === 'number' ? summary.visitors.toLocaleString() : '0')}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               Across all traffic sources
@@ -194,10 +217,12 @@ export function AnalyticsPanel() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {summary?.topPaths?.[0]?.path || 'Home'}
+              {(summary && Array.isArray(summary.topPaths) && summary.topPaths.length > 0 
+                ? summary.topPaths[0].path || 'Home' : 'Home')}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              {summary?.topPaths?.[0]?.total?.toLocaleString() || 0} views
+              {(summary && Array.isArray(summary.topPaths) && summary.topPaths.length > 0 && summary.topPaths[0].total
+                ? Number(summary.topPaths[0].total).toLocaleString() : '0')} views
             </p>
           </CardContent>
         </Card>
@@ -208,10 +233,12 @@ export function AnalyticsPanel() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold capitalize">
-              {summary?.topSources?.[0]?.source || 'Direct'}
+              {(summary && Array.isArray(summary.topSources) && summary.topSources.length > 0
+                ? summary.topSources[0].source || 'Direct' : 'Direct')}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              {summary?.topSources?.[0]?.total?.toLocaleString() || 0} visitors
+              {(summary && Array.isArray(summary.topSources) && summary.topSources.length > 0 && summary.topSources[0].total
+                ? Number(summary.topSources[0].total).toLocaleString() : '0')} visitors
             </p>
           </CardContent>
         </Card>
