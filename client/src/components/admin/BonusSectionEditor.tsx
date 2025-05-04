@@ -31,6 +31,7 @@ const bonusItemFormSchema = insertBonusItemSchema.extend({
   sectionId: z.number(),
   order: z.number(),
   imageUrl: z.string().optional().nullable(),
+  backgroundColor: z.string().optional(),
 });
 
 type BonusSectionFormValues = z.infer<typeof bonusSectionFormSchema>;
@@ -57,6 +58,9 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     defaultValues: {
       title: bonusSection?.title || 'Wait, did you say free bonuses?',
       subtitle: bonusSection?.subtitle || "Yup. We've decided to bundle in a bunch of free bonuses, just for fun:",
+      description: bonusSection?.description || '',
+      buttonText: bonusSection?.buttonText || '',
+      buttonUrl: bonusSection?.buttonUrl || '',
       backgroundColor: bonusSection?.backgroundColor || '#E6F1FE',
     },
   });
@@ -70,6 +74,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       order: items.length,
       sectionId: bonusSection?.id || 0,
       imageUrl: null,
+      backgroundColor: '#FFE382',
     },
   });
 
@@ -200,7 +205,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     } else {
       createItemMutation.mutate({
         ...data,
-        sectionId: bonusSection?.id
+        sectionId: bonusSection?.id || 0
       });
     }
   };
@@ -305,6 +310,50 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                 
                 <FormField
                   control={sectionForm.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} rows={4} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={sectionForm.control}
+                    name="buttonText"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button Text (optional)</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="View All Bonuses" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={sectionForm.control}
+                    name="buttonUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button URL (optional)</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="https://example.com/bonuses" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={sectionForm.control}
                   name="backgroundColor"
                   render={({ field }) => (
                     <FormItem>
@@ -315,7 +364,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                         </FormControl>
                         <div 
                           className="w-10 h-10 border rounded-md" 
-                          style={{ backgroundColor: field.value }}
+                          style={{ backgroundColor: field.value || '#E6F1FE' }}
                         />
                       </div>
                       <FormMessage />
@@ -452,7 +501,11 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                     <FormItem>
                       <FormLabel>Image URL (optional)</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="https://example.com/image.jpg" />
+                        <Input 
+                          {...field} 
+                          value={field.value || ''}
+                          placeholder="https://example.com/image.jpg" 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
