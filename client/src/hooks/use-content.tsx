@@ -1,6 +1,38 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+
+/**
+ * Hook for fetching the bonus section content for the admin page
+ */
+export function useBonusSection() {
+  return useQuery({
+    queryKey: ["/api/admin/bonus-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/bonus-section");
+      if (!response.ok) {
+        throw new Error("Failed to fetch bonus section");
+      }
+      return await response.json();
+    },
+  });
+}
+
+/**
+ * Hook for fetching bonus items for the admin page
+ */
+export function useBonusItems() {
+  return useQuery({
+    queryKey: ["/api/admin/bonus-items"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/bonus-items");
+      if (!response.ok) {
+        throw new Error("Failed to fetch bonus items");
+      }
+      return await response.json();
+    },
+  });
+}
 import { useRefreshPublicContent } from "@/hooks/use-public-content";
 import { LandingSection } from "@shared/schema";
 
@@ -27,6 +59,8 @@ export function useRefreshAdminContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/about-book"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/author"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/site-settings"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/bonus-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/bonus-items"] });
       
       // Also trigger the public content refresh
       refreshPublicContent.mutate();

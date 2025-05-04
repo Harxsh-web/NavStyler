@@ -707,6 +707,15 @@ adminRouter.delete("/videos/:id", async (req, res, next) => {
 });
 
 // Bonus section routes
+adminRouter.get("/bonus-section", async (req, res, next) => {
+  try {
+    const bonusSection = await storage.getBonusSection();
+    res.json(bonusSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
 adminRouter.put("/bonus-section", validateRequest(schema.insertBonusSectionSchema.partial()), async (req, res, next) => {
   try {
     const updatedSection = await storage.updateBonusSection(req.validatedBody);
@@ -726,6 +735,17 @@ adminRouter.put("/guarantee-section", async (req, res, next) => {
   }
 });
 
+// Get all bonus items
+adminRouter.get("/bonus-items", async (req, res, next) => {
+  try {
+    const bonusItems = await storage.getBonusItems();
+    res.json(bonusItems || []);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Create a new bonus item
 adminRouter.post("/bonus-items", validateRequest(schema.insertBonusItemSchema), async (req, res, next) => {
   try {
     const newItem = await storage.createBonusItem(req.validatedBody);

@@ -16,7 +16,26 @@ import GuaranteeSectionEditor from "@/components/admin/GuaranteeSectionEditor";
 import YoutubeFrameworkSectionEditor from "@/components/admin/YoutubeFrameworkSectionEditor";
 import ScholarshipSectionEditor from "@/components/admin/ScholarshipSectionEditor";
 import LandingEditor from "@/components/admin/LandingEditor";
-import { useLandingSection } from "@/hooks/use-content";
+import { useLandingSection, useBonusSection, useBonusItems } from "@/hooks/use-content";
+
+// BonusSectionEditor wrapper component to handle loading states
+function ProtectedBonusSectionEditor() {
+  const { data: bonusSection, isLoading: isLoadingSection } = useBonusSection();
+  const { data: bonusItems, isLoading: isLoadingItems } = useBonusItems();
+  
+  if (isLoadingSection || isLoadingItems) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="flex flex-col items-center gap-2">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-cyan-400 border-t-transparent"></div>
+          <p>Loading bonus section data...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  return <BonusSectionEditor bonusSection={bonusSection} bonusItems={bonusItems || []} />;
+}
 
 export default function AdminPage() {
   const { user, logoutMutation } = useAuth();
@@ -523,7 +542,8 @@ export default function AdminPage() {
               <div className="bg-white shadow-sm rounded-lg p-6">
                 <p className="text-gray-600 mb-4">Manage the "What if I can't afford The $995?" free bonuses section.</p>
                 <div className="mt-6">
-                  <BonusSectionEditor />
+                  {/* Use the new hooks to fetch bonus section data */}
+                  <ProtectedBonusSectionEditor />
                 </div>
               </div>
             </div>
