@@ -16,6 +16,7 @@ import GuaranteeSectionEditor from "@/components/admin/GuaranteeSectionEditor";
 import YoutubeFrameworkSectionEditor from "@/components/admin/YoutubeFrameworkSectionEditor";
 import ScholarshipSectionEditor from "@/components/admin/ScholarshipSectionEditor";
 import LandingEditor from "@/components/admin/LandingEditor";
+import MilestonesEditor from "@/components/admin/MilestonesEditor";
 import { useLandingSection, useBonusSection, useBonusItems } from "@/hooks/use-content";
 
 // BonusSectionEditor wrapper component to handle loading states
@@ -187,6 +188,15 @@ export default function AdminPage() {
               onClick={() => setActiveTab("scholarshipSection")}
             >
               Scholarship
+            </button>
+            
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "milestones" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("milestones")}
+            >
+              Milestones
             </button>
             
             <button
@@ -631,6 +641,16 @@ export default function AdminPage() {
                 </div>
               </div>
             </ThemeSettingsProvider>
+          )}
+          
+          {activeTab === "milestones" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Milestones</h1>
+              <p className="text-gray-600 mb-4">Manage progress milestones to showcase your journey.</p>
+              <div className="mt-6">
+                <MilestonesEditor />
+              </div>
+            </div>
           )}
         </main>
       </div>
