@@ -830,3 +830,75 @@ adminRouter.put(
     }
   }
 );
+
+// Milestones Routes
+adminRouter.get("/milestones", async (req, res, next) => {
+  try {
+    const milestones = await storage.getMilestones();
+    res.json(milestones);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.get("/milestones/:id", async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const milestone = await storage.getMilestone(id);
+    
+    if (!milestone) {
+      return res.status(404).json({ error: "Milestone not found" });
+    }
+    
+    res.json(milestone);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.post(
+  "/milestones",
+  validateRequest(schema.insertMilestoneSchema),
+  async (req, res, next) => {
+    try {
+      const newMilestone = await storage.createMilestone(req.validatedBody);
+      res.status(201).json(newMilestone);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+adminRouter.put(
+  "/milestones/:id",
+  validateRequest(schema.insertMilestoneSchema.partial()),
+  async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updatedMilestone = await storage.updateMilestone(id, req.validatedBody);
+      
+      if (!updatedMilestone) {
+        return res.status(404).json({ error: "Milestone not found" });
+      }
+      
+      res.json(updatedMilestone);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+adminRouter.delete("/milestones/:id", async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const success = await storage.deleteMilestone(id);
+    
+    if (!success) {
+      return res.status(404).json({ error: "Milestone not found" });
+    }
+    
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
