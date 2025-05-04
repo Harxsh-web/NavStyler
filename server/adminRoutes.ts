@@ -5,6 +5,7 @@ import * as schema from "@shared/schema";
 import { z } from "zod";
 import fs from 'fs';
 import path from 'path';
+import { createInsertSchema } from "drizzle-zod";
 
 // Extend Express Request interface
 declare global {
