@@ -303,7 +303,7 @@ export function AnalyticsPanel() {
           )}
         </Button>
         
-        <div className="flex items-center space-x-1 bg-gray-100 p-0.5 rounded-md">
+        <div className="flex items-center space-x-3 bg-gray-100 p-0.5 rounded-md">
           <Button
             variant={timeRange === "7" ? "default" : "ghost"}
             size="sm"
@@ -333,7 +333,7 @@ export function AnalyticsPanel() {
 
       {/* Charts */}
       <Tabs defaultValue="pageviews" className="w-full">
-        <TabsList className="mb-4">
+        <TabsList className="mb-4 space-x-3">
           <TabsTrigger value="pageviews">Page Views</TabsTrigger>
           <TabsTrigger value="visitors">Visitors</TabsTrigger>
           <TabsTrigger value="distribution">Traffic Distribution</TabsTrigger>
