@@ -19,7 +19,7 @@ export function SEOHead({
   const { data: seo, isLoading, error } = useSeoMetadata(pagePath);
   
   // Use provided props or fall back to SEO data from the database
-  const metaTitle = title || seo?.metaTitle || 'Feel-Good Productivity';
+  const metaTitle = title || seo?.metaTitle || 'Luke Mikic';
   const metaDescription = description || seo?.metaDescription || 'Learn how to be productive without burning out';
   const metaImage = image || seo?.ogImageUrl || '/images/default-og-image.jpg';
   
