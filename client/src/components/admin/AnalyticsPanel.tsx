@@ -55,6 +55,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 export function AnalyticsPanel() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState("30");
   const [formattedPageViews, setFormattedPageViews] = useState<any[]>([]);
   const [formattedVisitors, setFormattedVisitors] = useState<any[]>([]);
@@ -183,20 +184,36 @@ export function AnalyticsPanel() {
     );
   }
 
-  const handleRefresh = () => {
-    // Create a local reference to the things we need
-    const qc = queryClient;
-    const showToast = toast;
+  const handleRefresh = async () => {
+    if (refreshing) return;
     
-    qc.invalidateQueries({ queryKey: ["/api/analytics/summary"] });
-    qc.invalidateQueries({ queryKey: ["/api/analytics/page-views", { days: timeRange }] });
-    qc.invalidateQueries({ queryKey: ["/api/analytics/visitors", { days: timeRange }] });
+    setRefreshing(true);
     
-    showToast({
-      title: "Analytics refreshed",
-      description: "Data has been updated with the latest information",
-      className: "bg-green-50 border-green-200",
-    });
+    try {
+      // Create a local reference to the things we need
+      const qc = queryClient;
+      
+      // Use Promise.all to refresh all queries simultaneously
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: ["/api/analytics/summary"] }),
+        qc.invalidateQueries({ queryKey: ["/api/analytics/page-views", { days: timeRange }] }),
+        qc.invalidateQueries({ queryKey: ["/api/analytics/visitors", { days: timeRange }] })
+      ]);
+      
+      toast({
+        title: "Analytics refreshed",
+        description: "Data has been updated with the latest information",
+        className: "bg-green-50 border-green-200",
+      });
+    } catch (error) {
+      toast({
+        title: "Refresh failed",
+        description: "There was an error refreshing the analytics data",
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   return (
@@ -269,22 +286,49 @@ export function AnalyticsPanel() {
         <Button 
           variant="outline" 
           size="sm" 
-          onClick={refreshData}
+          onClick={handleRefresh}
           className="text-xs flex items-center gap-1"
+          disabled={refreshing}
         >
-          <RefreshCw className="h-3 w-3" />
-          Refresh Data
+          {refreshing ? (
+            <>
+              <Loader2 className="h-3 w-3 animate-spin mr-1" />
+              Refreshing...
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-3 w-3 mr-1" />
+              Refresh Data
+            </>
+          )}
         </Button>
         
-        <select
-          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
-        >
-          <option value="7">Last 7 days</option>
-          <option value="14">Last 14 days</option>
-          <option value="30">Last 30 days</option>
-        </select>
+        <div className="flex items-center space-x-1 bg-gray-100 p-0.5 rounded-md">
+          <Button
+            variant={timeRange === "7" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setTimeRange("7")}
+            className="text-xs"
+          >
+            7 days
+          </Button>
+          <Button
+            variant={timeRange === "14" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setTimeRange("14")}
+            className="text-xs"
+          >
+            14 days
+          </Button>
+          <Button
+            variant={timeRange === "30" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setTimeRange("30")}
+            className="text-xs"
+          >
+            30 days
+          </Button>
+        </div>
       </div>
 
       {/* Charts */}
