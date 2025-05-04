@@ -287,7 +287,20 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full relative">
+      {/* Celebration components */}
+      <Celebration 
+        trigger={sectionSaveSuccess} 
+        type="small"
+        message={sectionSaveSuccess ? "Section updated successfully!" : ""}
+      />
+      
+      <Celebration 
+        trigger={itemSaveSuccess} 
+        type="medium"
+        message={itemSaveSuccess ? "Bonus item saved successfully!" : ""}
+      />
+      
       <CardHeader>
         <CardTitle className="flex items-center">
           <GiftIcon className="mr-2 h-6 w-6" />
