@@ -303,32 +303,15 @@ export function AnalyticsPanel() {
           )}
         </Button>
         
-        <div className="flex items-center space-x-3 bg-gray-100 p-0.5 rounded-md">
-          <Button
-            variant={timeRange === "7" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => setTimeRange("7")}
-            className="text-xs"
-          >
-            7 days
-          </Button>
-          <Button
-            variant={timeRange === "14" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => setTimeRange("14")}
-            className="text-xs"
-          >
-            14 days
-          </Button>
-          <Button
-            variant={timeRange === "30" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => setTimeRange("30")}
-            className="text-xs"
-          >
-            30 days
-          </Button>
-        </div>
+        <select
+          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
+          value={timeRange}
+          onChange={(e) => setTimeRange(e.target.value)}
+        >
+          <option value="7">Last 7 days</option>
+          <option value="14">Last 14 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
       </div>
 
       {/* Charts */}
