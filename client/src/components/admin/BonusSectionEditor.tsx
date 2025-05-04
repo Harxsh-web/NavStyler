@@ -14,6 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { Celebration } from '@/components/ui/Celebration';
+import { useCelebration } from '@/components/ui/Celebration';
 
 // Create extended schemas with validation
 const bonusSectionFormSchema = insertBonusSectionSchema.extend({
@@ -47,10 +49,13 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
   bonusItems = []
 }) => {
   const { toast } = useToast();
+  const celebrate = useCelebration();
   const queryClient = useQueryClient();
   const [items, setItems] = useState<BonusItem[]>(bonusItems);
   const [activeTab, setActiveTab] = useState('section');
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [sectionSaveSuccess, setSectionSaveSuccess] = useState(false);
+  const [itemSaveSuccess, setItemSaveSuccess] = useState(false);
 
   // Form for the section
   const sectionForm = useForm<BonusSectionFormValues>({
@@ -88,6 +93,12 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-section'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-section'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content'] });
+      
+      // Trigger confetti celebration
+      celebrate('small');
+      setSectionSaveSuccess(true);
+      setTimeout(() => setSectionSaveSuccess(false), 2000);
+      
       toast({
         title: 'Section updated',
         description: 'Bonus section has been successfully updated',
@@ -121,9 +132,16 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content'] });
+      
+      // Trigger confetti celebration
+      celebrate('medium');
+      setItemSaveSuccess(true);
+      setTimeout(() => setItemSaveSuccess(false), 2000);
+      
       toast({
         title: 'Item added',
         description: 'New bonus item has been successfully added',
+        className: "bg-green-500 text-white border-none",
       });
       setActiveTab('items');
     },
@@ -157,10 +175,16 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content/bonus-items'] });
       queryClient.invalidateQueries({ queryKey: ['/api/content'] });
+      
+      // Trigger confetti celebration
+      celebrate('small');
+      setItemSaveSuccess(true);
+      setTimeout(() => setItemSaveSuccess(false), 2000);
+      
       toast({
         title: 'Item updated',
         description: 'Bonus item has been successfully updated',
-        variant:'success',
+        className: "bg-green-500 text-white border-none",
       });
     },
     onError: (error: Error) => {
