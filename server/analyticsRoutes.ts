@@ -87,9 +87,9 @@ analyticsRouter.get("/page-views", async (req, res) => {
     const days = Number(req.query.days) || 30;
     const startDate = getDateWithOffset(days - 1);
     
-    const result = await db.select().from(pageView)
-      .where(sql`${pageView.date} >= ${startDate}`)
-      .orderBy(pageView.date);
+    const result = await db.execute(
+      sql`SELECT * FROM page_view WHERE date >= ${startDate} ORDER BY date`
+    );
     
     return res.json(result);
   } catch (error) {
@@ -106,9 +106,9 @@ analyticsRouter.get("/visitors", async (req, res) => {
     const days = Number(req.query.days) || 30;
     const startDate = getDateWithOffset(days - 1);
     
-    const result = await db.select().from(visitor)
-      .where(sql`${visitor.date} >= ${startDate}`)
-      .orderBy(visitor.date);
+    const result = await db.execute(
+      sql`SELECT * FROM visitor WHERE date >= ${startDate} ORDER BY date`
+    );
     
     return res.json(result);
   } catch (error) {
@@ -125,42 +125,34 @@ analyticsRouter.get("/summary", async (req, res) => {
     const today = new Date().toISOString().split('T')[0];
     
     // Get today's page views
-    const pageViews = await db.select({
-      total: sql<number>`sum(${pageView.count})`,
-    })
-    .from(pageView)
-    .where(eq(pageView.date, today));
+    const pageViewsQuery = await db.execute(
+      sql`SELECT SUM(count) as total FROM page_view WHERE date = ${today}`
+    );
+    const pageViewsRows = pageViewsQuery.rows as any[];
+    const pageViews = pageViewsRows.length > 0 ? Number(pageViewsRows[0].total) || 0 : 0;
     
     // Get today's visitors
-    const visitors = await db.select({
-      total: sql<number>`sum(${visitor.count})`,
-    })
-    .from(visitor)
-    .where(eq(visitor.date, today));
+    const visitorsQuery = await db.execute(
+      sql`SELECT SUM(count) as total FROM visitor WHERE date = ${today}`
+    );
+    const visitorsRows = visitorsQuery.rows as any[];
+    const visitors = visitorsRows.length > 0 ? Number(visitorsRows[0].total) || 0 : 0;
     
     // Get top paths
-    const topPaths = await db.select({
-      path: pageView.path,
-      total: sql<number>`sum(${pageView.count})`,
-    })
-    .from(pageView)
-    .groupBy(pageView.path)
-    .orderBy(sql`total desc`)
-    .limit(5);
+    const topPaths = await db.execute(
+      sql`SELECT path, SUM(count) as total FROM page_view 
+          GROUP BY path ORDER BY total DESC LIMIT 5`
+    );
     
     // Get top sources
-    const topSources = await db.select({
-      source: visitor.source,
-      total: sql<number>`sum(${visitor.count})`,
-    })
-    .from(visitor)
-    .groupBy(visitor.source)
-    .orderBy(sql`total desc`)
-    .limit(5);
+    const topSources = await db.execute(
+      sql`SELECT source, SUM(count) as total FROM visitor 
+          GROUP BY source ORDER BY total DESC LIMIT 5`
+    );
     
     return res.json({
-      pageViews: pageViews[0]?.total || 0,
-      visitors: visitors[0]?.total || 0,
+      pageViews,
+      visitors,
       topPaths,
       topSources,
     });
