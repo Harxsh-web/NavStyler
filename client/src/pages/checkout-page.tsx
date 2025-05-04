@@ -1,35 +1,28 @@
 import { useState, useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, CheckCircle, CreditCard, HelpCircle, Info, Loader2, AlertCircle } from 'lucide-react';
 import { useLocation } from 'wouter';
+import { useStripe, useElements, Elements, PaymentElement } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowLeft, Loader2, Info, CheckCircle, AlertCircle } from 'lucide-react';
 
-// Check for the Stripe public key
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  console.warn('Stripe public key is missing. Running in test mode.');
-}
+// Make sure to call `loadStripe` outside of a component's render to avoid
+// recreating the `Stripe` object on every render.
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
 
-// Initialize Stripe
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '');
-
-// Payment card icons
+// Credit card icons
 const cardIcons = [
-  { name: 'visa', src: 'https://js.stripe.com/v3/fingerprinted/img/visa-729c05c240c4bdb47b03ac81d9945bfe.svg' },
-  { name: 'mastercard', src: 'https://js.stripe.com/v3/fingerprinted/img/mastercard-4d8844094130711885b5e41b28c9848f.svg' },
-  { name: 'amex', src: 'https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f46c5cd6a96a6e418a6ca1717c.svg' },
-  { name: 'discover', src: 'https://js.stripe.com/v3/fingerprinted/img/discover-ac52cd46f89fa40a29a0bfb954e33173.svg' },
-  { name: 'jcb', src: 'https://js.stripe.com/v3/fingerprinted/img/jcb-271fd06e6e7a2c52692ffa91a95fb64f.svg' },
-  { name: 'unionpay', src: 'https://js.stripe.com/v3/fingerprinted/img/unionpay-8a10aefc7295216c338ba4e1224627a1.svg' },
+  { name: 'visa', src: '/images/payments/visa.svg' },
+  { name: 'mastercard', src: '/images/payments/mastercard.svg' },
+  { name: 'amex', src: '/images/payments/amex.svg' },
+  { name: 'discover', src: '/images/payments/discover.svg' }
 ];
 
-interface BillingDetails {
+export interface BillingDetails {
   email: string;
   firstName: string;
   lastName: string;
@@ -40,9 +33,18 @@ interface BillingDetails {
   state: string;
 }
 
-const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
+interface CheckoutFormProps {
+  clientSecret: string;
+}
+
+const CheckoutForm = ({ clientSecret }: CheckoutFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
+  const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [billingDetails, setBillingDetails] = useState<BillingDetails>({
     email: '',
     firstName: '',
@@ -53,53 +55,27 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
     country: 'US',
     state: ''
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [acceptTerms, setAcceptTerms] = useState(false);
-  const { toast } = useToast();
-  const [location, setLocation] = useLocation();
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setBillingDetails(prev => ({
-      ...prev,
-      [id]: value
-    }));
+    setBillingDetails(prev => ({ ...prev, [id]: value }));
   };
   
   const handleSelectChange = (field: string, value: string) => {
-    setBillingDetails(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setBillingDetails(prev => ({ ...prev, [field]: value }));
   };
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!stripe || !elements) {
-      toast({
-        title: "Checkout Error",
-        description: "Payment system not initialized yet. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!billingDetails.email) {
-      setError('Email is required for purchase confirmation');
       return;
     }
     
-    if (!acceptTerms) {
-      setError('You must accept the terms and conditions to proceed');
-      return;
-    }
-
     setLoading(true);
     setError(null);
-
-    // Store billing details for the success page
+    
+    // Store billing details in localStorage
     try {
       localStorage.setItem('billingDetails', JSON.stringify(billingDetails));
     } catch (e) {
@@ -394,6 +370,139 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
   );
 };
 
+// Success page component
+function CheckoutSuccessPage() {
+  const [paymentSuccessStatus, setPaymentSuccessStatus] = useState<'processing' | 'success' | 'error'>('processing');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const processSuccessfulPayment = async () => {
+      try {
+        // Extract payment_intent_id from URL if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Check for both possible parameter names Stripe might use
+        let paymentIntentId = urlParams.get('payment_intent_id') || urlParams.get('payment_intent');
+        
+        if (!paymentIntentId) {
+          console.log("Looking for payment_intent in URL fragment", window.location.hash);
+          // Try to extract from the URL fragment (Stripe sometimes adds as #payment_intent=pi_...)
+          const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+          paymentIntentId = hashParams.get('payment_intent');
+        }
+        
+        // Try to extract from localStorage as a fallback
+        if (!paymentIntentId) {
+          const lastPaymentId = localStorage.getItem('lastPaymentIntentId');
+          if (lastPaymentId) {
+            console.log("Using stored payment intent ID:", lastPaymentId);
+            paymentIntentId = lastPaymentId;
+          }
+        }
+        
+        if (!paymentIntentId) {
+          console.error("No payment intent ID found in URL or storage");
+          setPaymentSuccessStatus('error');
+          setErrorMessage('We could not locate your payment information. Please contact support if you believe your payment was processed.');
+          return;
+        }
+        
+        // Get the stored billing details from localStorage if available
+        const storedBillingDetails = localStorage.getItem('billingDetails');
+        let billingInfo: BillingDetails | Record<string, never> = {};
+        
+        if (storedBillingDetails) {
+          try {
+            const parsedDetails = JSON.parse(storedBillingDetails);
+            if (typeof parsedDetails === 'object' && parsedDetails !== null) {
+              billingInfo = parsedDetails as BillingDetails;
+            }
+          } catch (e) {
+            console.error('Error parsing billing details', e);
+          }
+        }
+        
+        // Record the successful payment on our backend
+        try {
+          const response = await apiRequest('POST', '/api/payment-success', {
+            paymentIntentId,
+            email: 'email' in billingInfo ? billingInfo.email : '',
+            name: 'firstName' in billingInfo && 'lastName' in billingInfo 
+              ? `${billingInfo.firstName} ${billingInfo.lastName}`
+              : ''
+          });
+          
+          if (response.ok) {
+            setPaymentSuccessStatus('success');
+            // Clear the stored billing details
+            localStorage.removeItem('billingDetails');
+            localStorage.removeItem('lastPaymentIntentId');
+          } else {
+            console.error('Could not record successful payment on backend', await response.text());
+            // Still mark as success since the payment may have gone through
+            setPaymentSuccessStatus('success');
+          }
+        } catch (error) {
+          console.error("Error recording payment:", error);
+          // Still mark as success since the payment likely went through
+          // but we couldn't save the subscriber
+          setPaymentSuccessStatus('success');
+        }
+      } catch (err) {
+        console.error('Error processing successful payment:', err);
+        setPaymentSuccessStatus('error');
+        setErrorMessage('There was an error processing your payment confirmation.');
+      }
+    };
+    
+    processSuccessfulPayment();
+  }, []);
+  
+  return (
+    <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="max-w-md w-full mx-auto p-8 rounded-xl bg-white shadow-md text-center">
+        {paymentSuccessStatus === 'processing' ? (
+          <>
+            <div className="mb-6">
+              <Loader2 className="h-16 w-16 text-primary animate-spin mx-auto" />
+            </div>
+            <h1 className="text-2xl font-bold mb-4">Processing Your Payment</h1>
+            <p className="text-gray-600 mb-6">
+              Please wait while we confirm your payment...
+            </p>
+          </>
+        ) : paymentSuccessStatus === 'error' ? (
+          <>
+            <div className="mb-6">
+              <AlertCircle className="h-16 w-16 text-red-500 mx-auto" />
+            </div>
+            <h1 className="text-2xl font-bold mb-4">Oops, Something Went Wrong</h1>
+            <p className="text-gray-600 mb-6">
+              {errorMessage || 'There was an issue confirming your payment. Please contact support.'}
+            </p>
+            <Button onClick={() => window.location.href = '/'} className="w-full">
+              Return to Home
+            </Button>
+          </>
+        ) : (
+          <>
+            <div className="mb-6">
+              <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+            </div>
+            <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
+            <p className="text-gray-600 mb-6">
+              Thank you for your purchase! We've sent a confirmation email with details on how to access your book.
+            </p>
+            <Button onClick={() => window.location.href = '/'} className="w-full">
+              Return to Home
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CheckoutPage() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -422,129 +531,9 @@ export default function CheckoutPage() {
   
   // Handle success page display
   if (location.startsWith('/checkout/success')) {
-    const [paymentSuccessStatus, setPaymentSuccessStatus] = useState<'processing' | 'success' | 'error'>('processing');
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    
-    useEffect(() => {
-      const processSuccessfulPayment = async () => {
-        try {
-          // Extract payment_intent_id from URL if it exists
-          const urlParams = new URLSearchParams(window.location.search);
-          
-          // Check for both possible parameter names Stripe might use
-          let paymentIntentId = urlParams.get('payment_intent_id') || urlParams.get('payment_intent');
-          
-          if (!paymentIntentId) {
-            console.log("Looking for payment_intent in URL fragment", window.location.hash);
-            // Try to extract from the URL fragment (Stripe sometimes adds as #payment_intent=pi_...)
-            const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
-            paymentIntentId = hashParams.get('payment_intent');
-          }
-          
-          // Try to extract from localStorage as a fallback
-          if (!paymentIntentId) {
-            const lastPaymentId = localStorage.getItem('lastPaymentIntentId');
-            if (lastPaymentId) {
-              console.log("Using stored payment intent ID:", lastPaymentId);
-              paymentIntentId = lastPaymentId;
-            }
-          }
-          
-          if (!paymentIntentId) {
-            console.error("No payment intent ID found in URL or storage");
-            setPaymentSuccessStatus('error');
-            setErrorMessage('We could not locate your payment information. Please contact support if you believe your payment was processed.');
-            return;
-          }
-          
-          // Get the stored billing details from localStorage if available
-          const storedBillingDetails = localStorage.getItem('billingDetails');
-          let billingInfo: BillingDetails | Record<string, never> = {};
-          
-          if (storedBillingDetails) {
-            try {
-              const parsedDetails = JSON.parse(storedBillingDetails);
-              if (typeof parsedDetails === 'object' && parsedDetails !== null) {
-                billingInfo = parsedDetails as BillingDetails;
-              }
-            } catch (e) {
-              console.error('Error parsing billing details', e);
-            }
-          }
-          
-          // Record the successful payment on our backend
-          const response = await apiRequest('POST', '/api/payment-success', {
-            paymentIntentId,
-            email: 'email' in billingInfo ? billingInfo.email : '',
-            name: 'firstName' in billingInfo && 'lastName' in billingInfo 
-              ? `${billingInfo.firstName} ${billingInfo.lastName}`
-              : ''
-          });
-          
-          if (response.ok) {
-            setPaymentSuccessStatus('success');
-            // Clear the stored billing details
-            localStorage.removeItem('billingDetails');
-          } else {
-            // Payment was processed but we couldn't record it
-            setPaymentSuccessStatus('success');
-            console.error('Could not record successful payment on backend', await response.text());
-          }
-        } catch (err) {
-          console.error('Error processing successful payment:', err);
-          setPaymentSuccessStatus('error');
-          setErrorMessage('There was an error processing your payment confirmation.');
-        }
-      };
-      
-      processSuccessfulPayment();
-    }, []);
-    
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="max-w-md w-full mx-auto p-8 rounded-xl bg-white shadow-md text-center">
-          {paymentSuccessStatus === 'processing' ? (
-            <>
-              <div className="mb-6">
-                <Loader2 className="h-16 w-16 text-primary animate-spin mx-auto" />
-              </div>
-              <h1 className="text-2xl font-bold mb-4">Processing Your Payment</h1>
-              <p className="text-gray-600 mb-6">
-                Please wait while we confirm your payment...
-              </p>
-            </>
-          ) : paymentSuccessStatus === 'error' ? (
-            <>
-              <div className="mb-6">
-                <AlertCircle className="h-16 w-16 text-red-500 mx-auto" />
-              </div>
-              <h1 className="text-2xl font-bold mb-4">Oops, Something Went Wrong</h1>
-              <p className="text-gray-600 mb-6">
-                {errorMessage || 'There was an issue confirming your payment. Please contact support.'}
-              </p>
-              <Button onClick={() => window.location.href = '/'} className="w-full">
-                Return to Home
-              </Button>
-            </>
-          ) : (
-            <>
-              <div className="mb-6">
-                <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
-              </div>
-              <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
-              <p className="text-gray-600 mb-6">
-                Thank you for your purchase! We've sent a confirmation email with details on how to access your book.
-              </p>
-              <Button onClick={() => window.location.href = '/'} className="w-full">
-                Return to Home
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
-    );
+    return <CheckoutSuccessPage />;
   }
-
+  
   return (
     <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 py-10 bg-gray-50">
       <div className="mb-8">

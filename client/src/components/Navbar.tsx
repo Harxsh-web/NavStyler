@@ -163,10 +163,17 @@ export default function Navbar() {
           <div 
             className="flex items-center cursor-pointer" 
             onClick={() => {
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-              });
+              // Check if we're on home page
+              if (location === '/') {
+                // If on home page, just scroll to top
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+                });
+              } else {
+                // If on another page, redirect to home page
+                window.location.href = '/';
+              }
             }}
           >
             <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
@@ -215,10 +222,17 @@ export default function Navbar() {
                       onClick={() => {
                         setIsSheetOpen(false);
                         setTimeout(() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                          });
+                          // Check if we're on home page
+                          if (location === '/') {
+                            // If on home page, just scroll to top
+                            window.scrollTo({
+                              top: 0,
+                              behavior: 'smooth'
+                            });
+                          } else {
+                            // If on another page, redirect to home page
+                            window.location.href = '/';
+                          }
                         }, 300);
                       }}
                     >
