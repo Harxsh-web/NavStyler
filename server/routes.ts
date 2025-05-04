@@ -5,10 +5,10 @@ import express from "express";
 import { setupAuth } from "./auth";
 import { adminRouter } from "./adminRoutes";
 import { contentRouter } from "./contentRoutes";
-import analyticsRouter from "./analyticsRoutes";
+import { analyticsRouter } from "./analyticsRoutes";
 import stripeRouter from "./stripeRoutes";
 import themeRouter from "./themeRoutes";
-import seoRouter from "./seoRoutes";
+import { seoRouter } from "./seoRoutes";
 import { uploadRouter } from "./uploadRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {

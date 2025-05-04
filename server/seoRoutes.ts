@@ -4,7 +4,7 @@ import { isAdmin, isAuthenticated } from "./auth";
 import { insertSeoMetadataSchema } from "@shared/schema";
 import { z } from "zod";
 
-const seoRouter = Router();
+export const seoRouter = Router();
 
 // Get all SEO metadata (admin only)
 seoRouter.get("/", isAuthenticated, isAdmin, async (req, res) => {
@@ -156,4 +156,4 @@ seoRouter.delete("/:id", isAuthenticated, isAdmin, async (req, res) => {
   }
 });
 
-export default seoRouter;
+// Remove default export

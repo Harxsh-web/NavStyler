@@ -442,12 +442,12 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                                             Edit
                                           </Button>
                                           <Button 
-                                            variant="ghost" 
+                                            className="delete-button"
                                             size="sm"
                                             onClick={() => deleteItemMutation.mutate(item.id)}
                                             disabled={deleteItemMutation.isPending}
                                           >
-                                            <Trash2Icon className="h-4 w-4 text-red-500" />
+                                            <Trash2Icon className="h-4 w-4 text-white" />
                                           </Button>
                                         </div>
                                       </div>

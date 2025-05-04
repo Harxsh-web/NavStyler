@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pgTable, serial, text, integer, boolean, timestamp, uniqueIndex, varchar, json } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, boolean, timestamp, uniqueIndex, varchar, json, date } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 // ----- Landing Section Schema -----
@@ -380,22 +380,31 @@ export const insertVideoSchema = createInsertSchema(videos).omit({
 export type InsertVideo = z.infer<typeof insertVideoSchema>;
 
 // ----- Analytics Schema -----
-export const analytics = pgTable("analytics", {
+export const pageView = pgTable("page_view", {
   id: serial("id").primaryKey(),
-  date: timestamp("date").defaultNow().notNull(),
-  pageViews: integer("page_views").notNull(),
-  uniqueVisitors: integer("unique_visitors").notNull(),
-  bounceRate: varchar("bounce_rate", { length: 10 }).notNull(),
-  averageSessionDuration: varchar("average_session_duration", { length: 10 }).notNull(),
-  conversionRate: varchar("conversion_rate", { length: 10 }).notNull(),
-  revenue: integer("revenue").notNull(),
+  date: date("date").notNull(),
+  path: text("path").notNull(),
+  count: integer("count").notNull(),
 });
 
-export type Analytics = typeof analytics.$inferSelect;
-export const insertAnalyticsSchema = createInsertSchema(analytics).omit({
+export type PageView = typeof pageView.$inferSelect;
+export const insertPageViewSchema = createInsertSchema(pageView).omit({
   id: true,
 });
-export type InsertAnalytics = z.infer<typeof insertAnalyticsSchema>;
+export type InsertPageView = z.infer<typeof insertPageViewSchema>;
+
+export const visitor = pgTable("visitor", {
+  id: serial("id").primaryKey(),
+  date: date("date").notNull(),
+  count: integer("count").notNull(),
+  source: text("source").notNull(),
+});
+
+export type Visitor = typeof visitor.$inferSelect;
+export const insertVisitorSchema = createInsertSchema(visitor).omit({
+  id: true,
+});
+export type InsertVisitor = z.infer<typeof insertVisitorSchema>;
 
 // ----- Newsletter Subscribers Schema -----
 export const subscribers = pgTable("subscribers", {
