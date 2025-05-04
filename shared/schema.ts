@@ -531,3 +531,24 @@ export const insertQuestionsSectionSchema = createInsertSchema(questionsSection)
   id: true,
 });
 export type InsertQuestionsSection = z.infer<typeof insertQuestionsSectionSchema>;
+
+// ----- Milestones Schema -----
+export const milestones = pgTable("milestones", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  dateReached: timestamp("date_reached"),
+  targetDate: timestamp("target_date"),
+  iconName: text("icon_name"),
+  order: integer("order").default(0),
+  completed: boolean("completed").default(false),
+  progress: integer("progress").default(0), // 0-100 percentage
+  color: text("color").default("#4f46e5"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type Milestone = typeof milestones.$inferSelect;
+export const insertMilestoneSchema = createInsertSchema(milestones).omit({
+  id: true,
+});
+export type InsertMilestone = z.infer<typeof insertMilestoneSchema>;
