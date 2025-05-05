@@ -181,35 +181,8 @@ export default function TestimonialsDisplay() {
   // Fetch testimonials from API
   const { data, isLoading } = usePublicTestimonials();
   
-  // Set up state for testimonials
-  const [testimonials, setTestimonials] = useState([
-    {
-      id: 1,
-      name: "Izzy Sealey",
-      title: "624,000 subscribers",
-      quote: "I think the content is super helpful, especially for a beginner to really get an idea of the YouTube landscape and how everything works. Secondly, the amazing community of creators was something I never expected and has actually been the most valuable takeaway for me.",
-      headline: "Izzy had never made a video before she took our course.",
-      subheadline: "She implemented everything she learned, and her channel has grown to 600k+ subscribers since.",
-      imageUrl: "https://randomuser.me/api/portraits/women/65.jpg",
-      videoUrl: "/attached_assets/image_1746467734537.png",
-      mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746469561985.png",
-      hasGrowthChart: true
-    },
-    {
-      id: 2,
-      name: "James Wilson",
-      title: "356,000 subscribers",
-      quote: "The course completely changed my approach to YouTube. The step-by-step guidance helped me grow my channel beyond what I thought was possible in such a short time.",
-      headline: "James was stuck at 5,000 subscribers for 2 years before joining.",
-      subheadline: "After implementing our strategies, his channel grew exponentially to over 350k subscribers.",
-      imageUrl: "https://randomuser.me/api/portraits/men/32.jpg",
-      videoUrl: "/attached_assets/image_1746467734537.png",
-      mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746469561985.png",
-      hasGrowthChart: true
-    }
-  ]);
+  // Set up state for testimonials with an empty array that will be populated from API
+  const [testimonials, setTestimonials] = useState<TestimonialDisplayItem[]>([]);
   
   // Update testimonials when data is loaded
   useEffect(() => {
@@ -225,8 +198,8 @@ export default function TestimonialsDisplay() {
         imageUrl: item.imageUrl || "https://randomuser.me/api/portraits/women/65.jpg",
         videoUrl: item.videoUrl || "/attached_assets/image_1746467734537.png",
         mediaType: item.mediaType || "image",
-        growthChartUrl: "/attached_assets/image_1746469561985.png", // Use the YouTube analytics screenshot
-        hasGrowthChart: true, // Always show growth chart
+        growthChartUrl: item.growthChartUrl || "/attached_assets/image_1746469561985.png", 
+        hasGrowthChart: item.hasGrowthChart || false,
         subscriberCount: item.subscriberCount
       }));
       
@@ -267,12 +240,14 @@ export default function TestimonialsDisplay() {
               </div>
               
               {/* Growth Chart - Using full-width YouTube analytics */}
-              <div className="mb-16">
-                <GrowthChart 
-                  imageUrl="/attached_assets/image_1746469561985.png" 
-                  alt={`${testimonial.name}'s YouTube channel growth`} 
-                />
-              </div>
+              {testimonial.hasGrowthChart && (
+                <div className="mb-16">
+                  <GrowthChart 
+                    imageUrl={testimonial.growthChartUrl} 
+                    alt={`${testimonial.name}'s YouTube channel growth`} 
+                  />
+                </div>
+              )}
               
               {/* Video testimonial section - alternating layout */}
               <div className="mt-8">
