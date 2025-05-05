@@ -111,10 +111,8 @@ export default function HomePage() {
         </section>
         
         {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <TestimonialsDisplay />
-          </div>
+        <section id="testimonials" className="py-0 bg-white">
+          <TestimonialsDisplay />
         </section>
         
         {/* Hero Section */}
