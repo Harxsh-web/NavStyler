@@ -275,30 +275,31 @@ export function TestimonialsEditor() {
         </CardHeader>
         <CardContent>
           <div className="rounded-md border mb-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Quote Preview</TableHead>
-                  <TableHead className="w-24 text-center">Media Type</TableHead>
-                  <TableHead className="w-48 text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <div className="relative w-full overflow-visible">
+              <table className="w-full caption-bottom text-sm">
+                <thead className="[&_tr]:border-b">
+                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Name</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Title</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Quote Preview</th>
+                    <th className="h-12 px-4 text-center align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-24">Media Type</th>
+                    <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-48">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="[&_tr:last-child]:border-0">
                 {testimonials && testimonials.length > 0 ? (
                   testimonials.map((testimonial: Testimonial) => (
-                    <TableRow key={testimonial.id}>
-                      <TableCell className="font-medium">
+                    <tr key={testimonial.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
                         {testimonial.name}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
+                      </td>
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-muted-foreground">
                         {testimonial.title}
-                      </TableCell>
-                      <TableCell className="max-w-xs truncate">
+                      </td>
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 max-w-xs truncate">
                         {testimonial.quote}
-                      </TableCell>
-                      <TableCell className="text-center">
+                      </td>
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-center">
                         {testimonial.mediaType === 'video' ? (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                             <Video className="h-3 w-3 mr-1" />
@@ -310,8 +311,8 @@ export function TestimonialsEditor() {
                             Image
                           </span>
                         )}
-                      </TableCell>
-                      <TableCell className="text-right">
+                      </td>
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
                         <div className="flex justify-end gap-2">
                           <Button 
                             variant="outline" 
@@ -351,18 +352,19 @@ export function TestimonialsEditor() {
                             </AlertDialogContent>
                           </AlertDialog>
                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center">
+                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <td colSpan={5} className="p-4 align-middle [&:has([role=checkbox])]:pr-0 h-24 text-center">
                       No testimonials found. Add one below.
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 )}
-              </TableBody>
-            </Table>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
