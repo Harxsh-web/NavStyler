@@ -97,70 +97,107 @@ export default function TestimonialsDisplay() {
                     alt="Izzy Sealey video testimonial" 
                     className="w-full h-full object-cover"
                   />
-                  {/* Video controls overlay */}
+                  {/* Video controls overlay based on new image */}
                   <div className="absolute inset-0">
-                    {/* Top label */}
-                    <div className="absolute top-2 left-2 bg-black text-white text-xs font-medium py-1 px-2 rounded">
-                      Izzy Sealey
+                    {/* Top bar with YouTube-style controls */}
+                    <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-2 py-1 bg-gradient-to-b from-black/70 to-transparent">
+                      <div className="flex items-center">
+                        {/* YouTube-style icon */}
+                        <div className="bg-red-600 w-8 h-6 rounded flex items-center justify-center mr-2">
+                          <svg viewBox="0 0 24 24" width="16" height="12" fill="white">
+                            <path d="M10 15L15 12 10 9z"/>
+                          </svg>
+                        </div>
+                        
+                        {/* Name and status */}
+                        <div className="text-white">
+                          <div className="font-bold text-sm">Izzy Sealey</div>
+                          <div className="text-xs opacity-80">01:43 | Student</div>
+                        </div>
+                      </div>
+                      
+                      {/* Green "LIVE" badge */}
+                      <div className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                        LIVE
+                      </div>
                     </div>
                     
                     {/* Play button in center */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <button className="bg-black/30 hover:bg-black/50 text-white rounded-full w-12 h-12 flex items-center justify-center transition-colors">
+                      <button className="bg-black/30 hover:bg-black/50 w-12 h-12 rounded flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
                           <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                       </button>
                     </div>
                     
-                    {/* Bottom video controls bar */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white h-10 flex items-center px-2">
-                      {/* Play button */}
-                      <button className="mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white">
-                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                        </svg>
-                      </button>
-                      
-                      {/* Current time */}
-                      <span className="text-xs mr-2">0:41</span>
-                      
+                    {/* Bottom control bar */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-black text-white flex flex-col">
                       {/* Progress bar */}
-                      <div className="h-1 bg-gray-600 flex-grow mx-2 rounded-full overflow-hidden">
-                        <div className="h-full bg-white w-1/3 rounded-full"></div>
+                      <div className="h-1 w-full bg-black">
+                        <div className="h-full bg-red-600 w-1/3"></div>
                       </div>
                       
-                      {/* Total time */}
-                      <span className="text-xs mx-2">2:14</span>
-                      
-                      {/* Volume */}
-                      <button className="mx-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                        </svg>
-                      </button>
-                      
-                      {/* CC button */}
-                      <button className="mx-1 text-xs font-bold">
-                        CC
-                      </button>
-                      
-                      {/* Settings */}
-                      <button className="mx-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                          <circle cx="12" cy="12" r="3"></circle>
-                          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                      </button>
-                      
-                      {/* Fullscreen */}
-                      <button className="mx-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                        </svg>
-                      </button>
+                      {/* Controls */}
+                      <div className="flex items-center justify-between px-2 py-2">
+                        <div className="flex items-center">
+                          {/* Play button */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                          </button>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          {/* Volume control */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                          </button>
+                          
+                          {/* CC button */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                              <path d="M8 13h3M15 13h2"></path>
+                            </svg>
+                          </button>
+                          
+                          {/* Speed button */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                            </svg>
+                          </button>
+                          
+                          {/* Settings */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <circle cx="12" cy="12" r="3"></circle>
+                              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                          </button>
+                          
+                          {/* PIP mode */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                              <rect x="10" y="11" width="10" height="6" rx="1" ry="1" fill="white" stroke="white"></rect>
+                            </svg>
+                          </button>
+                          
+                          {/* Fullscreen */}
+                          <button className="p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
