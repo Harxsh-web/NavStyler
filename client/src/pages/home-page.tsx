@@ -98,20 +98,24 @@ export default function HomePage() {
                     ) : (
                       <>
                         <p>
-                          Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                        there is no data available for the author bio.
                         </p>
-                        <p>
-                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online. In the years since, Luke's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
-                        </p>
-                        <p>
-                          In 2021, Luke took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
-                        </p>
+                      
                       </>
                     )}
                   </div>
                 </div>
               </div>
             )}
+          </div>
+        </section>
+        
+        {/* Testimonials Section */}
+        <section id="testimonials" className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">What people are saying...</h2>
+            
+            <TestimonialsDisplay />
           </div>
         </section>
         
@@ -198,16 +202,6 @@ export default function HomePage() {
                 <cite className="text-gray-600 text-lg font-normal">— {quoteData?.author || "Luke Mikic"}</cite>
               </blockquote>
             )}
-          </div>
-        </section>
-
-
-        {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">What people are saying...</h2>
-            
-            <TestimonialsDisplay />
           </div>
         </section>
 
