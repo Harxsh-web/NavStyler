@@ -164,14 +164,14 @@ const TestimonialQuote = ({ quote, name, title }: TestimonialQuoteProps) => {
   );
 }
 
-// Growth Chart component
-const GrowthChart = ({ imageUrl = "/attached_assets/image_1746466630188.png", alt = "Growth chart" }) => {
+// Growth Chart component with YouTube analytics
+const GrowthChart = ({ imageUrl = "/attached_assets/image_1746469387132.png", alt = "YouTube Growth Analytics" }) => {
   return (
     <div className="w-full">
       <img 
         src={imageUrl} 
         alt={alt} 
-        className="w-full h-auto"
+        className="w-full h-auto rounded-md shadow-md border border-gray-200"
       />
     </div>
   );
@@ -193,7 +193,7 @@ export default function TestimonialsDisplay() {
       imageUrl: "https://randomuser.me/api/portraits/women/65.jpg",
       videoUrl: "/attached_assets/image_1746467734537.png",
       mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746466630188.png",
+      growthChartUrl: "/attached_assets/image_1746469387132.png",
       hasGrowthChart: true
     },
     {
@@ -206,7 +206,7 @@ export default function TestimonialsDisplay() {
       imageUrl: "https://randomuser.me/api/portraits/men/32.jpg",
       videoUrl: "/attached_assets/image_1746467734537.png",
       mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746466630188.png",
+      growthChartUrl: "/attached_assets/image_1746469387132.png",
       hasGrowthChart: true
     }
   ]);
@@ -225,8 +225,8 @@ export default function TestimonialsDisplay() {
         imageUrl: item.imageUrl || "https://randomuser.me/api/portraits/women/65.jpg",
         videoUrl: item.videoUrl || "/attached_assets/image_1746467734537.png",
         mediaType: item.mediaType || "image",
-        growthChartUrl: item.growthChartUrl || "/attached_assets/image_1746466630188.png",
-        hasGrowthChart: item.hasGrowthChart || false,
+        growthChartUrl: "/attached_assets/image_1746469387132.png", // Use the YouTube analytics screenshot
+        hasGrowthChart: true, // Always show growth chart
         subscriberCount: item.subscriberCount
       }));
       
@@ -244,9 +244,6 @@ export default function TestimonialsDisplay() {
     );
   }
   
-  // No need for active testimonial references anymore
-  // We display all testimonials one after another
-  
   return (
     <div className="py-16 md:py-24 bg-white w-full">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
@@ -254,8 +251,6 @@ export default function TestimonialsDisplay() {
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
           We've helped Beginners shortcut their YouTube learning curve ✋
         </h2>
-        
-        {/* No navigation needed - removed per client request */}
         
         {/* All Testimonials - Displayed One Below Another */}
         <div className="mt-10 space-y-24">
@@ -271,75 +266,57 @@ export default function TestimonialsDisplay() {
                 </p>
               </div>
               
-              {/* Profile and chart */}
-              <div className="mb-12">
-                {/* Profile */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-full overflow-hidden">
-                    <img 
-                      src={testimonial.imageUrl} 
-                      alt={`${testimonial.name} profile picture`} 
-                      className="w-full h-full object-cover object-top"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.title}</p>
-                  </div>
-                </div>
-                
-                {/* Growth Chart (if available) */}
-                {testimonial.hasGrowthChart && (
-                  <GrowthChart 
-                    imageUrl={testimonial.growthChartUrl} 
-                    alt={`${testimonial.name}'s growth chart`} 
-                  />
-                )}
-                
-                {/* Video testimonial section - alternating layout */}
-                <div className="mt-16">
-                  <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
-                    {/* Conditionally render quote and video in alternating order */}
-                    {index % 2 === 0 ? (
-                      <>
-                        {/* Left quote side */}
-                        <div className="w-full md:w-1/2">
-                          <TestimonialQuote 
-                            quote={testimonial.quote} 
-                            name={testimonial.name}
-                            title={testimonial.title}
-                          />
-                        </div>
-                        
-                        {/* Right video side */}
-                        <div className="w-full md:w-1/2">
-                          <VideoPlayer 
-                            name={testimonial.name}
-                            videoSrc={testimonial.videoUrl}
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {/* Left video side (for odd indexes) */}
-                        <div className="w-full md:w-1/2">
-                          <VideoPlayer 
-                            name={testimonial.name}
-                            videoSrc={testimonial.videoUrl}
-                          />
-                        </div>
-                        
-                        {/* Right quote side (for odd indexes) */}
-                        <div className="w-full md:w-1/2">
-                          <TestimonialQuote 
-                            quote={testimonial.quote} 
-                            name={testimonial.name}
-                            title={testimonial.title}
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
+              {/* Growth Chart - Using full-width YouTube analytics */}
+              <div className="mb-16">
+                <GrowthChart 
+                  imageUrl="/attached_assets/image_1746469387132.png" 
+                  alt={`${testimonial.name}'s YouTube channel growth`} 
+                />
+              </div>
+              
+              {/* Video testimonial section - alternating layout */}
+              <div className="mt-8">
+                <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
+                  {/* Conditionally render quote and video in alternating order */}
+                  {index % 2 === 0 ? (
+                    <>
+                      {/* Left quote side */}
+                      <div className="w-full md:w-1/2">
+                        <TestimonialQuote 
+                          quote={testimonial.quote} 
+                          name={testimonial.name}
+                          title={testimonial.title}
+                        />
+                      </div>
+                      
+                      {/* Right video side */}
+                      <div className="w-full md:w-1/2">
+                        <VideoPlayer 
+                          name={testimonial.name}
+                          videoSrc={testimonial.videoUrl}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Left video side (for odd indexes) */}
+                      <div className="w-full md:w-1/2">
+                        <VideoPlayer 
+                          name={testimonial.name}
+                          videoSrc={testimonial.videoUrl}
+                        />
+                      </div>
+                      
+                      {/* Right quote side (for odd indexes) */}
+                      <div className="w-full md:w-1/2">
+                        <TestimonialQuote 
+                          quote={testimonial.quote} 
+                          name={testimonial.name}
+                          title={testimonial.title}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
