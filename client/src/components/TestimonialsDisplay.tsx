@@ -19,7 +19,7 @@ export default function TestimonialsDisplay() {
   
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-12 bg-white">
+      <div className="flex justify-center items-center py-12 bg-[#F9F6F3]">
         <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
       </div>
     );
@@ -28,7 +28,7 @@ export default function TestimonialsDisplay() {
   const currentTestimonial = testimonials[activeIndex];
   
   return (
-    <div className="py-16 md:py-24 bg-white w-full">
+    <div className="py-16 md:py-24 bg-[#F9F6F3] w-full">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Main heading */}
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
@@ -71,6 +71,51 @@ export default function TestimonialsDisplay() {
                 alt="Growth chart" 
                 className="w-full h-auto"
               />
+            </div>
+            
+            {/* Video testimonial section */}
+            <div className="mt-16">
+              <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
+                {/* Left quote side */}
+                <div className="w-full md:w-1/2 bg-[#F9F6F3] p-8 md:p-10 flex flex-col justify-center">
+                  <p className="text-lg md:text-xl leading-relaxed mb-8">
+                    "I think the content is super helpful, especially for a beginner to really 
+                    get an idea of the YouTube landscape and how everything works. 
+                    Secondly, the amazing community of creators was something I never 
+                    expected and has actually been the most valuable takeaway for me."
+                  </p>
+                  <div>
+                    <p className="font-bold text-lg">Izzy Sealey</p>
+                    <p className="text-gray-600">(624,000 Subscribers)</p>
+                  </div>
+                </div>
+                
+                {/* Right video side */}
+                <div className="w-full md:w-1/2 bg-black relative">
+                  <img 
+                    src="/attached_assets/image_1746467734537.png" 
+                    alt="Izzy Sealey video testimonial" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button className="bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="absolute top-2 left-2 bg-black text-white text-xs font-medium py-1 px-2 rounded">
+                    Izzy Sealey
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* CTA button */}
+            <div className="mt-16 text-center">
+              <button className="bg-[#4fc6e0] hover:bg-[#39b4d0] text-white px-10 py-4 rounded-full text-lg font-semibold shadow-md">
+                Enrol Now For $995
+              </button>
             </div>
           </div>
         </div>
