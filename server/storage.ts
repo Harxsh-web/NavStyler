@@ -690,7 +690,9 @@ export class DatabaseStorage implements IStorage {
       const result = await query(
         `SELECT id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
-         show_mobile as "showMobile", updated_at as "updatedAt"
+         show_mobile as "showMobile", updated_at as "updatedAt",
+         subscriber_count as "subscriberCount", growth_chart_url as "growthChartUrl",
+         has_growth_chart as "hasGrowthChart", headline, subheadline
          FROM testimonial`
       );
       return result.rows as schema.Testimonial[];
@@ -705,7 +707,9 @@ export class DatabaseStorage implements IStorage {
       const result = await query(
         `SELECT id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
-         show_mobile as "showMobile", updated_at as "updatedAt"
+         show_mobile as "showMobile", updated_at as "updatedAt",
+         subscriber_count as "subscriberCount", growth_chart_url as "growthChartUrl",
+         has_growth_chart as "hasGrowthChart", headline, subheadline
          FROM testimonial WHERE id = $1`,
         [id]
       );
@@ -719,11 +723,16 @@ export class DatabaseStorage implements IStorage {
   async createTestimonial(data: schema.InsertTestimonial): Promise<schema.Testimonial> {
     try {
       const result = await query(
-        `INSERT INTO testimonial (name, quote, title, image_url, video_url, media_type, show_mobile)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO testimonial (
+          name, quote, title, image_url, video_url, media_type, show_mobile,
+          subscriber_count, growth_chart_url, has_growth_chart, headline, subheadline
+        )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
          RETURNING id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
-         show_mobile as "showMobile", updated_at as "updatedAt"`,
+         show_mobile as "showMobile", updated_at as "updatedAt",
+         subscriber_count as "subscriberCount", growth_chart_url as "growthChartUrl",
+         has_growth_chart as "hasGrowthChart", headline, subheadline`,
         [
           data.name,
           data.quote, 
@@ -731,7 +740,12 @@ export class DatabaseStorage implements IStorage {
           data.imageUrl || '',
           data.videoUrl || '',
           data.mediaType || 'image',
-          data.showMobile ?? true
+          data.showMobile ?? true,
+          data.subscriberCount || 0,
+          data.growthChartUrl || '',
+          data.hasGrowthChart ?? false,
+          data.headline || '',
+          data.subheadline || ''
         ]
       );
       
@@ -757,11 +771,15 @@ export class DatabaseStorage implements IStorage {
       const result = await query(
         `UPDATE testimonial 
          SET name = $1, quote = $2, title = $3, image_url = $4, 
-         video_url = $5, media_type = $6, show_mobile = $7, updated_at = NOW()
-         WHERE id = $8
+         video_url = $5, media_type = $6, show_mobile = $7,
+         subscriber_count = $8, growth_chart_url = $9, has_growth_chart = $10,
+         headline = $11, subheadline = $12, updated_at = NOW()
+         WHERE id = $13
          RETURNING id, quote, name, title, image_url as "imageUrl", 
          video_url as "videoUrl", media_type as "mediaType", 
-         show_mobile as "showMobile", updated_at as "updatedAt"`,
+         show_mobile as "showMobile", updated_at as "updatedAt",
+         subscriber_count as "subscriberCount", growth_chart_url as "growthChartUrl",
+         has_growth_chart as "hasGrowthChart", headline, subheadline`,
         [
           data.name ?? existing.name,
           data.quote ?? existing.quote,
@@ -770,6 +788,11 @@ export class DatabaseStorage implements IStorage {
           data.videoUrl ?? existing.videoUrl,
           data.mediaType ?? existing.mediaType,
           data.showMobile ?? existing.showMobile,
+          data.subscriberCount ?? existing.subscriberCount ?? 0,
+          data.growthChartUrl ?? existing.growthChartUrl ?? '',
+          data.hasGrowthChart ?? existing.hasGrowthChart ?? false,
+          data.headline ?? existing.headline ?? '',
+          data.subheadline ?? existing.subheadline ?? '',
           id
         ]
       );
