@@ -67,6 +67,11 @@ interface Testimonial {
   videoUrl?: string;
   mediaType: 'image' | 'video';
   showMobile: boolean;
+  subscriberCount?: number;
+  growthChartUrl?: string;
+  hasGrowthChart?: boolean;
+  headline?: string;
+  subheadline?: string;
 }
 
 // Schema for section title
@@ -80,9 +85,14 @@ const testimonialSchema = z.object({
   name: z.string().min(1, "Name is required"),
   title: z.string().optional(),
   quote: z.string().min(1, "Testimonial quote is required"),
+  headline: z.string().optional(),
+  subheadline: z.string().optional(),
+  subscriberCount: z.number().optional(),
   mediaType: z.enum(['image', 'video']).default('image'),
   imageUrl: z.string().optional().or(z.literal("")),
   videoUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  growthChartUrl: z.string().optional().or(z.literal("")),
+  hasGrowthChart: z.boolean().default(false),
   showMobile: z.boolean().default(true),
 });
 
@@ -126,9 +136,14 @@ export function TestimonialsEditor() {
       name: "",
       title: "",
       quote: "",
+      headline: "",
+      subheadline: "",
+      subscriberCount: undefined,
       mediaType: "image",
       imageUrl: "",
       videoUrl: "",
+      growthChartUrl: "",
+      hasGrowthChart: false,
       showMobile: true,
     },
   });
@@ -154,9 +169,14 @@ export function TestimonialsEditor() {
           name: "",
           title: "",
           quote: "",
+          headline: "",
+          subheadline: "",
+          subscriberCount: undefined,
           mediaType: "image",
           imageUrl: "",
           videoUrl: "",
+          growthChartUrl: "",
+          hasGrowthChart: false,
           showMobile: true,
         });
       }
@@ -183,9 +203,14 @@ export function TestimonialsEditor() {
       name: testimonial.name || "",
       title: testimonial.title || "",
       quote: testimonial.quote || "",
+      headline: testimonial.headline || "",
+      subheadline: testimonial.subheadline || "",
+      subscriberCount: testimonial.subscriberCount,
       mediaType: testimonial.mediaType || "image",
       imageUrl: testimonial.imageUrl || "",
       videoUrl: testimonial.videoUrl || "",
+      growthChartUrl: testimonial.growthChartUrl || "",
+      hasGrowthChart: testimonial.hasGrowthChart || false,
       showMobile: testimonial.showMobile !== false,
     });
     setShowEditDialog(true);
