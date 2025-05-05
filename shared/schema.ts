@@ -140,6 +140,14 @@ export const testimonials = pgTable("testimonial", {
   mediaType: text("media_type").default("image").notNull(),
   showMobile: boolean("show_mobile").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  subscriberCount: integer("subscriber_count"),
+  viewCount: integer("view_count"),
+  growthChartUrl: text("growth_chart_url"),
+  hasGrowthChart: boolean("has_growth_chart").default(false),
+  growthChartData: json("growth_chart_data"),
+  annotations: json("annotations"),
+  headline: text("headline"),
+  subheadline: text("subheadline"),
 });
 
 export type Testimonial = typeof testimonials.$inferSelect;

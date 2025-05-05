@@ -210,7 +210,7 @@ export default function HomePage() {
         {!bonusSectionLoading && !bonusItemsLoading && (
           <BonusSection 
             bonusSection={bonusSectionData} 
-            bonusItems={bonusItemsData?.sort((a: BonusItem, b: BonusItem) => ((a.orderIndex || 0) - (b.orderIndex || 0)))} 
+            bonusItems={bonusItemsData?.sort((a: BonusItem, b: BonusItem) => ((a.order || 0) - (b.order || 0)))} 
           />
         )}
 
