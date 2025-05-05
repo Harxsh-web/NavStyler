@@ -51,38 +51,36 @@ export default function LandingSection({ data }: LandingSectionProps) {
 
   return (
     <section 
-      style={{ backgroundColor: data.backgroundColor || '#F9F6F3' }}
+      style={{ backgroundColor: '#F9F7F4' }}
       className="py-12 md:py-16 px-4 md:px-8 mt-0 mb-0"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Hey Friends section */}
-        <div className="grid grid-cols-1 gap-8 items-center mb-16">
-          <div className="space-y-6 flex flex-col items-center text-center">
+        {/* Hero section */}
+        <div className="max-w-4xl mx-auto text-center py-12 md:py-16">
+          <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6">
+            Join The Part-Time YouTuber 
             <div className="relative">
-              <h2
-                className="text-5xl font-bold inline-flex items-center"
-              >
-                <span
-                  className="underline underline-offset-8"
-                  style={{ textDecorationColor: '#47c1e1' }}
-                >
-                  Join the 9 to 5 Escape Artist Academy.
-                </span>
-                {/* <span className="ml-2 transform rotate-12">👋</span> */}
-              </h2>
+              Academy
+              <div className="absolute bottom-0 left-0 right-0 h-2 bg-purple-300 opacity-75 -mb-1 transform translate-y-2 mx-auto w-3/4"></div>
             </div>
-
-            <p className="text-xl max-w-2xl">
-              Want To Escape Your 9-5 & travel the world?
-              <span className="font-bold"> Join Our 8 Week YouTube Masterclass</span>.
-            </p>
-            <div className="flex items-center">
-              <div className="h-10 w-1 bg-orange-400 mr-4"></div>
-              <p className="text-lg">Want To Escape Your 9-5 & travel the world?
-                Join Our YouTube Masterclass
-              </p>
-            </div>
-            
+          </h1>
+          
+          <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto">
+            Discover the proven strategies and techniques to thrive on YouTube –
+            <br />without <span className="font-bold">quitting your day job</span>
+          </p>
+          
+          <div className="flex justify-center mb-10">
+            <Button
+              size="lg"
+              className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-10 py-6 h-auto text-lg"
+              onClick={() => navigate('/checkout')}
+            >
+              Enrol Now for $995
+            </Button>
+          </div>
+          
+          {/* Image container */}
           <div className="relative flex justify-center w-full">
             {/* Capsule shape with yellow background - slight offset for visual interest */}
             <div className="absolute w-full h-full bg-yellow-300 rounded-[100px] max-w-md transform translate-x-4 translate-y-4"></div>
@@ -95,26 +93,6 @@ export default function LandingSection({ data }: LandingSectionProps) {
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
-          </div>
-            <div className="flex space-x-4 mt-2">
-              <Button
-                size="lg"
-                className="bg-[#F9966B] hover:bg-[#f8845a] text-white rounded-full px-8"
-                onClick={() => navigate('/checkout')}
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Buy the Book
-              </Button>
-              
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-full px-8"
-                onClick={() => window.open('https://www.youtube.com/@lukemikic21', '_blank')}
-              >
-                Join YouTube 
-              </Button>
             </div>
           </div>
         </div>
