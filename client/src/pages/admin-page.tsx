@@ -7,7 +7,7 @@ import { QuoteEditor } from "@/components/admin/QuoteEditor";
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
-import { SeoEditor } from "@/components/admin/SeoEditor";
+import { SEOEditor } from "@/components/admin/SEOEditor";
 import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
 import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
@@ -562,7 +562,7 @@ export default function AdminPage() {
               <div className="bg-white shadow-sm rounded-lg p-6">
                 <p className="text-gray-600 mb-4">Optimize your site for search engines and social media.</p>
                 <div className="mt-6">
-                  <SeoEditor />
+                  <SEOEditor />
                 </div>
               </div>
             </div>

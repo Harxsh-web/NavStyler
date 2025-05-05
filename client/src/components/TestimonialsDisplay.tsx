@@ -3,6 +3,22 @@ import { usePublicTestimonials } from "@/hooks/use-public-content";
 import { useState, useEffect } from "react";
 import { Testimonial } from "@shared/schema";
 
+// Define interface type for testimonial data in display component
+interface TestimonialDisplayItem {
+  id: number;
+  name: string;
+  title: string;
+  quote: string;
+  headline?: string;
+  subheadline?: string;
+  imageUrl: string;
+  videoUrl?: string;
+  mediaType: 'image' | 'video';
+  growthChartUrl?: string;
+  hasGrowthChart?: boolean;
+  subscriberCount?: number;
+}
+
 // VideoPlayer component with YouTube-style controls
 interface VideoPlayerProps {
   name?: string;
@@ -201,8 +217,8 @@ export default function TestimonialsDisplay() {
   // Update testimonials when data is loaded
   useEffect(() => {
     if (data && data.length > 0) {
-      // Map API data to our format if needed
-      const formattedTestimonials = data.map(item => ({
+      // Map API data to our format
+      const formattedTestimonials = data.map((item: any) => ({
         id: item.id,
         name: item.name,
         title: item.title || "YouTube Creator",

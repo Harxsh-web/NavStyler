@@ -208,7 +208,7 @@ export function TestimonialsEditor() {
   return (
     <div className="space-y-8">
       {/* Section Editor */}
-      <Card className="h-[80vh] overflow-auto">
+      <Card>
         <CardHeader>
           <CardTitle>Testimonials Section</CardTitle>
           <CardDescription>Edit the section title and description</CardDescription>
