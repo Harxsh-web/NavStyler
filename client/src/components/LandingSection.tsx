@@ -56,8 +56,34 @@ export default function LandingSection({ data }: LandingSectionProps) {
     >
       <div className="max-w-7xl mx-auto">
         {/* Hey Friends section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">
-          <div className="relative flex justify-center">
+        <div className="grid grid-cols-1 gap-8 items-center mb-16">
+          <div className="space-y-6 flex flex-col items-center text-center">
+            <div className="relative">
+              <h2
+                className="text-5xl font-bold inline-flex items-center"
+              >
+                <span
+                  className="underline underline-offset-8"
+                  style={{ textDecorationColor: '#47c1e1' }}
+                >
+                  Join the 9 to 5 Escape Artist Academy.
+                </span>
+                {/* <span className="ml-2 transform rotate-12">👋</span> */}
+              </h2>
+            </div>
+
+            <p className="text-xl max-w-2xl">
+              Want To Escape Your 9-5 & travel the world?
+              <span className="font-bold"> Join Our 8 Week YouTube Masterclass</span>.
+            </p>
+            <div className="flex items-center">
+              <div className="h-10 w-1 bg-orange-400 mr-4"></div>
+              <p className="text-lg">Want To Escape Your 9-5 & travel the world?
+                Join Our YouTube Masterclass
+              </p>
+            </div>
+            
+          <div className="relative flex justify-center w-full">
             {/* Capsule shape with yellow background - slight offset for visual interest */}
             <div className="absolute w-full h-full bg-yellow-300 rounded-[100px] max-w-md transform translate-x-4 translate-y-4"></div>
             {/* Image container */}
@@ -71,29 +97,6 @@ export default function LandingSection({ data }: LandingSectionProps) {
               </div>
             </div>
           </div>
-          <div className="space-y-6">
-            <div className="relative">
-              <h2
-                className="text-5xl font-bold inline-flex whitespace-nowrap items-center"
-              >
-                <span
-                  className="underline underline-offset-8"
-                  style={{ textDecorationColor: '#47c1e1' }}
-                >
-                  Hey Friends
-                </span>
-                <span className="ml-2 transform rotate-12">👋</span>
-              </h2>
-            </div>
-
-            <p className="text-xl">
-              I'm Luke. I'm a Doctor turned Entrepreneur, YouTuber, and the author of the New York Times bestseller, <span className="font-bold">Feel-Good Productivity</span>.
-            </p>
-            <div className="flex items-center">
-              <div className="h-10 w-1 bg-orange-400 mr-4"></div>
-              <p className="text-lg">{data.subheading}</p>
-            </div>
-            
             <div className="flex space-x-4 mt-2">
               <Button
                 size="lg"
@@ -119,39 +122,36 @@ export default function LandingSection({ data }: LandingSectionProps) {
         {/* Newsletter subscription card */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-8 md:p-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Left side - Subscription info */}
-              <div className="space-y-4 ">
+              <div className="space-y-4 flex flex-col items-center text-center">
                 <div className="flex justify-center items-center">
-                  <h2 className="text-6xl font-semi-bold ">Subscribe to <br /><span className='font-bold'>LifeNotes</span> </h2>
+                  <h2 className="text-6xl font-semi-bold">Subscribe to <br /><span className='font-bold'>LifeNotes</span></h2>
                   <img src="https://cdn-icons-png.flaticon.com/128/16273/16273684.png" alt="Pen" className="h-16 ml-2" />
                 </div>
                 
-                
                 <div className="flex items-center justify-center flex-col">
-                <p className="font-medium">
-                  Join a growing community of more than<br />
-                  <span className="font-bold">{data.subscribersCount}</span>
-                </p>
-                <div className='flex items-center'>
-                  <div className="flex -space-x-2 mr-4">
-                    <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-10 w-[80] rounded-full border-2 border-white" />
-
-                  </div>
-                  <div>
-                    <div className="flex text-yellow-400 text-2xl">
-                      ★★★★★
+                  <p className="font-medium">
+                    Join a growing community of more than<br />
+                    <span className="font-bold">{data.subscribersCount}</span>
+                  </p>
+                  <div className='flex items-center'>
+                    <div className="flex -space-x-2 mr-4">
+                      <img src="https://aliabdaal.com/wp-content/uploads/2024/09/Avatars.png" alt="Avatar" className="h-10 w-[80] rounded-full border-2 border-white" />
                     </div>
-                    <p className="text-xl text-[#8D8A91] font-semibold">{data.reviewsCount}</p>
-                </div>
-                
+                    <div>
+                      <div className="flex text-yellow-400 text-2xl">
+                        ★★★★★
+                      </div>
+                      <p className="text-xl text-[#8D8A91] font-semibold">{data.reviewsCount}</p>
+                    </div>
                   </div>
                 </div>
               </div>
               
               {/* Right side - Form */}
-              <div className="space-y-4">
-                <p className="text-gray-700 font-semibold text-xl">
+              <div className="space-y-4 mx-auto w-full max-w-md">
+                <p className="text-gray-700 font-semibold text-xl text-center md:text-left">
                   {data.newsletterSubheading}
                 </p>
                 
@@ -161,7 +161,6 @@ export default function LandingSection({ data }: LandingSectionProps) {
                       type="email" 
                       placeholder="Your email" 
                       value={email}
-                    
                       onChange={(e) => setEmail(e.target.value)}
                       className="flex-grow rounded-none border-0 bg-gray-100 h-full px-6 focus-visible:ring-0 focus-visible:ring-offset-0 text-[#76737C] font-semibold tracking-wide"
                       required
@@ -176,7 +175,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                   </div>
                 </form>
                 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 text-center md:text-left">
                   By submitting this form, you'll be signed up to my free newsletter, which sometimes
                   includes mentions of my books, apps and courses. You can opt-out at any time with no
                   hard feelings. 👍 Here's our <a href="#" className="underline">privacy policy</a> if you like reading.
@@ -185,9 +184,9 @@ export default function LandingSection({ data }: LandingSectionProps) {
             </div>
           </div>
           
-          <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-center items-center space-x-2">
-            <p className="text-sm text-gray-600 text-center md:text-left">As featured in:</p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-2">
+          <div className="border-t border-gray-200 p-4 bg-gray-50 flex flex-col items-center justify-center">
+            <p className="text-sm text-gray-600 text-center mb-2">As featured in:</p>
+            <div className="flex flex-wrap justify-center gap-6">
               <img src="https://aliabdaal.com/wp-content/uploads/2024/09/image-264.png" alt="Business Insider" className="h-6" />
               <img src="https://aliabdaal.com/wp-content/uploads/2024/09/new_york_times.png" alt="New York Times" className="h-6" />
               <img src="https://aliabdaal.com/wp-content/uploads/2025/01/good-morning-america-logo.png" alt="Good Morning America" className="h-6" />
