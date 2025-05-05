@@ -1,5 +1,5 @@
 import Footer from "@/components/Footer";
-import { FaAward, FaBook } from "react-icons/fa";
+import { FaAward } from "react-icons/fa";
 import { TbHeartHandshake } from "react-icons/tb";
 import { Loader2 } from "lucide-react";
 import { 
@@ -115,70 +115,7 @@ export default function HomePage() {
           <TestimonialsDisplay />
         </section>
         
-        {/* Hero Section */}
-        <section id="book-section" className="py-12 md:py-24 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            {heroLoading ? (
-              <div className="flex justify-center items-center py-20">
-                <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-              </div>
-            ) : (
-              <div className="flex flex-col md:flex-row items-center md:justify-between">
-                <div className="md:w-1/2 mb-10 md:mb-0 md:pr-12">
-                  <div className="mb-6">
-                    <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                      {/* Use dynamic content or fallback if not available */}
-                      {heroData?.title || "Feel-Good"} <span className="text-black relative inline-block">
-                       
-                      </span>
-                    </h1>
-                    <h2 className="text-xl md:text-2xl font-medium text-gray-700 mb-8">
-                      {heroData?.subtitle || "The science-based guide to achieving more while feeling good in the process."}
-                    </h2>
-                  </div>
-                  
-                  {/* <div className="flex flex-wrap gap-4 items-center mb-8">
-                    <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/63a6770e3e6bcc9e7c6aaa9ad9f3f0f9.png" alt="New York Times" className="h-6" />
-                    <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/ca22e1850226ddb886bc2cf69290c8dc.png" alt="Sunday Times" className="h-6" />
-                    <img src="https://cdn.buymeacoffee.com/uploads/project_updates/2023/10/adf7bc3af650d4fefbd310e1cebf6d6e.png" alt="Financial Times" className="h-6" />
-                  </div> */}
-                  
-                  <div className="flex items-center gap-4">
-                    <a
-                      href={heroData?.buttonUrl || "/checkout"} 
-                      className="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-200"
-                    >
-                      {heroData?.buttonText || "Get the Book"}
-                    </a>
-                    <a href="#bonus-section" className="text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
-                      Learn More
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="md:w-1/2">
-                  <div className="bg-amber-100 rounded-xl p-4 max-w-md mx-auto">
-                    <img 
-                      src={heroData?.imageUrl || "https://images.squarespace-cdn.com/content/v1/60bd6ea1c39d1e35837d56c1/f1d4b73c-8a28-4854-9b0e-6291a3e86410/FeelGoodProductivityCover.jpg"} 
-                      alt="Feel-Good Productivity Book Cover" 
-                      className="w-full h-auto rounded-lg shadow-md"
-                      onError={(e) => {
-                        console.error("Failed to load hero image:", heroData?.imageUrl);
-                        // Fallback to default image if the hero image fails to load
-                        const target = e.target as HTMLImageElement;
-                        target.src = "https://images.squarespace-cdn.com/content/v1/60bd6ea1c39d1e35837d56c1/f1d4b73c-8a28-4854-9b0e-6291a3e86410/FeelGoodProductivityCover.jpg";
-                      }}
-                    />
-                    {/* Debug: Show image URL for troubleshooting */}
-                    <div className="mt-2 text-xs text-gray-500 hidden">
-                      Image source: {heroData?.imageUrl}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        {/* Hero Section Removed */}
         
         {/* Quote Section */}
         <section className="py-16 bg-yellow-50">
@@ -237,62 +174,7 @@ export default function HomePage() {
             questionsSection={questionsSectionData}
           />
         )}
-        {/* About Book Section */}
-        {/* <section className="py-16 bg-white" id="learn-more">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex flex-col items-center mb-10">
-              <FaBook className="text-cyan-500 text-4xl mb-4" />
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">
-                About <span className="relative inline-block">
-                  Feel-Good Productivity
-                  <span className="absolute bottom-1 left-0 w-full h-1 bg-cyan-400"></span>
-                </span>
-              </h2>
-            </div>
-            
-            <div className="flex flex-col md:flex-row gap-12">
-              <div className="md:w-2/5">
-                <div className="sticky top-8">
-                  <img 
-                    src="https://images.squarespace-cdn.com/content/v1/60bd6ea1c39d1e35837d56c1/f1d4b73c-8a28-4854-9b0e-6291a3e86410/FeelGoodProductivityCover.jpg" 
-                    alt="Feel-Good Productivity Book Cover" 
-                    className="w-full h-auto rounded-lg shadow-xl"
-                  />
-                </div>
-              </div>
-              
-              <div className="md:w-3/5">
-                <h3 className="text-2xl font-bold mb-5">Introduction</h3>
-                <h4 className="text-xl font-semibold mb-3">The Art & Science of Feel-Good Productivity</h4>
-                <p className="text-gray-700 mb-6">
-                  Luke shares his journey from stressed-out doctor to successful entrepreneur, and how he discovered the science of Feel-Good Productivity. You'll understand the psychological and neuroscientific evidence for why positive emotions fuel success, and explore how <span className="italic">feeling good</span> in your work can boost your energy, reduce your stress, and enrich your life.
-                </p>
-                
-                <h3 className="text-2xl font-bold mb-5">Part 1</h3>
-                <h4 className="text-xl font-semibold mb-3">Energise</h4>
-                <p className="text-gray-700 mb-6">
-                  Luke shares the three fundamental energizers that make us feel good and lead to true productivity. You'll discover the strategies that Nobel laureates and trailblazing founders of multimillion-dollar enterprises use to maintain motivation and outperform expectations, all by finding the fun in their projects.
-                </p>
-                
-                <h3 className="text-2xl font-bold mb-5">Part 2</h3>
-                <h4 className="text-xl font-semibold mb-3">Unblock</h4>
-                <p className="text-gray-700 mb-6">
-                  This section outlines a groundbreaking method for beating procrastination that <span className="italic">doesn't</span> rely on temporary motivation or painful discipline. You'll learn about the three biggest blockers that run down our feel-good emotions and so derail our productivity – as well as the simple strategies you can use to stay focused and consistent.
-                </p>
-                
-                <div className="mt-8">
-                  <a 
-                    href={heroData?.buttonUrl || "#buy"} 
-                    className="bg-black text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition duration-200 inline-block"
-                  >
-                    {heroData?.buttonText || "Get the Book"}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-         */}
+        {/* About Book Section - Removed */}
      
       </main>
       

@@ -165,7 +165,7 @@ const TestimonialQuote = ({ quote, name, title }: TestimonialQuoteProps) => {
 }
 
 // Growth Chart component with YouTube analytics
-const GrowthChart = ({ imageUrl = "/attached_assets/image_1746469387132.png", alt = "YouTube Growth Analytics" }) => {
+const GrowthChart = ({ imageUrl = "/attached_assets/image_1746469561985.png", alt = "YouTube Growth Analytics" }) => {
   return (
     <div className="w-full">
       <img 
@@ -193,7 +193,7 @@ export default function TestimonialsDisplay() {
       imageUrl: "https://randomuser.me/api/portraits/women/65.jpg",
       videoUrl: "/attached_assets/image_1746467734537.png",
       mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746469387132.png",
+      growthChartUrl: "/attached_assets/image_1746469561985.png",
       hasGrowthChart: true
     },
     {
@@ -206,7 +206,7 @@ export default function TestimonialsDisplay() {
       imageUrl: "https://randomuser.me/api/portraits/men/32.jpg",
       videoUrl: "/attached_assets/image_1746467734537.png",
       mediaType: "video",
-      growthChartUrl: "/attached_assets/image_1746469387132.png",
+      growthChartUrl: "/attached_assets/image_1746469561985.png",
       hasGrowthChart: true
     }
   ]);
@@ -225,7 +225,7 @@ export default function TestimonialsDisplay() {
         imageUrl: item.imageUrl || "https://randomuser.me/api/portraits/women/65.jpg",
         videoUrl: item.videoUrl || "/attached_assets/image_1746467734537.png",
         mediaType: item.mediaType || "image",
-        growthChartUrl: "/attached_assets/image_1746469387132.png", // Use the YouTube analytics screenshot
+        growthChartUrl: "/attached_assets/image_1746469561985.png", // Use the YouTube analytics screenshot
         hasGrowthChart: true, // Always show growth chart
         subscriberCount: item.subscriberCount
       }));
@@ -269,7 +269,7 @@ export default function TestimonialsDisplay() {
               {/* Growth Chart - Using full-width YouTube analytics */}
               <div className="mb-16">
                 <GrowthChart 
-                  imageUrl="/attached_assets/image_1746469387132.png" 
+                  imageUrl="/attached_assets/image_1746469561985.png" 
                   alt={`${testimonial.name}'s YouTube channel growth`} 
                 />
               </div>
