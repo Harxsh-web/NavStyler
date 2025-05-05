@@ -97,15 +97,10 @@ export default function HomePage() {
                   
                   <div className="text-gray-700 space-y-5 leading-relaxed">
                     {authorData?.bio ? (
-                      <div className="prose prose-lg max-w-none">
-                        {/* Replace text pattern with styled version */}
-                        {authorData.bio.split(/\*\*(.*?)\*\*/g).map((part: string, index: number) => 
-                          index % 2 === 0 ? (
-                            <span key={index} dangerouslySetInnerHTML={{ __html: part }} />
-                          ) : (
-                            <span key={index} className="font-semibold text-[#5DCDF1]">{part}</span>
-                          )
-                        )}
+                      <div className="prose prose-lg max-w-none whitespace-pre-wrap">
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: authorData.bio.replace(/\*\*(.*?)\*\*/g, '<span class="font-semibold text-[#5DCDF1]">$1</span>')
+                        }} />
                       </div>
                     ) : (
                       <>
