@@ -26,9 +26,57 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer = ({ 
-  name = "Izzy Sealey", 
+  name = "Steven Bartlett", 
   videoSrc = "/attached_assets/image_1746467734537.png" 
 }: VideoPlayerProps) => {
+  // Check if source is a YouTube URL
+  const isYouTubeVideo = videoSrc && (
+    videoSrc.includes('youtube.com') || 
+    videoSrc.includes('youtu.be') ||
+    videoSrc.includes('youtube') ||
+    videoSrc.includes('shorts')
+  );
+
+  // Extract YouTube video ID from URL
+  const getYouTubeId = (url: string) => {
+    if (!url) return '';
+    
+    // Handle youtu.be format
+    if (url.includes('youtu.be')) {
+      return url.split('youtu.be/')[1]?.split('?')[0];
+    }
+    
+    // Handle youtube.com/shorts format
+    if (url.includes('/shorts/')) {
+      return url.split('/shorts/')[1]?.split('?')[0];
+    }
+    
+    // Handle regular youtube.com format
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/);
+    return match && match[1] ? match[1] : '';
+  };
+
+  // Create embed URL for YouTube
+  const youtubeEmbedUrl = isYouTubeVideo ? 
+    `https://www.youtube.com/embed/${getYouTubeId(videoSrc)}?autoplay=0&rel=0` : 
+    '';
+
+  if (isYouTubeVideo) {
+    return (
+      <div className="bg-black relative w-full h-full aspect-video">
+        <iframe
+          src={youtubeEmbedUrl}
+          title={`${name} Testimonial Video`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="w-full h-full"
+        ></iframe>
+      </div>
+    );
+  }
+
+  // Fallback to image display with YouTube-style controls
   return (
     <div className="bg-black relative h-full">
       <img 
@@ -47,18 +95,7 @@ const VideoPlayer = ({
                 <path d="M10 15L15 12 10 9z"/>
               </svg>
             </div>
-            
-            {/* Name and status */}
-            {/* <div className="text-white">
-              <div className="font-bold text-sm">{name}</div>
-              <div className="text-xs opacity-80">01:43 | Student</div>
-            </div> */}
           </div>
-          
-          {/* Green "LIVE" badge */}
-          {/* <div className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-            LIVE
-          </div> */}
         </div>
         
         {/* Play button in center */}
@@ -106,26 +143,11 @@ const VideoPlayer = ({
                 </svg>
               </button>
               
-              {/* Speed button */}
-              <button className="p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-                </svg>
-              </button>
-              
               {/* Settings */}
               <button className="p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                   <circle cx="12" cy="12" r="3"></circle>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-              </button>
-              
-              {/* PIP mode */}
-              <button className="p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <rect x="10" y="11" width="10" height="6" rx="1" ry="1" fill="white" stroke="white"></rect>
                 </svg>
               </button>
               
@@ -251,12 +273,12 @@ export default function TestimonialsDisplay() {
               
               {/* Video testimonial section - alternating layout */}
               <div className="mt-8">
-                <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
+                <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg ">
                   {/* Conditionally render quote and video in alternating order */}
                   {index % 2 === 0 ? (
                     <>
                       {/* Left quote side */}
-                      <div className="w-full md:w-1/2">
+                      <div className="w-full md:w-1/2 ">
                         <TestimonialQuote 
                           quote={testimonial.quote} 
                           name={testimonial.name}
@@ -299,7 +321,7 @@ export default function TestimonialsDisplay() {
           
           {/* CTA button */}
           <div className="mt-16 text-center">
-            <button className="bg-[#4fc6e0] hover:bg-[#39b4d0] text-white px-10 py-4 rounded-full text-lg font-semibold shadow-md">
+            <button className="bg-[#4fc6e0] hover:bg-black hover:text-white text-black px-10 py-3 rounded-full text-lg font-semibold shadow-md">
               Enrol Now For $995
             </button>
           </div>
