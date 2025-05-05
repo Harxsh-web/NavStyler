@@ -4,7 +4,15 @@ import { useState, useEffect } from "react";
 import { Testimonial } from "@shared/schema";
 
 // VideoPlayer component with YouTube-style controls
-const VideoPlayer = ({ name = "Izzy Sealey", videoSrc = "/attached_assets/image_1746467734537.png" }) => {
+interface VideoPlayerProps {
+  name?: string;
+  videoSrc?: string;
+}
+
+const VideoPlayer = ({ 
+  name = "Izzy Sealey", 
+  videoSrc = "/attached_assets/image_1746467734537.png" 
+}: VideoPlayerProps) => {
   return (
     <div className="bg-black relative h-full">
       <img 
@@ -120,7 +128,13 @@ const VideoPlayer = ({ name = "Izzy Sealey", videoSrc = "/attached_assets/image_
 }
 
 // Testimonial Quote component
-const TestimonialQuote = ({ quote, name, title }) => {
+interface TestimonialQuoteProps {
+  quote: string;
+  name: string;
+  title: string;
+}
+
+const TestimonialQuote = ({ quote, name, title }: TestimonialQuoteProps) => {
   return (
     <div className="bg-[#F9F6F3] p-8 md:p-10 flex flex-col justify-center h-full">
       <p className="text-lg md:text-xl leading-relaxed mb-8">

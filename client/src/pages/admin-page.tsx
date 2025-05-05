@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
-import { HeroEditor } from "@/components/admin/HeroEditor";
+// HeroEditor import removed as requested
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { QuoteEditor } from "@/components/admin/QuoteEditor";
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
@@ -108,17 +108,7 @@ export default function AdminPage() {
             
             {/* Landing section removed as requested */}
             
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                activeTab === "hero" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
-              }`}
-              onClick={() => {
-                setActiveTab("hero");
-                if (window.innerWidth < 1024) setShowSidebar(false);
-              }}
-            >
-              Hero Section
-            </button>
+            {/* Hero section removed as requested */}
             
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
@@ -271,12 +261,7 @@ export default function AdminPage() {
                     View Live Site
                   </a>
                   
-                  <button
-                    onClick={() => setActiveTab("hero")}
-                    className="  text-center text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    Edit Hero Section
-                  </button>
+                  {/* Hero section button removed as requested */}
 
                 </div>
               </div>
@@ -285,13 +270,7 @@ export default function AdminPage() {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {/* Landing section stats card removed as requested */}
                 
-                <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Hero Section</span>
-                    <span className="text-xl sm:text-2xl font-bold mt-1">1</span>
-                    <span className="text-xs text-gray-500 mt-1">Last updated: Today</span>
-                  </div>
-                </div>
+                {/* Hero section stats card removed as requested */}
                 
 
                 
@@ -317,15 +296,7 @@ export default function AdminPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 {/* Landing section quick action removed as requested */}
                 
-                <button 
-                  onClick={() => setActiveTab("hero")}
-                  className="flex items-center justify-center py-3 px-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-                >
-                  <div className="text-left">
-                    <h3 className="font-medium">Edit Hero Section</h3>
-                    <p className="text-sm text-white-800">Update headlines and CTAs</p>
-                  </div>
-                </button>
+                {/* Hero section quick action removed as requested */}
                 
                 <button 
                   onClick={() => setActiveTab("testimonials")}
@@ -347,18 +318,7 @@ export default function AdminPage() {
                 <div className="divide-y divide-gray-200">
                   {/* Landing section overview removed as requested */}
                 
-                  <div className="px-6 py-4 flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium">Hero Section</h3>
-                      <p className="text-sm text-gray-500">Main headline and book promotion</p>
-                    </div>
-                    <button 
-                      onClick={() => setActiveTab("hero")}
-                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </div>
+                  {/* Hero section overview removed as requested */}
                   
                   <div className="px-6 py-4 flex justify-between items-center">
                     <div>
@@ -483,18 +443,7 @@ export default function AdminPage() {
             </div>
           )}
           
-          {activeTab === "hero" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Hero Section Editor</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-gray-600 mb-4">Edit the main hero section of your landing page.</p>
-                {/* Import and use the HeroEditor component */}
-                <div className="mt-6">
-                  <HeroEditor />
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Hero section editor component removed as requested */}
           
           {activeTab === "quote" && (
             <div>
