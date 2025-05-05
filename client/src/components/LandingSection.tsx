@@ -59,9 +59,14 @@ export default function LandingSection({ data }: LandingSectionProps) {
         <div className="max-w-4xl mx-auto text-center ">
           <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6">
             Join The 9–5 Escape Artist 
-            <div className="relative">
+            <div className="relative inline-block">
               Academy
-              <div className="absolute bottom-0 left-0 right-0 h-2 bg-purple-300 opacity-75 -mb-1 transform translate-y-2 mx-auto w-3/4"></div>
+              <div className="absolute bottom-1 left-0 right-0 h-1.5 -mb-1 transform translate-y-1 mx-auto" style={{
+                background: 'linear-gradient(to right, rgba(182, 153, 255, 0.3) 0%, rgba(182, 153, 255, 0.9) 50%, rgba(182, 153, 255, 0.3) 100%)',
+                borderRadius: '9999px',
+                width: '106%',
+                marginLeft: '-3%'
+              }}></div>
             </div>
           </h1>
           
