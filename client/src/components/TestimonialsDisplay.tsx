@@ -49,16 +49,16 @@ const VideoPlayer = ({
             </div>
             
             {/* Name and status */}
-            <div className="text-white">
+            {/* <div className="text-white">
               <div className="font-bold text-sm">{name}</div>
               <div className="text-xs opacity-80">01:43 | Student</div>
-            </div>
+            </div> */}
           </div>
           
           {/* Green "LIVE" badge */}
-          <div className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+          {/* <div className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
             LIVE
-          </div>
+          </div> */}
         </div>
         
         {/* Play button in center */}
