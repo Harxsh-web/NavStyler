@@ -91,7 +91,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
           </p>
           
           {/* Buttons */}
-          <div className="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-4 mb-10">
+          <div className="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-4 mb-4">
             <Button
               size="default"
               className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-6 md:px-8 py-2 md:py-4 h-auto text-lg md:text-lg w-50 md:w-auto"
@@ -108,6 +108,15 @@ export default function LandingSection({ data }: LandingSectionProps) {
             >
               Join YouTube
             </Button>
+          </div>
+          
+          {/* Animated down arrow */}
+          <div className="flex justify-center mb-10">
+            <div className="animate-bounce-slow">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5L12 19M12 19L18 13M12 19L6 13" stroke="#FF9B76" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
           
           

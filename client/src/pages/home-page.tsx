@@ -50,6 +50,71 @@ export default function HomePage() {
           <LandingSection data={landingData} />
         ) : null}
         
+        {/* Author Section */}
+        <section id="author-section" className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-10">
+              <TbHeartHandshake className="text-cyan-500 text-4xl mx-auto mb-4" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">About The Author</h2>
+            </div>
+
+            {authorLoading ? (
+              <div className="flex justify-center items-center py-12">
+                <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+              </div>
+            ) : (
+              <div className="flex flex-col md:flex-row items-center gap-10 max-w-4xl mx-auto">
+                <div className="md:w-1/3 relative">
+                  {/* Circular background with accent */}
+                  <div className="absolute w-full h-full rounded-full bg-[#5DCDF1] transform translate-x-2 translate-y-2">
+                    {/* Curved accent line */}
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-[10%]">
+                      <svg width="20" height="80" viewBox="0 0 20 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 2C8 2 2 20 2 40C2 60 8 78 18 78" stroke="#5DCDF1" strokeWidth="4" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                    {/* Curved accent for bottom right */}
+                    <div className="absolute right-0 bottom-5 transform translate-x-[30%]">
+                      <svg width="50" height="40" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 38C15 38 35 32 48 2" stroke="#5DCDF1" strokeWidth="4" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  {/* Author image */}
+                  <div className="relative z-10 overflow-hidden rounded-full aspect-square">
+                    <img 
+                      src={authorData?.imageUrl || "https://randomuser.me/api/portraits/men/44.jpg"} 
+                      alt={authorData?.name || "Luke Mikic"} 
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+                </div>
+
+                <div className="md:w-2/3">
+                  <h3 className="text-2xl font-bold mb-4">{authorData?.name || "Luke Mikic"}</h3>
+                  <div className="text-gray-700 space-y-4">
+                    {authorData?.bio ? (
+                      <div dangerouslySetInnerHTML={{ __html: authorData.bio }} />
+                    ) : (
+                      <>
+                        <p>
+                          Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
+                        </p>
+                        <p>
+                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online. In the years since, Luke's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
+                        </p>
+                        <p>
+                          In 2021, Luke took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+        
         {/* Hero Section */}
         <section id="book-section" className="py-12 md:py-24 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">
@@ -132,53 +197,6 @@ export default function HomePage() {
                 </p>
                 <cite className="text-gray-600 text-lg font-normal">— {quoteData?.author || "Luke Mikic"}</cite>
               </blockquote>
-            )}
-          </div>
-        </section>
-
-        {/* Author Section */}
-        <section id="author-section" className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="text-center mb-10">
-              <TbHeartHandshake className="text-cyan-500 text-4xl mx-auto mb-4" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">About The Author</h2>
-            </div>
-
-            {authorLoading ? (
-              <div className="flex justify-center items-center py-12">
-                <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-              </div>
-            ) : (
-              <div className="flex flex-col md:flex-row items-center gap-10 max-w-4xl mx-auto">
-                <div className="md:w-1/3">
-                  <img 
-                    src={authorData?.imageUrl || "https://randomuser.me/api/portraits/men/44.jpg"} 
-                    alt={authorData?.name || "Luke Mikic"} 
-                    className="w-full h-auto rounded-lg shadow-md"
-                  />
-                </div>
-
-                <div className="md:w-2/3">
-                  <h3 className="text-2xl font-bold mb-4">{authorData?.name || "Luke Mikic"}</h3>
-                  <div className="text-gray-700 space-y-4">
-                    {authorData?.bio ? (
-                      <div dangerouslySetInnerHTML={{ __html: authorData.bio }} />
-                    ) : (
-                      <>
-                        <p>
-                          Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
-                        </p>
-                        <p>
-                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online. In the years since, Luke's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
-                        </p>
-                        <p>
-                          In 2021, Luke took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
             )}
           </div>
         </section>
