@@ -94,7 +94,7 @@ export default function HomePage() {
                   <h3 className="text-2xl font-bold mb-4">{authorData?.name || "Luke Mikic"}</h3>
                   <div className="text-gray-700 space-y-4">
                     {authorData?.bio ? (
-                      <div dangerouslySetInnerHTML={{ __html: authorData.bio }} />
+                      <div dangerouslySetInnerHTML={{ __html: authorData.bio }} className="prose prose-lg max-w-none" />
                     ) : (
                       <>
                         <p>
