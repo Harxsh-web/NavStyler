@@ -56,9 +56,9 @@ export default function LandingSection({ data }: LandingSectionProps) {
     >
       <div className="max-w-7xl mx-auto">
         {/* Hero section */}
-        <div className="max-w-4xl mx-auto text-center py-12 md:py-16">
+        <div className="max-w-4xl mx-auto text-center ">
           <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6">
-            Join The Part-Time YouTuber 
+            Join The 9–5 Escape Artist 
             <div className="relative">
               Academy
               <div className="absolute bottom-0 left-0 right-0 h-2 bg-purple-300 opacity-75 -mb-1 transform translate-y-2 mx-auto w-3/4"></div>
@@ -66,22 +66,32 @@ export default function LandingSection({ data }: LandingSectionProps) {
           </h1>
           
           <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto">
-            Discover the proven strategies and techniques to thrive on YouTube –
-            <br />without <span className="font-bold">quitting your day job</span>
+            Discover the proven strategies and blueprints I’ve developed, that will allow you to quit your 
+            <br />without <span className="font-bold"> 9-5 and succeed on YouTube.</span>
           </p>
           
-          <div className="flex justify-center mb-10">
+          {/* Buttons */}
+          <div className="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-4 mb-10">
             <Button
-              size="lg"
-              className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-10 py-6 h-auto text-lg"
+              size="default"
+              className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-6 md:px-10 py-2 md:py-6 h-auto text-sm md:text-lg w-64 md:w-auto"
               onClick={() => navigate('/checkout')}
             >
               Enrol Now for $995
             </Button>
+            
+            <Button
+              size="default"
+              variant="outline"
+              className="border-2 font-medium rounded-full px-6 md:px-8 py-2 md:py-6 h-auto text-sm md:text-lg w-64 md:w-auto"
+              onClick={() => window.open('https://www.youtube.com/@lukemikic21', '_blank')}
+            >
+              Join YouTube
+            </Button>
           </div>
           
           {/* Image container */}
-          <div className="relative flex justify-center w-full">
+          <div className="relative flex justify-center w-full mb-8">
             {/* Capsule shape with yellow background - slight offset for visual interest */}
             <div className="absolute w-full h-full bg-yellow-300 rounded-[100px] max-w-md transform translate-x-4 translate-y-4"></div>
             {/* Image container */}
@@ -95,6 +105,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
               </div>
             </div>
           </div>
+          
         </div>
 
         {/* Newsletter subscription card */}
