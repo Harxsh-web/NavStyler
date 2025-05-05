@@ -113,8 +113,6 @@ export default function HomePage() {
         {/* Testimonials Section */}
         <section id="testimonials" className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">What people are saying...</h2>
-            
             <TestimonialsDisplay />
           </div>
         </section>
