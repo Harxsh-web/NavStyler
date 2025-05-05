@@ -91,58 +91,23 @@ export default function HomePage() {
                 </div>
 
                 <div className="md:w-2/3">
-                  <h3 className="text-3xl font-bold mb-6 text-[#1a202c] relative inline-block">
-                    {authorData?.name || "Luke Mikic"}
-                    <span className="absolute bottom-0 left-0 h-1 bg-[#5DCDF1] w-3/4"></span>
-                  </h3>
-                  
-                  <div className="text-gray-700 space-y-5 leading-relaxed">
+                  <h3 className="text-2xl font-bold mb-4">{authorData?.name || "Luke Mikic"}</h3>
+                  <div className="text-gray-700 space-y-4">
                     {authorData?.bio ? (
-                      <div 
-                        className="prose prose-lg max-w-none prose-headings:text-[#1a202c] prose-p:text-gray-700 prose-strong:text-[#5DCDF1] prose-strong:font-semibold"
-                        dangerouslySetInnerHTML={{ __html: authorData.bio }} 
-                      />
+                      <div dangerouslySetInnerHTML={{ __html: authorData.bio }} />
                     ) : (
                       <>
-                        <p className="text-lg font-medium text-[#1a202c]">
+                        <p>
                           Luke Mikic is a doctor, entrepreneur, amateur magician, and the world's most-followed productivity expert.
                         </p>
-                        <div className="pl-4 border-l-4 border-[#5DCDF1] italic">
-                          <p className="text-gray-700">
-                            "I'm passionate about helping people escape the 9-5 grind and build the YouTube career of their dreams."
-                          </p>
-                        </div>
                         <p>
-                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online.
+                          Luke became intrigued by the science of productivity while juggling the demands of medical training at Cambridge University with building his business. While working as a doctor in the UK's National Health Service, Luke started to document his journey towards living a healthier, happier, more productive life online. In the years since, Luke's evidence-based videos, podcasts and articles about the human mind have reached hundreds of millions of people all around the world.
                         </p>
                         <p>
-                          In the years since, Luke's <span className="font-semibold text-[#5DCDF1]">evidence-based videos, podcasts and articles</span> about the human mind have reached hundreds of millions of people all around the world.
-                        </p>
-                        <p className="font-medium">
                           In 2021, Luke took a break from his medical career to focus on creating content. He now runs a team of 20+ people across his businesses, helping millions of people live happier, healthier, and more productive lives.
                         </p>
                       </>
                     )}
-                    
-                    <div className="flex items-center gap-4 pt-2">
-                      <a
-                        href="https://www.youtube.com/@lukemikic21"
-                        target="_blank"
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center px-4 py-2 bg-[#5DCDF1] text-white rounded-md hover:bg-[#4BAAD8] transition-colors"
-                      >
-                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                        YouTube Channel
-                      </a>
-                      <a
-                        href="#bonus-section" 
-                        className="inline-flex items-center px-4 py-2 border border-[#5DCDF1] text-[#5DCDF1] rounded-md hover:bg-gray-50 transition-colors"
-                      >
-                        Learn More
-                      </a>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -251,7 +216,7 @@ export default function HomePage() {
         {!bonusSectionLoading && !bonusItemsLoading && (
           <BonusSection 
             bonusSection={bonusSectionData} 
-            bonusItems={bonusItemsData?.sort((a: BonusItem, b: BonusItem) => ((a.order || 0) - (b.order || 0)))} 
+            bonusItems={bonusItemsData?.sort((a: BonusItem, b: BonusItem) => ((a.orderIndex || 0) - (b.orderIndex || 0)))} 
           />
         )}
 
