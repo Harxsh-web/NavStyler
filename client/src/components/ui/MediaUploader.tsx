@@ -8,6 +8,7 @@ interface MediaUploaderProps {
   onChange: (url: string) => void;
   accept?: string;
   maxSize?: number; // in MB
+  mediaType?: string; // Added for testimonial editor support
 }
 
 export function MediaUploader({
@@ -15,6 +16,7 @@ export function MediaUploader({
   onChange,
   accept = "image/*",
   maxSize = 5, // Default 5MB
+  mediaType, // Use mediaType if provided
 }: MediaUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
