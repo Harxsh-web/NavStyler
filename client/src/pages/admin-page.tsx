@@ -4,7 +4,7 @@ import { Link } from "wouter";
 // HeroEditor import removed as requested
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { QuoteEditor } from "@/components/admin/QuoteEditor";
-import { TestimonialsEditor } from "@/components/admin/TestimonialsEditor";
+import { TestimonialsEditor } from "@/components/admin/TestimonialsEditorFixed";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
 import { SEOEditor } from "@/components/admin/SEOEditor";
