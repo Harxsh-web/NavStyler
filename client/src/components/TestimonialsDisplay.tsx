@@ -1,4 +1,4 @@
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { usePublicTestimonials } from "@/hooks/use-public-content";
 import { useState, useEffect } from "react";
 import { Testimonial } from "@shared/schema";
@@ -211,9 +211,6 @@ export default function TestimonialsDisplay() {
     }
   ]);
   
-  // Current testimonial index
-  const [activeIndex, setActiveIndex] = useState(0);
-  
   // Update testimonials when data is loaded
   useEffect(() => {
     if (data && data.length > 0) {
@@ -239,16 +236,6 @@ export default function TestimonialsDisplay() {
     }
   }, [data]);
   
-  // Navigate to next testimonial
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
-  
-  // Navigate to previous testimonial
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-  
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-12 bg-white">
@@ -257,11 +244,8 @@ export default function TestimonialsDisplay() {
     );
   }
   
-  // Get current testimonial
-  const currentTestimonial = testimonials[activeIndex];
-  
-  // Determine if this is an even or odd index (for alternating layout)
-  const isEven = activeIndex % 2 === 0;
+  // No need for active testimonial references anymore
+  // We display all testimonials one after another
   
   return (
     <div className="py-16 md:py-24 bg-white w-full">
@@ -271,127 +255,101 @@ export default function TestimonialsDisplay() {
           We've helped Beginners shortcut their YouTube learning curve ✋
         </h2>
         
-        {/* Testimonial navigation */}
-        {testimonials.length > 1 && (
-          <div className="flex justify-center items-center mb-8 gap-2">
-            <button 
-              onClick={prevTestimonial}
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 rounded-full ${index === activeIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
-            </div>
-            
-            <button 
-              onClick={nextTestimonial}
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        )}
+        {/* No navigation needed - removed per client request */}
         
-        {/* Testimonial section */}
-        <div className="mt-10">
-          {/* Testimonial headline */}
-          <div className="text-center mb-8">
-            <h3 className="text-3xl md:text-5xl font-serif font-bold">
-              {currentTestimonial.headline}
-            </h3>
-            <p className="text-lg mt-6 max-w-3xl mx-auto">
-              {currentTestimonial.subheadline}
-            </p>
-          </div>
-          
-          {/* Profile and chart */}
-          <div className="mb-12">
-            {/* Profile */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-14 h-14 rounded-full overflow-hidden">
-                <img 
-                  src={currentTestimonial.imageUrl} 
-                  alt={`${currentTestimonial.name} profile picture`} 
-                  className="w-full h-full object-cover object-top"
-                />
+        {/* All Testimonials - Displayed One Below Another */}
+        <div className="mt-10 space-y-24">
+          {testimonials.map((testimonial, index) => (
+            <div key={testimonial.id} className="testimonial-item">
+              {/* Testimonial headline */}
+              <div className="text-center mb-8">
+                <h3 className="text-3xl md:text-5xl font-serif font-bold">
+                  {testimonial.headline}
+                </h3>
+                <p className="text-lg mt-6 max-w-3xl mx-auto">
+                  {testimonial.subheadline}
+                </p>
               </div>
-              <div>
-                <h4 className="font-bold text-lg">{currentTestimonial.name}</h4>
-                <p className="text-sm text-gray-600">{currentTestimonial.title}</p>
-              </div>
-            </div>
-            
-            {/* Growth Chart (if available) */}
-            {currentTestimonial.hasGrowthChart && (
-              <GrowthChart 
-                imageUrl={currentTestimonial.growthChartUrl} 
-                alt={`${currentTestimonial.name}'s growth chart`} 
-              />
-            )}
-            
-            {/* Video testimonial section - alternating layout */}
-            <div className="mt-16">
-              <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
-                {/* Conditionally render quote and video in alternating order */}
-                {isEven ? (
-                  <>
-                    {/* Left quote side */}
-                    <div className="w-full md:w-1/2">
-                      <TestimonialQuote 
-                        quote={currentTestimonial.quote} 
-                        name={currentTestimonial.name}
-                        title={currentTestimonial.title}
-                      />
-                    </div>
-                    
-                    {/* Right video side */}
-                    <div className="w-full md:w-1/2">
-                      <VideoPlayer 
-                        name={currentTestimonial.name}
-                        videoSrc={currentTestimonial.videoUrl}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Left video side (for odd indexes) */}
-                    <div className="w-full md:w-1/2">
-                      <VideoPlayer 
-                        name={currentTestimonial.name}
-                        videoSrc={currentTestimonial.videoUrl}
-                      />
-                    </div>
-                    
-                    {/* Right quote side (for odd indexes) */}
-                    <div className="w-full md:w-1/2">
-                      <TestimonialQuote 
-                        quote={currentTestimonial.quote} 
-                        name={currentTestimonial.name}
-                        title={currentTestimonial.title}
-                      />
-                    </div>
-                  </>
+              
+              {/* Profile and chart */}
+              <div className="mb-12">
+                {/* Profile */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 rounded-full overflow-hidden">
+                    <img 
+                      src={testimonial.imageUrl} 
+                      alt={`${testimonial.name} profile picture`} 
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg">{testimonial.name}</h4>
+                    <p className="text-sm text-gray-600">{testimonial.title}</p>
+                  </div>
+                </div>
+                
+                {/* Growth Chart (if available) */}
+                {testimonial.hasGrowthChart && (
+                  <GrowthChart 
+                    imageUrl={testimonial.growthChartUrl} 
+                    alt={`${testimonial.name}'s growth chart`} 
+                  />
                 )}
+                
+                {/* Video testimonial section - alternating layout */}
+                <div className="mt-16">
+                  <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg">
+                    {/* Conditionally render quote and video in alternating order */}
+                    {index % 2 === 0 ? (
+                      <>
+                        {/* Left quote side */}
+                        <div className="w-full md:w-1/2">
+                          <TestimonialQuote 
+                            quote={testimonial.quote} 
+                            name={testimonial.name}
+                            title={testimonial.title}
+                          />
+                        </div>
+                        
+                        {/* Right video side */}
+                        <div className="w-full md:w-1/2">
+                          <VideoPlayer 
+                            name={testimonial.name}
+                            videoSrc={testimonial.videoUrl}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Left video side (for odd indexes) */}
+                        <div className="w-full md:w-1/2">
+                          <VideoPlayer 
+                            name={testimonial.name}
+                            videoSrc={testimonial.videoUrl}
+                          />
+                        </div>
+                        
+                        {/* Right quote side (for odd indexes) */}
+                        <div className="w-full md:w-1/2">
+                          <TestimonialQuote 
+                            quote={testimonial.quote} 
+                            name={testimonial.name}
+                            title={testimonial.title}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-            
-            {/* CTA button */}
-            <div className="mt-16 text-center">
-              <button className="bg-[#4fc6e0] hover:bg-[#39b4d0] text-white px-10 py-4 rounded-full text-lg font-semibold shadow-md">
-                Enrol Now For $995
-              </button>
-            </div>
+          ))}
+          
+          {/* CTA button */}
+          <div className="mt-16 text-center">
+            <button className="bg-[#4fc6e0] hover:bg-[#39b4d0] text-white px-10 py-4 rounded-full text-lg font-semibold shadow-md">
+              Enrol Now For $995
+            </button>
           </div>
         </div>
       </div>
