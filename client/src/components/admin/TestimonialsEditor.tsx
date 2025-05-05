@@ -315,7 +315,7 @@ export function TestimonialsEditor() {
                 {testimonials && testimonials.length > 0 ? (
                   testimonials.map((testimonial: Testimonial) => (
                     <tr key={testimonial.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                      <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium bg-green">
                         {testimonial.name}
                       </td>
                       <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-muted-foreground">

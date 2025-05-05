@@ -238,18 +238,18 @@ export default function TestimonialsDisplay() {
   
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-12 bg-white">
+      <div className="flex justify-center items-center py-12 bg-[#F9F6F3]">
         <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
       </div>
     );
   }
   
   return (
-    <div className="py-16 md:py-24 bg-white w-full">
+    <div className="py-16 md:py-24 bg-[#F9F6F3] w-full">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Main heading */}
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
-          We've helped Beginners shortcut their YouTube learning curve ✋
+          We've helped Beginners shortcut their YouTube learning curve <span className="text-amber-500">✋</span>
         </h2>
         
         {/* All Testimonials - Displayed One Below Another */}
