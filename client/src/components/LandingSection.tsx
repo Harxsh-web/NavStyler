@@ -70,31 +70,6 @@ export default function LandingSection({ data }: LandingSectionProps) {
             </div>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto">
-            Discover the proven strategies and blueprints I’ve developed, that will allow you to quit your 
-            <br />without <span className="font-bold"> 9-5 and succeed on YouTube.</span>
-          </p>
-          
-          {/* Buttons */}
-          <div className="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-4 mb-10">
-            <Button
-              size="default"
-              className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-6 md:px-10 py-2 md:py-6 h-auto text-sm md:text-lg w-64 md:w-auto"
-              onClick={() => navigate('/checkout')}
-            >
-              Enrol Now for $995
-            </Button>
-            
-            <Button
-              size="default"
-              variant="outline"
-              className="border-2 font-medium rounded-full px-6 md:px-8 py-2 md:py-6 h-auto text-sm md:text-lg w-64 md:w-auto"
-              onClick={() => window.open('https://www.youtube.com/@lukemikic21', '_blank')}
-            >
-              Join YouTube
-            </Button>
-          </div>
-          
           {/* Image container */}
           <div className="relative flex justify-center w-full mb-8">
             {/* Capsule shape with yellow background - slight offset for visual interest */}
@@ -110,14 +85,40 @@ export default function LandingSection({ data }: LandingSectionProps) {
               </div>
             </div>
           </div>
+          <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto">
+            Discover the proven strategies and blueprints I’ve developed, that will allow you to quit your 
+            <br />without <span className="font-bold"> 9-5 and succeed on YouTube.</span>
+          </p>
+          
+          {/* Buttons */}
+          <div className="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-4 mb-10">
+            <Button
+              size="default"
+              className="bg-[#FF9B76] hover:bg-[#FF855A] text-black font-medium rounded-full px-6 md:px-8 py-2 md:py-4 h-auto text-lg md:text-lg w-50 md:w-auto"
+              onClick={() => navigate('/checkout')}
+            >
+              Enrol Now for $995
+            </Button>
+            
+            <Button
+              size="default"
+              variant="outline"
+              className="border-2 font-medium rounded-full px-6 md:px-8 py-2 md:py-4 h-auto text-sm md:text-lg w-50 md:w-auto"
+              onClick={() => window.open('https://www.youtube.com/@lukemikic21', '_blank')}
+            >
+              Join YouTube
+            </Button>
+          </div>
+          
           
         </div>
 
-        {/* Newsletter subscription card */}
+        {/* 
+        <!-- Newsletter subscription card - Commented out for future use -->
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-8 md:p-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Left side - Subscription info */}
+              <!-- Left side - Subscription info -->
               <div className="space-y-4 flex flex-col items-center text-center">
                 <div className="flex justify-center items-center">
                   <h2 className="text-6xl font-semi-bold">Subscribe to <br /><span className='font-bold'>LifeNotes</span></h2>
@@ -143,7 +144,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
                 </div>
               </div>
               
-              {/* Right side - Form */}
+              <!-- Right side - Form -->
               <div className="space-y-4 mx-auto w-full max-w-md">
                 <p className="text-gray-700 font-semibold text-xl text-center md:text-left">
                   {data.newsletterSubheading}
@@ -190,6 +191,7 @@ export default function LandingSection({ data }: LandingSectionProps) {
             </div>
           </div>
         </div>
+        */}
       </div>
     </section>
   );
