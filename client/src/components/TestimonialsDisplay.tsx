@@ -290,7 +290,7 @@ export default function TestimonialsDisplay() {
 
               <div>
               <p className="text-lg  mx-auto font-serif">
-              Brandon’s channel has since grown from 700 subs to over 10,000 subs in past 18 months we’ve been working together.
+              Brandon's channel has since grown from 700 subs to over 10,000 subs in past 18 months we've been working together.
               <br/>
               Brandon saw a 6300% increase in views <b>OVERNIGHT, </b> in the first 12 weeks working together, most importantly, without doing any extra work.
                 <br/>
@@ -300,7 +300,7 @@ export default function TestimonialsDisplay() {
                 <br/>
               In the first 12 weeks working together, we averaged 5,700 views per video. 
                 <br/>
-            <b>  Yes, that’s a 6300% increase in views, overnight.</b>
+            <b>  Yes, that's a 6300% increase in views, overnight.</b>
 </p>
               </div>
               
@@ -318,11 +318,15 @@ export default function TestimonialsDisplay() {
                             "{testimonial.quote}"
                           </p>
                           <div>
-                            <p className="font-bold text-lg">{testimonial.name}</p>
-                            <p className="text-gray-600">
-                              {testimonial.title || ""}
-                              {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
-                            </p>
+                            {testimonial.name && (
+                              <p className="font-bold text-lg">{testimonial.name}</p>
+                            )}
+                            {(testimonial.title || testimonial.subscriberCount) && (
+                              <p className="text-gray-600">
+                                {testimonial.title || ""}
+                                {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -352,11 +356,15 @@ export default function TestimonialsDisplay() {
                             "{testimonial.quote}"
                           </p>
                           <div>
-                            <p className="font-bold text-lg">{testimonial.name}</p>
-                            <p className="text-gray-600">
-                              {testimonial.title || ""}
-                              {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
-                            </p>
+                            {testimonial.name && (
+                              <p className="font-bold text-lg">{testimonial.name}</p>
+                            )}
+                            {(testimonial.title || testimonial.subscriberCount) && (
+                              <p className="text-gray-600">
+                                {testimonial.title || ""}
+                                {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
