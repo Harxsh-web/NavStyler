@@ -165,26 +165,7 @@ const VideoPlayer = ({
   );
 }
 
-// Testimonial Quote component
-interface TestimonialQuoteProps {
-  quote: string;
-  name: string;
-  title: string;
-}
-
-const TestimonialQuote = ({ quote, name, title }: TestimonialQuoteProps) => {
-  return (
-    <div className="bg-[#F9F6F3] p-8 md:p-10 flex flex-col justify-center h-full">
-      <p className="text-lg md:text-xl leading-relaxed mb-8">
-        "{quote}"
-      </p>
-      <div>
-        <p className="font-bold text-lg">{name}</p>
-        <p className="text-gray-600">({title})</p>
-      </div>
-    </div>
-  );
-}
+// This component has been integrated directly in the layout
 
 // Growth Chart component with YouTube analytics
 const GrowthChart = ({ imageUrl = "/attached_assets/image_1746469561985.png", alt = "YouTube Growth Analytics" }) => {
@@ -240,12 +221,15 @@ export default function TestimonialsDisplay() {
   }
   
   return (
-    <div className="py-16 md:py-24 bg-[#F9F6F3] w-full">
-      <div className="max-w-6xl mx-auto px-4 md:px-6">
+    <div className="py-16 md:py-24 bg-white w-full">
         {/* Main heading */}
+      <div className="bg-[#F9F6F3] w-full py-1">
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
           We've helped Beginners shortcut their YouTube learning curve <span className="text-amber-500">✋</span>
         </h2>
+      </div>
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        
         
         {/* All Testimonials - Displayed One Below Another */}
         <div className="mt-10 space-y-24">
@@ -270,50 +254,54 @@ export default function TestimonialsDisplay() {
                   />
                 </div>
               )}
+
+              <div>
+              <p className="text-lg  mx-auto font-serif">
+              Brandon’s channel has since grown from 700 subs to over 10,000 subs in past 18 months we’ve been working together.
+              <br/>
+              Brandon saw a 6300% increase in views <b>OVERNIGHT, </b> in the first 12 weeks working together, most importantly, without doing any extra work.
+                <br/>
+
+
+              In the 12 weeks before working with us he was averaging around 90 views per video.
+                <br/>
+              In the first 12 weeks working together, we averaged 5,700 views per video. 
+                <br/>
+            <b>  Yes, that’s a 6300% increase in views, overnight.</b>
+</p>
+              </div>
               
-              {/* Video testimonial section - alternating layout */}
+              
+              {/* Video testimonial section - matching the provided image layout */}
               <div className="mt-8">
-                <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg ">
-                  {/* Conditionally render quote and video in alternating order */}
-                  {index % 2 === 0 ? (
-                    <>
-                      {/* Left quote side */}
-                      <div className="w-full md:w-1/2 ">
-                        <TestimonialQuote 
-                          quote={testimonial.quote} 
-                          name={testimonial.name}
-                          title={testimonial.title}
-                        />
+                <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg bg-[#f8f6f3]">
+                  {/* Always show quote on the left, video on the right - like the provided reference image */}
+                  <>
+                    {/* Left quote side with light background */}
+                    <div className="w-full md:w-1/2 bg-[#f8f6f3]">
+                      <div className="p-8 md:p-10 flex flex-col justify-center h-full">
+                        <p className="text-lg md:text-xl leading-relaxed mb-8">
+                          "{testimonial.quote}"
+                        </p>
+                        <div>
+                          <p className="font-bold text-lg">{testimonial.name}</p>
+                          <p className="text-gray-600">
+                            {testimonial.title || ""}
+                            {testimonial.subscriberCount ? `(${testimonial.subscriberCount} subscriber)` : ""}
+                          </p>
+                        </div>
                       </div>
-                      
-                      {/* Right video side */}
-                      <div className="w-full md:w-1/2">
-                        <VideoPlayer 
-                          name={testimonial.name}
-                          videoSrc={testimonial.videoUrl}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {/* Left video side (for odd indexes) */}
-                      <div className="w-full md:w-1/2">
-                        <VideoPlayer 
-                          name={testimonial.name}
-                          videoSrc={testimonial.videoUrl}
-                        />
-                      </div>
-                      
-                      {/* Right quote side (for odd indexes) */}
-                      <div className="w-full md:w-1/2">
-                        <TestimonialQuote 
-                          quote={testimonial.quote} 
-                          name={testimonial.name}
-                          title={testimonial.title}
-                        />
-                      </div>
-                    </>
-                  )}
+                    </div>
+                    
+                    {/* Right video side */}
+                    <div className="w-full md:w-1/2">
+                      <VideoPlayer 
+                        name={testimonial.name}
+                        videoSrc={testimonial.videoUrl}
+                      />
+                    </div>
+                  </>
+                  
                 </div>
               </div>
             </div>
