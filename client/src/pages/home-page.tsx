@@ -11,7 +11,6 @@ import {
   usePublicBonusSection,
   usePublicBonusItems,
   usePublicGuaranteeSection,
-  usePublicScholarshipSection,
   usePublicYoutubeFrameworkSection,
   usePublicQuestionsSection
 } from "@/hooks/use-public-content";
@@ -20,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import TestimonialsDisplay from "@/components/TestimonialsDisplay";
 import BonusSection from "@/components/BonusSection";
 import GuaranteeSection from "@/components/GuaranteeSection";
-import ScholarshipSection from "@/components/ScholarshipSection";
 import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
 import QuestionsSection from "@/components/QuestionsSection";
 import LandingSection from "@/components/LandingSection";
@@ -34,7 +32,6 @@ export default function HomePage() {
   const { data: bonusSectionData, isLoading: bonusSectionLoading } = usePublicBonusSection();
   const { data: bonusItemsData, isLoading: bonusItemsLoading } = usePublicBonusItems();
   const { data: guaranteeSectionData, isLoading: guaranteeSectionLoading } = usePublicGuaranteeSection();
-  const { data: scholarshipSectionData, isLoading: scholarshipSectionLoading } = usePublicScholarshipSection();
   const { data: youtubeFrameworkSectionData, isLoading: youtubeFrameworkSectionLoading } = usePublicYoutubeFrameworkSection();
   const { data: questionsSectionData, isLoading: questionsSectionLoading } = usePublicQuestionsSection();
   
@@ -139,13 +136,6 @@ export default function HomePage() {
         {!youtubeFrameworkSectionLoading && (
           <YoutubeFrameworkSection
             youtubeFrameworkSection={youtubeFrameworkSectionData}
-          />
-        )}
-
-        {/* Scholarship Section */}
-        {!scholarshipSectionLoading && (
-          <ScholarshipSection 
-            scholarshipSection={scholarshipSectionData}
           />
         )}
         
