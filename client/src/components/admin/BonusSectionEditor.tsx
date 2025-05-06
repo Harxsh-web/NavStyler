@@ -61,9 +61,6 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     defaultValues: {
       title: bonusSection?.title || 'Wait, did you say free bonuses?',
       subtitle: bonusSection?.subtitle || "Yup. We've decided to bundle in a bunch of free bonuses, just for fun:",
-      description: bonusSection?.description || '',
-      buttonText: bonusSection?.buttonText || '',
-      buttonUrl: bonusSection?.buttonUrl || '',
       backgroundColor: bonusSection?.backgroundColor || '#E6F1FE',
     },
   });
@@ -347,49 +344,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                   )}
                 />
                 
-                <FormField
-                  control={sectionForm.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} rows={4} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={sectionForm.control}
-                    name="buttonText"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Button Text (optional)</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="View All Bonuses" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={sectionForm.control}
-                    name="buttonUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Button URL (optional)</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="https://example.com/bonuses" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                {/* Fields below were removed as they don't exist in the database */}
 
                 <FormField
                   control={sectionForm.control}

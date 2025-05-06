@@ -446,10 +446,8 @@ export const bonusSection = pgTable("bonus_section", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle"),
-  description: text("description").notNull(),
-  buttonText: text("button_text"),
-  buttonUrl: text("button_url"),
   backgroundColor: text("background_color"),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export type BonusSection = typeof bonusSection.$inferSelect;
@@ -466,9 +464,12 @@ export const bonusItems = pgTable("bonus_item", {
     .notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  imageUrl: text("image_url"),
+  iconName: text("icon_name"),
+  buttonText: text("button_text"),
+  buttonUrl: text("button_url"),
   backgroundColor: text("background_color"),
-  order: integer("order").notNull(),
+  orderIndex: integer("order_index"),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export type BonusItem = typeof bonusItems.$inferSelect;
