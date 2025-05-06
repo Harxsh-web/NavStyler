@@ -72,9 +72,10 @@ export type InsertHeroSection = z.infer<typeof insertHeroSectionSchema>;
 // ----- Quote Section Schema -----
 export const quoteSection = pgTable("quote_section", {
   id: serial("id").primaryKey(),
-  quote: text("quote").notNull(),
-  author: text("author").notNull(),
-  position: text("position"),
+  heading: text("heading").notNull(), // This corresponds to the author
+  content: text("content").notNull(), // This corresponds to the quote text
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  backgroundColor: text("background_color").default("#fffcf1"),
 });
 
 export type QuoteSection = typeof quoteSection.$inferSelect;
