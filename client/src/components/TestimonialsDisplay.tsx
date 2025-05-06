@@ -383,13 +383,13 @@ export default function TestimonialsDisplay() {
               </div>
             </div>
           ))}
-          
           {/* CTA button */}
           <div className="mt-16 text-center">
             <button className="bg-[#4fc6e0] hover:bg-black hover:text-white text-black px-10 py-3 rounded-full text-lg font-semibold shadow-md">
               Enrol Now For $995
             </button>
           </div>
+          
         </div>
       </div>
     </div>
