@@ -18,12 +18,10 @@ import { Celebration } from '@/components/ui/Celebration';
 import { useCelebration } from '@/components/ui/Celebration';
 
 // Create extended schemas with validation
-const bonusSectionFormSchema = insertBonusSectionSchema.extend({
+// Note: Only include fields that exist in the database
+const bonusSectionFormSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   subtitle: z.string().optional(),
-  description: z.string().optional(),
-  buttonText: z.string().optional(),
-  buttonUrl: z.string().optional(),
   backgroundColor: z.string().optional(),
 });
 
