@@ -305,36 +305,63 @@ export default function TestimonialsDisplay() {
               </div>
               
               
-              {/* Video testimonial section - matching the provided image layout */}
+              {/* Video testimonial section - alternating layout */}
               <div className="mt-8">
                 <div className="flex flex-col md:flex-row items-stretch overflow-hidden rounded-lg bg-[#f8f6f3]">
-                  {/* Always show quote on the left, video on the right - like the provided reference image */}
-                  <>
-                    {/* Left quote side with light background */}
-                    <div className="w-full md:w-1/2 bg-[#f8f6f3]">
-                      <div className="p-8 md:p-10 flex flex-col justify-center h-full">
-                        <p className="text-lg md:text-xl leading-relaxed mb-8">
-                          "{testimonial.quote}"
-                        </p>
-                        <div>
-                          <p className="font-bold text-lg">{testimonial.name}</p>
-                          <p className="text-gray-600">
-                            {testimonial.title || ""}
-                            {testimonial.subscriberCount ? `(${testimonial.subscriberCount} subscriber)` : ""}
+                  {/* Conditionally render quote and video in alternating order */}
+                  {index % 2 === 0 ? (
+                    <>
+                      {/* Left quote side with light background (for even indexes - 0, 2, 4...) */}
+                      <div className="w-full md:w-1/2 bg-[#f8f6f3]">
+                        <div className="p-8 md:p-10 flex flex-col justify-center h-full">
+                          <p className="text-lg md:text-xl leading-relaxed mb-8">
+                            "{testimonial.quote}"
                           </p>
+                          <div>
+                            <p className="font-bold text-lg">{testimonial.name}</p>
+                            <p className="text-gray-600">
+                              {testimonial.title || ""}
+                              {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* Right media side (video or image) */}
-                    <div className="w-full md:w-1/2">
-                      <VideoPlayer 
-                        name={testimonial.name}
-                        videoSrc={testimonial.mediaType === 'image' ? testimonial.imageUrl : testimonial.videoUrl}
-                      />
-                    </div>
-                  </>
-                  
+                      
+                      {/* Right media side (for even indexes - 0, 2, 4...) */}
+                      <div className="w-full md:w-1/2">
+                        <VideoPlayer 
+                          name={testimonial.name}
+                          videoSrc={testimonial.mediaType === 'image' ? testimonial.imageUrl : testimonial.videoUrl}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Left media side (for odd indexes - 1, 3, 5...) */}
+                      <div className="w-full md:w-1/2">
+                        <VideoPlayer 
+                          name={testimonial.name}
+                          videoSrc={testimonial.mediaType === 'image' ? testimonial.imageUrl : testimonial.videoUrl}
+                        />
+                      </div>
+                      
+                      {/* Right quote side (for odd indexes - 1, 3, 5...) */}
+                      <div className="w-full md:w-1/2 bg-[#f8f6f3]">
+                        <div className="p-8 md:p-10 flex flex-col justify-center h-full">
+                          <p className="text-lg md:text-xl leading-relaxed mb-8">
+                            "{testimonial.quote}"
+                          </p>
+                          <div>
+                            <p className="font-bold text-lg">{testimonial.name}</p>
+                            <p className="text-gray-600">
+                              {testimonial.title || ""}
+                              {testimonial.subscriberCount ? ` (${testimonial.subscriberCount} subscriber)` : ""}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
