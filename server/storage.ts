@@ -664,23 +664,103 @@ export class DatabaseStorage implements IStorage {
 
   // Testimonial section
   async getTestimonialSection(): Promise<schema.TestimonialSection | undefined> {
-    const [section] = await db.select().from(schema.testimonialSection).limit(1);
-    return section;
+    try {
+      const result = await query(
+        `SELECT id, title, description, 
+         success_story as "successStory", 
+         success_story_name as "successStoryName",
+         initial_subs as "initialSubs",
+         current_subs as "currentSubs",
+         timeframe_subs as "timeframeSubs",
+         views_increase as "viewsIncrease",
+         initial_views as "initialViews",
+         final_views as "finalViews",
+         work_period as "workPeriod"
+         FROM testimonial_section LIMIT 1`
+      );
+      return result.rows[0] as schema.TestimonialSection;
+    } catch (error) {
+      console.error('Error in getTestimonialSection:', error);
+      return undefined;
+    }
   }
 
   async updateTestimonialSection(data: Partial<schema.InsertTestimonialSection>): Promise<schema.TestimonialSection> {
-    const existing = await this.getTestimonialSection();
-    if (existing) {
-      const [updated] = await db.update(schema.testimonialSection)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(schema.testimonialSection.id, existing.id))
-        .returning();
-      return updated;
-    } else {
-      const [newSection] = await db.insert(schema.testimonialSection)
-        .values(data as schema.InsertTestimonialSection)
-        .returning();
-      return newSection;
+    try {
+      const existing = await this.getTestimonialSection();
+      
+      if (existing) {
+        // Update existing section
+        const result = await query(
+          `UPDATE testimonial_section 
+           SET title = $1, description = $2, 
+           success_story = $3, success_story_name = $4,
+           initial_subs = $5, current_subs = $6, timeframe_subs = $7,
+           views_increase = $8, initial_views = $9, final_views = $10,
+           work_period = $11, updated_at = NOW()
+           WHERE id = $12
+           RETURNING id, title, description, 
+           success_story as "successStory", success_story_name as "successStoryName",
+           initial_subs as "initialSubs", current_subs as "currentSubs", 
+           timeframe_subs as "timeframeSubs", views_increase as "viewsIncrease", 
+           initial_views as "initialViews", final_views as "finalViews",
+           work_period as "workPeriod", updated_at as "updatedAt"`,
+          [
+            data.title ?? existing.title,
+            data.description ?? existing.description,
+            data.successStory ?? existing.successStory,
+            data.successStoryName ?? existing.successStoryName,
+            data.initialSubs ?? existing.initialSubs,
+            data.currentSubs ?? existing.currentSubs,
+            data.timeframeSubs ?? existing.timeframeSubs,
+            data.viewsIncrease ?? existing.viewsIncrease,
+            data.initialViews ?? existing.initialViews,
+            data.finalViews ?? existing.finalViews,
+            data.workPeriod ?? existing.workPeriod,
+            existing.id
+          ]
+        );
+        
+        console.log('Testimonial section updated successfully:', result.rows[0]);
+        
+        return result.rows[0] as schema.TestimonialSection;
+      } else {
+        // Create new section
+        const result = await query(
+          `INSERT INTO testimonial_section (
+            title, description, success_story, success_story_name,
+            initial_subs, current_subs, timeframe_subs, 
+            views_increase, initial_views, final_views, work_period
+          )
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+           RETURNING id, title, description, 
+           success_story as "successStory", success_story_name as "successStoryName",
+           initial_subs as "initialSubs", current_subs as "currentSubs", 
+           timeframe_subs as "timeframeSubs", views_increase as "viewsIncrease", 
+           initial_views as "initialViews", final_views as "finalViews",
+           work_period as "workPeriod", updated_at as "updatedAt"`,
+          [
+            data.title || '',
+            data.description || '',
+            data.successStory || '',
+            data.successStoryName || 'Brandon',
+            data.initialSubs || 700,
+            data.currentSubs || 10000,
+            data.timeframeSubs || '18 months',
+            data.viewsIncrease || 6300,
+            data.initialViews || 90,
+            data.finalViews || 5700,
+            data.workPeriod || '12 weeks'
+          ]
+        );
+        
+        console.log('New testimonial section created:', result.rows[0]);
+        
+        return result.rows[0] as schema.TestimonialSection;
+      }
+    } catch (error) {
+      console.error('Error updating testimonial section:', error);
+      throw error;
     }
   }
 
