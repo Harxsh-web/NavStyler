@@ -132,7 +132,7 @@ export type InsertTestimonialSection = z.infer<typeof insertTestimonialSectionSc
 // ----- Testimonials Schema -----
 export const testimonials = pgTable("testimonial", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name"),
   title: text("title"),
   quote: text("quote").notNull(),
   imageUrl: text("image_url"),

@@ -82,7 +82,7 @@ const sectionSchema = z.object({
 
 // Schema for testimonial
 const testimonialSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().optional(),
   title: z.string().optional(),
   quote: z.string().min(1, "Testimonial quote is required"),
   headline: z.string().optional(),
