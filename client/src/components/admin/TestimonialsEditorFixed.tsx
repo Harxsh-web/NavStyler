@@ -165,19 +165,11 @@ export function TestimonialsEditor() {
     createTestimonialMutation.mutate(values, {
       onSuccess: () => {
         setShowAddDialog(false);
+        // Keep the form values except for the quote which should be reset
+        // This allows users to quickly add multiple testimonials with similar settings
         testimonialForm.reset({
-          name: "",
-          title: "",
-          quote: "",
-          headline: "",
-          subheadline: "",
-          subscriberCount: undefined,
-          mediaType: "image",
-          imageUrl: "",
-          videoUrl: "",
-          growthChartUrl: "",
-          hasGrowthChart: false,
-          showMobile: true,
+          ...values,
+          quote: "", // Reset only the quote field
         });
       }
     });
