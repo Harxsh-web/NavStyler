@@ -909,3 +909,26 @@ adminRouter.delete("/milestones/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+// Questions Section Routes
+adminRouter.get("/questions-section", async (req, res, next) => {
+  try {
+    const questionsSection = await storage.getQuestionsSection();
+    res.json(questionsSection || {});
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put(
+  "/questions-section",
+  validateRequest(schema.insertQuestionsSectionSchema.partial()),
+  async (req, res, next) => {
+    try {
+      const updatedSection = await storage.updateQuestionsSection(req.validatedBody);
+      res.json(updatedSection);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
