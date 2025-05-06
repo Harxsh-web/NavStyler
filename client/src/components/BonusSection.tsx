@@ -3,6 +3,7 @@ import { GiftIcon, ArrowRightIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BonusSection as BonusSectionType, BonusItem } from '@shared/schema';
+import { navigate } from "wouter/use-browser-location";
 
 interface BonusSectionProps {
   bonusSection?: BonusSectionType;
@@ -56,6 +57,12 @@ const BonusSection: React.FC<BonusSectionProps> = ({ bonusSection, bonusItems = 
               </CardContent>
             </Card>
           ))}
+          {/* CTA button */}
+          <div className="mt-16 text-center">
+            <button className="bg-[#4fc6e0] hover:bg-black hover:text-white text-black px-10 py-3 rounded-full text-lg font-semibold shadow-md" onClick={()=>navigate("/checkout")}>
+              Enrol Now For $995
+            </button>
+          </div>
         </div>
       </div>
     </section>

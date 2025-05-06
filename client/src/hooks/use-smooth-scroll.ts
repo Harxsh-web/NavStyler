@@ -11,6 +11,9 @@ interface SmoothScrollOptions {
  * This combines both CSS-based smooth scrolling and our custom implementation
  */
 export function useSmoothScroll(options: SmoothScrollOptions = {}) {
+  // Convert options.behavior to a dependency-safe string value for the dependency array
+  const behaviorValue = options.behavior || '';
+  
   useEffect(() => {
     // Set up CSS-based smooth scrolling if specified
     if (options.behavior === 'smooth') {
@@ -24,7 +27,7 @@ export function useSmoothScroll(options: SmoothScrollOptions = {}) {
     return () => {
       document.documentElement.style.scrollBehavior = '';
     };
-  }, [options.behavior]);
+  }, [behaviorValue]); // Use the stable reference
 }
 
 export default useSmoothScroll;

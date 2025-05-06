@@ -78,8 +78,9 @@ function Router() {
   );
 }
 
-export default function App() {
-  // Activate smooth scrolling for anchor links
+// Create a separate component for smooth scrolling functionality
+function SmoothScrollSetup() {
+  // Custom hook for smooth scrolling
   useSmoothScroll({ 
     offset: 80, // Adjust based on your navbar height
     behavior: 'smooth'
@@ -107,6 +108,11 @@ export default function App() {
     }
   }, []);
 
+  return null; // This component doesn't render anything
+}
+
+export default function App() {
+
   return (
     <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
@@ -114,6 +120,7 @@ export default function App() {
           <ThemeSettingsProvider>
             <PageTransitionProvider>
               <SEOHead />
+              <SmoothScrollSetup />
               <Navbar />
               <div className="pt-20">
                 <Router />

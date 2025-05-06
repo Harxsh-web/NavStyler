@@ -2,6 +2,7 @@ import { Loader2 } from "lucide-react";
 import { usePublicTestimonials, usePublicSection } from "@/hooks/use-public-content";
 import { useState, useEffect } from "react";
 import { Testimonial, TestimonialSection } from "@shared/schema";
+import { navigate } from "wouter/use-browser-location";
 
 // Define interface type for testimonial data in display component
 interface TestimonialDisplayItem {
@@ -385,7 +386,7 @@ export default function TestimonialsDisplay() {
           ))}
           {/* CTA button */}
           <div className="mt-16 text-center">
-            <button className="bg-[#4fc6e0] hover:bg-black hover:text-white text-black px-10 py-3 rounded-full text-lg font-semibold shadow-md">
+            <button className="bg-[#4fc6e0] hover:bg-black hover:text-white text-black px-10 py-3 rounded-full text-lg font-semibold shadow-md" onClick={()=>navigate("/checkout")}>
               Enrol Now For $995
             </button>
           </div>
