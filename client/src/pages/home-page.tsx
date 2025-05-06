@@ -24,6 +24,7 @@ import ScholarshipSection from "@/components/ScholarshipSection";
 import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
 import QuestionsSection from "@/components/QuestionsSection";
 import LandingSection from "@/components/LandingSection";
+import QuoteSection from "@/components/QuoteSection";
 
 export default function HomePage() {
   // Fetch data from the API
@@ -118,25 +119,13 @@ export default function HomePage() {
         {/* Hero Section Removed */}
         
         {/* Quote Section */}
-        <section className="py-16 bg-yellow-50">
-          <div className="container mx-auto px-4 max-w-4xl">
-            {quoteLoading ? (
-              <div className="flex justify-center items-center py-12">
-                <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-              </div>
-            ) : (
-              <blockquote className="text-center">
-                <p className="text-xl md:text-3xl font-medium italic text-gray-800 mb-4">
-                  "{quoteData?.text || "Productivity isn't about how much you do, it's about how"} <span className="relative inline-block">
-                    good
-                    <span className="absolute bottom-1 left-0 w-full h-1.5 bg-yellow-300"></span>
-                  </span> {quoteData?.text2 || "you feel about what you're doing."}"
-                </p>
-                <cite className="text-gray-600 text-lg font-normal">— {quoteData?.author || "Luke Mikic"}</cite>
-              </blockquote>
-            )}
+        {quoteLoading ? (
+          <div className="flex justify-center items-center py-16">
+            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
           </div>
-        </section>
+        ) : (
+          <QuoteSection data={quoteData || {}} />
+        )}
 
         
         {/* Bonus Section */}

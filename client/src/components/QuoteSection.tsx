@@ -1,19 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { QuoteSection as QuoteSectionType } from "@shared/schema";
 
-export function QuoteSection() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["/api/content/quote"],
-  });
+interface QuoteSectionProps {
+  data: Partial<QuoteSectionType>;
+}
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
+export function QuoteSection({ data }: QuoteSectionProps) {
   if (!data || !data.content) {
     return null;
   }
