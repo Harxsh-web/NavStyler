@@ -17,6 +17,7 @@ import YoutubeFrameworkSectionEditor from "@/components/admin/YoutubeFrameworkSe
 // ScholarshipSectionEditor import removed
 import LandingEditor from "@/components/admin/LandingEditor";
 import MilestonesEditor from "@/components/admin/MilestonesEditor";
+import QuestionsSectionEditor from "@/components/admin/QuestionsSectionEditor";
 import { useLandingSection, useBonusSection, useBonusItems } from "@/hooks/use-content";
 
 // BonusSectionEditor wrapper component to handle loading states
@@ -168,6 +169,15 @@ export default function AdminPage() {
               onClick={() => setActiveTab("milestones")}
             >
               Milestones
+            </button>
+
+            <button
+              className={`w-full text-left px-3 py-2 rounded-md ${
+                activeTab === "questionsSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("questionsSection")}
+            >
+              Questions Section
             </button>
             
             <button
