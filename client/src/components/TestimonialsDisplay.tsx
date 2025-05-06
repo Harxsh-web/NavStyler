@@ -289,21 +289,22 @@ export default function TestimonialsDisplay() {
                 </div>
               )}
 
-              <div>
-              <p className="text-lg  mx-auto font-serif">
-              Brandon's channel has since grown from 700 subs to over 10,000 subs in past 18 months we've been working together.
-              <br/>
-              Brandon saw a 6300% increase in views <b>OVERNIGHT, </b> in the first 12 weeks working together, most importantly, without doing any extra work.
-                <br/>
+              {sectionData && (
+                <div>
+                  <p className="text-lg mx-auto font-serif">
+                    {sectionData.successStoryName || "Brandon"}'s channel has since grown from {sectionData.initialSubs || 700} subs to over {sectionData.currentSubs || 10000} subs in past {sectionData.timeframeSubs || "18 months"} we've been working together.
+                    <br/>
+                    {sectionData.successStoryName || "Brandon"} saw a {sectionData.viewsIncrease || 6300}% increase in views <b>OVERNIGHT, </b> in the first {sectionData.workPeriod || "12 weeks"} working together, most importantly, without doing any extra work.
+                    <br/>
 
-
-              In the 12 weeks before working with us he was averaging around 90 views per video.
-                <br/>
-              In the first 12 weeks working together, we averaged 5,700 views per video. 
-                <br/>
-            <b>  Yes, that's a 6300% increase in views, overnight.</b>
-</p>
-              </div>
+                    In the {sectionData.workPeriod || "12 weeks"} before working with us he was averaging around {sectionData.initialViews || 90} views per video.
+                    <br/>
+                    In the first {sectionData.workPeriod || "12 weeks"} working together, we averaged {sectionData.finalViews || 5700} views per video. 
+                    <br/>
+                    <b>Yes, that's a {sectionData.viewsIncrease || 6300}% increase in views, overnight.</b>
+                  </p>
+                </div>
+              )}
               
               
               {/* Video testimonial section - alternating layout */}

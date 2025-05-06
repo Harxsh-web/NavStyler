@@ -74,10 +74,19 @@ interface Testimonial {
   subheadline?: string;
 }
 
-// Schema for section title
+// Schema for section title and success story
 const sectionSchema = z.object({
   title: z.string().min(1, "Section title is required"),
   description: z.string().optional(),
+  successStory: z.string().optional(),
+  successStoryName: z.string().optional().default("Brandon"),
+  initialSubs: z.coerce.number().optional().default(700),
+  currentSubs: z.coerce.number().optional().default(10000),
+  timeframeSubs: z.string().optional().default("18 months"),
+  viewsIncrease: z.coerce.number().optional().default(6300),
+  initialViews: z.coerce.number().optional().default(90),
+  finalViews: z.coerce.number().optional().default(5700),
+  workPeriod: z.string().optional().default("12 weeks"),
 });
 
 // Schema for testimonial
@@ -120,12 +129,21 @@ export function TestimonialsEditor() {
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
-  // Form for section title
+  // Form for section title and success story
   const sectionForm = useForm<SectionFormValues>({
     resolver: zodResolver(sectionSchema),
     defaultValues: {
       title: "",
       description: "",
+      successStory: "",
+      successStoryName: "Brandon",
+      initialSubs: 700,
+      currentSubs: 10000,
+      timeframeSubs: "18 months",
+      viewsIncrease: 6300,
+      initialViews: 90,
+      finalViews: 5700,
+      workPeriod: "12 weeks",
     },
   });
 
@@ -153,6 +171,15 @@ export function TestimonialsEditor() {
     sectionForm.reset({
       title: section.title || "",
       description: section.description || "",
+      successStory: section.successStory || "",
+      successStoryName: section.successStoryName || "Brandon",
+      initialSubs: section.initialSubs || 700,
+      currentSubs: section.currentSubs || 10000,
+      timeframeSubs: section.timeframeSubs || "18 months",
+      viewsIncrease: section.viewsIncrease || 6300,
+      initialViews: section.initialViews || 90,
+      finalViews: section.finalViews || 5700,
+      workPeriod: section.workPeriod || "12 weeks",
     });
     setIsEditing(true);
   }
@@ -264,6 +291,123 @@ export function TestimonialsEditor() {
                   </FormItem>
                 )}
               />
+
+              <div className="my-8 border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">Success Story Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={sectionForm.control}
+                    name="successStoryName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Creator Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Brandon" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="timeframeSubs"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Timeframe for Growth</FormLabel>
+                        <FormControl>
+                          <Input placeholder="18 months" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="workPeriod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Working Period</FormLabel>
+                        <FormControl>
+                          <Input placeholder="12 weeks" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="initialSubs"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Initial Subscribers</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="700" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="currentSubs"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current Subscribers</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="10000" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="initialViews"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Initial Views</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="90" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="finalViews"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Final Views</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="5700" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={sectionForm.control}
+                    name="viewsIncrease"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Views Percentage Increase</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="6300" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               <Button
                 type="submit"
