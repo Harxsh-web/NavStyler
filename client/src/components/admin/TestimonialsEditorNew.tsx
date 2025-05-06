@@ -361,7 +361,7 @@ export function TestimonialsEditor() {
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                 <AlertDialogDescription >
-                                  This will permanently delete the testimonial from {testimonial.name}.
+                                  This will permanently delete this testimonial{testimonial.name ? ` from ${testimonial.name}` : ''}.
                                   This action cannot be undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
