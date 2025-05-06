@@ -78,14 +78,6 @@ const sectionSchema = z.object({
   title: z.string().min(1, "Section title is required"),
   description: z.string().optional(),
   successStory: z.string().optional(),
-  successStoryName: z.string().optional().default("Brandon"),
-  initialSubs: z.coerce.number().optional().default(700),
-  currentSubs: z.coerce.number().optional().default(10000),
-  timeframeSubs: z.string().optional().default("18 months"),
-  viewsIncrease: z.coerce.number().optional().default(6300),
-  initialViews: z.coerce.number().optional().default(90),
-  finalViews: z.coerce.number().optional().default(5700),
-  workPeriod: z.string().optional().default("12 weeks"),
 });
 
 // Schema for testimonial
@@ -135,14 +127,6 @@ export function TestimonialsEditor() {
       title: "",
       description: "",
       successStory: "",
-      successStoryName: "Brandon",
-      initialSubs: 700,
-      currentSubs: 10000,
-      timeframeSubs: "18 months",
-      viewsIncrease: 6300,
-      initialViews: 90,
-      finalViews: 5700,
-      workPeriod: "12 weeks",
     },
   });
 
@@ -171,14 +155,6 @@ export function TestimonialsEditor() {
       title: section.title || "",
       description: section.description || "",
       successStory: section.successStory || "",
-      successStoryName: section.successStoryName || "Brandon",
-      initialSubs: section.initialSubs || 700,
-      currentSubs: section.currentSubs || 10000,
-      timeframeSubs: section.timeframeSubs || "18 months",
-      viewsIncrease: section.viewsIncrease || 6300,
-      initialViews: section.initialViews || 90,
-      finalViews: section.finalViews || 5700,
-      workPeriod: section.workPeriod || "12 weeks",
     });
     setIsEditing(true);
   }
@@ -293,134 +269,40 @@ export function TestimonialsEditor() {
 
               <div className="my-8 border-t pt-6">
                 <h3 className="text-lg font-medium mb-4">Success Story Settings</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={sectionForm.control}
-                    name="successStoryName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Creator Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Brandon" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="timeframeSubs"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Timeframe for Growth</FormLabel>
-                        <FormControl>
-                          <Input placeholder="18 months" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="workPeriod"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Working Period</FormLabel>
-                        <FormControl>
-                          <Input placeholder="12 weeks" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="initialSubs"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Initial Subscribers</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="700" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="currentSubs"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Current Subscribers</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="10000" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="initialViews"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Initial Views</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="90" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="finalViews"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Final Views</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="5700" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={sectionForm.control}
-                    name="viewsIncrease"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Views Percentage Increase</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="6300" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                
+                <div className="mb-2">
+                  <p className="text-sm text-gray-500">
+                    Use <code className="bg-gray-100 px-1 py-0.5 rounded">**text**</code> to make text <strong>bold</strong>.
+                  </p>
                 </div>
 
                 <FormField
                   control={sectionForm.control}
                   name="successStory"
                   render={({ field }) => (
-                    <FormItem className="mt-4">
+                    <FormItem>
                       <FormLabel>Success Story Description</FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Describe the success story in detail..." 
-                          className="min-h-20"
+                          placeholder="Describe the success story in detail... Use **text** to make text bold." 
+                          className="min-h-32"
                           {...field} 
                         />
                       </FormControl>
                       <FormMessage />
+                      {field.value && (
+                        <div className="mt-4">
+                          <h5 className="text-sm font-medium mb-2">Preview:</h5>
+                          <div className="p-4 bg-gray-50 rounded-md prose prose-sm max-w-none whitespace-pre-wrap">
+                            {field.value.split(/(\*\*.*?\*\*)/).map((part: string, i: number) => {
+                              if (part.startsWith('**') && part.endsWith('**')) {
+                                return <strong key={i}>{part.slice(2, -2)}</strong>;
+                              }
+                              return part;
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -1100,45 +982,28 @@ export function TestimonialsEditor() {
                   />
                   
                   <div className="border-t mt-8 pt-6">
-                    <h3 className="text-lg font-medium mb-4">Success Story Settings</h3>
+                    <h3 className="text-lg font-medium mb-4">Success Story</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Note: These settings are shared across all testimonials and are edited in the main section settings.
+                      Note: The success story is shared across all testimonials and is edited in the section settings.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Creator Name</h4>
-                        <p className="text-sm text-muted-foreground">{section?.successStoryName || "Brandon"}</p>
-                      </div>
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Timeframe for Growth</h4>
-                        <p className="text-sm text-muted-foreground">{section?.timeframeSubs || "18 months"}</p>
-                      </div>
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Working Period</h4>
-                        <p className="text-sm text-muted-foreground">{section?.workPeriod || "12 weeks"}</p>
-                      </div>
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Subscriber Growth</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {section?.initialSubs || 700} → {section?.currentSubs || 10000} subscribers
-                        </p>
-                      </div>
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Views Increase</h4>
-                        <p className="text-sm text-muted-foreground">{section?.viewsIncrease || 6300}%</p>
-                      </div>
-                      <div className="p-4 border rounded-md">
-                        <h4 className="font-medium mb-1">Views Growth</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {section?.initialViews || 90} → {section?.finalViews || 5700} views
-                        </p>
-                      </div>
-                    </div>
                     <div className="p-4 border rounded-md mt-4">
-                      <h4 className="font-medium mb-1">Success Story</h4>
-                      <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                        {section?.successStory || "Edit the success story in the section settings above"}
-                      </p>
+                      <h4 className="font-medium mb-1">Success Story Preview</h4>
+                      <div className="mt-2 p-4 bg-gray-50 rounded-md">
+                        {section?.successStory ? (
+                          <div className="prose prose-sm max-w-none whitespace-pre-wrap">
+                            {section.successStory.split(/(\*\*.*?\*\*)/).map((part: string, i: number) => {
+                              if (part.startsWith('**') && part.endsWith('**')) {
+                                return <strong key={i}>{part.slice(2, -2)}</strong>;
+                              }
+                              return part;
+                            })}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            Edit the success story in the section settings to see a preview here.
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
