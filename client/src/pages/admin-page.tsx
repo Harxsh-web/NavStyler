@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
 // HeroEditor import removed as requested
 import { FooterEditor } from "@/components/admin/FooterEditor";
-import { QuoteEditor } from "@/components/admin/QuoteEditor";
+// QuoteEditor import removed as requested
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditorSuccess";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
@@ -109,19 +109,7 @@ export default function AdminPage() {
             {/* Landing section removed as requested */}
             
             {/* Hero section removed as requested */}
-            
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                activeTab === "quote" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
-              }`}
-              onClick={() => {
-                setActiveTab("quote");
-                if (window.innerWidth < 1024) setShowSidebar(false);
-              }}
-            >
-              Quote Section
-            </button>
-            
+            {/* Quote section removed as requested */}
 
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
@@ -320,19 +308,7 @@ export default function AdminPage() {
                 
                   {/* Hero section overview removed as requested */}
                   
-                  <div className="px-6 py-4 flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium">Quote Section</h3>
-                      <p className="text-sm text-gray-500">Featured quote from a notable person</p>
-                    </div>
-                    <button 
-                      onClick={() => setActiveTab("quote")}
-                      className="px-3 py-1.5 text-xs text-cyan-700 bg-cyan-50 rounded hover:bg-cyan-100 transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                  
+                  {/* Quote Section overview removed as requested */}
 
                   
                   <div className="px-6 py-4 flex justify-between items-center">
@@ -445,18 +421,7 @@ export default function AdminPage() {
           
           {/* Hero section editor component removed as requested */}
           
-          {activeTab === "quote" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Quote Section Editor</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-gray-600 mb-4">Edit the quote section displayed on your landing page.</p>
-                <div className="mt-6">
-                  <QuoteEditor />
-                </div>
-              </div>
-            </div>
-          )}
-
+          {/* Quote Section Editor removed as requested */}
 
 
           {activeTab === "testimonials" && (
@@ -544,17 +509,7 @@ export default function AdminPage() {
             </div>
           )}
           
-          {activeTab === "quote" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Quote Section</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-gray-600 mb-4">Edit the featured quote and its appearance.</p>
-                <div className="mt-6">
-                  <QuoteEditor />
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Quote Section Editor duplicate removed as requested */}
           
           {activeTab === "settings" && (
             <div>

@@ -24,7 +24,6 @@ import ScholarshipSection from "@/components/ScholarshipSection";
 import YoutubeFrameworkSection from "@/components/YoutubeFrameworkSection";
 import QuestionsSection from "@/components/QuestionsSection";
 import LandingSection from "@/components/LandingSection";
-import QuoteSection from "@/components/QuoteSection";
 
 export default function HomePage() {
   // Fetch data from the API
@@ -118,14 +117,7 @@ export default function HomePage() {
         
         {/* Hero Section Removed */}
         
-        {/* Quote Section */}
-        {quoteLoading ? (
-          <div className="flex justify-center items-center py-16">
-            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          <QuoteSection data={quoteData || {}} />
-        )}
+        {/* Quote Section removed as requested */}
 
         
         {/* Bonus Section */}
