@@ -25,7 +25,7 @@ const QuestionsSection: React.FC<{ questionsSection?: QuestionsSectionProps }> =
   } = questionsSection;
 
   return (
-    <section className={`py-20 ${backgroundColor}`}>
+    <section id="contact" className={`py-20 ${backgroundColor}`}>
       <div className="container mx-auto px-4 max-w-4xl text-center">
         <div className="mb-8">
           <Mail className="h-12 w-12 text-cyan-500 mx-auto mb-4" />

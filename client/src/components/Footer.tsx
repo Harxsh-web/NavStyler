@@ -146,9 +146,9 @@ export default function Footer() {
             <h3 className="font-semibold text-gray-800 mb-4">More</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">About</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Jobs</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Contact</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">My Account</a></li>
+              {/* <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Jobs</a></li> */}
+              <li><a href="#contact" className="text-gray-600 hover:text-gray-900 transition">Contact</a></li>
+              {/* <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">My Account</a></li> */}
             </ul>
           </div>
           
@@ -168,12 +168,14 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link to="/checkout" className="text-gray-600 hover:text-gray-900 transition flex items-center">
-                  <FaShoppingCart className="mr-1 h-3 w-3" />
-                  <span className="font-medium text-[#F9966B]">Buy Feel-Good Productivity Book</span>
+               
+                  <span className="font-medium text-[#F9966B]">Enrol Now for $995 </span>
                 </Link>
               </li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">YouTuber Academy</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">LifeOS</a></li>
+              <li><a href="https://www.youtube.com/@lukemikic21" 
+                    target="blank"
+                    className="text-gray-600 hover:text-gray-900 transition">YouTuber Academy</a></li>
+             
             </ul>
           </div>
         </div>
