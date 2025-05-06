@@ -29,12 +29,31 @@ const VideoPlayer = ({
   name = "Steven Bartlett", 
   videoSrc = "/attached_assets/image_1746467734537.png" 
 }: VideoPlayerProps) => {
+  // If no source is provided, show a placeholder image
+  if (!videoSrc) {
+    return (
+      <div className="bg-gray-100 w-full h-full flex items-center justify-center aspect-video">
+        <p className="text-gray-500">No media available</p>
+      </div>
+    );
+  }
+
   // Check if source is a YouTube URL
   const isYouTubeVideo = videoSrc && (
     videoSrc.includes('youtube.com') || 
     videoSrc.includes('youtu.be') ||
     videoSrc.includes('youtube') ||
     videoSrc.includes('shorts')
+  );
+
+  // Check if source is an image file
+  const isImage = videoSrc && (
+    videoSrc.endsWith('.jpg') || 
+    videoSrc.endsWith('.jpeg') || 
+    videoSrc.endsWith('.png') || 
+    videoSrc.endsWith('.gif') ||
+    videoSrc.endsWith('.webp') ||
+    videoSrc.startsWith('/uploads/')
   );
 
   // Extract YouTube video ID from URL
@@ -61,6 +80,7 @@ const VideoPlayer = ({
     `https://www.youtube.com/embed/${getYouTubeId(videoSrc)}?autoplay=0&rel=0` : 
     '';
 
+  // If it's a YouTube video, display an iframe with the embedded video
   if (isYouTubeVideo) {
     return (
       <div className="bg-black relative w-full h-full aspect-video">
@@ -76,7 +96,20 @@ const VideoPlayer = ({
     );
   }
 
-  // Fallback to image display with YouTube-style controls
+  // If it's an image, display it without video controls
+  if (isImage) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-[#f8f6f3]">
+        <img 
+          src={videoSrc}
+          alt={`${name} testimonial image`} 
+          className="w-full h-full object-contain max-h-[400px]"
+        />
+      </div>
+    );
+  }
+
+  // Fallback to image display with YouTube-style controls for video files
   return (
     <div className="bg-black relative h-full">
       <img 
