@@ -13,6 +13,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus } from "lucide-react";
 import { backgroundColorOptions } from "@/lib/constants";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 
 const stepSchema = z.object({
   number: z.number(),
@@ -150,11 +151,14 @@ const YoutubeFrameworkSectionEditor = ({ initialData }: { initialData?: any }) =
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Enter section description" 
-                      {...field} 
-                      className="min-h-[120px]" 
-                    />
+                    <div className="rich-text-wrapper">
+                      <RichTextEditor 
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        placeholder="Enter section description" 
+                        className="min-h-[120px]" 
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -217,11 +221,14 @@ const YoutubeFrameworkSectionEditor = ({ initialData }: { initialData?: any }) =
                           <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                              <Textarea 
-                                placeholder="Enter step description" 
-                                {...field} 
-                                className="min-h-[80px]" 
-                              />
+                              <div className="rich-text-wrapper">
+                                <RichTextEditor 
+                                  value={field.value || ""}
+                                  onChange={field.onChange}
+                                  placeholder="Enter step description" 
+                                  className="min-h-[80px]" 
+                                />
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -240,11 +247,14 @@ const YoutubeFrameworkSectionEditor = ({ initialData }: { initialData?: any }) =
                 <FormItem>
                   <FormLabel>Final Note</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Enter final note" 
-                      {...field} 
-                      className="min-h-[80px]" 
-                    />
+                    <div className="rich-text-wrapper">
+                      <RichTextEditor 
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        placeholder="Enter final note" 
+                        className="min-h-[80px]" 
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

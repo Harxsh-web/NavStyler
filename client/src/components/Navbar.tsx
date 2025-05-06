@@ -71,7 +71,7 @@ export default function Navbar() {
     { id: 'author-section', label: 'About' },
     { id: 'testimonials', label: 'Testimonials' },
     { id: 'bonus-section', label: 'Bonuses' },
-    { id: 'book-section', label: 'My Book' },
+    // { id: 'book-section', label: 'My Book' },
   ];
   
   // These are used for the Free Resources dropdown content in both desktop and mobile views

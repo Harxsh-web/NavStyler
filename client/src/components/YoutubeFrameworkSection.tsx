@@ -27,61 +27,70 @@ const YoutubeFrameworkSection: React.FC<{ youtubeFrameworkSection?: YoutubeFrame
   const data = youtubeFrameworkSection || {};
   
   // Extract properties with fallbacks
-  const title = data.title || "My Simple 3 Step YouTube Framework";
-  const subtitle = data.subtitle || "How I Grew My Channel to 4,000,000 Subscribers";
-  const description = data.description || "This is the exact framework I used to grow my YouTube channel from 0 to over 4 million subscribers and generate 8 figures in revenue - all while maintaining my medical career.";
+  const title = data.title || "My Simple 3 Step YouTube Framework To Gain 10,000 Subscribers in 100 Days";
+  const subtitle = data.subtitle || "";
+  const description = data.description || "So many FAKE GURUS hide behind others success, BUT starting in 2024 I wanted to walk the walk, to prove my SIMPLE 3 step formula works So over the last 3 years, I've learned a lot about what it takes to build an audience from scratch, provide value consistently, and monetise in a non-spammy way. I've spent thousands of hours, and over $100,000 in courses and coaching programs to try and find the secret sauce that helps grow a channel and a business.";
   const steps = data.steps || [
     { 
       number: 1, 
-      title: "Find Your Validated Content Angle", 
-      description: "Learn how to identify content topics people are actively searching for, and position yourself as the perfect creator to deliver what they need." 
+      title: "Creating videos that people want to click on", 
+      description: "" 
     },
     { 
       number: 2, 
-      title: "Create Value-First Content", 
-      description: "Master my step-by-step process for creating content that genuinely helps viewers while building your authority and subscriber base." 
+      title: "Posting them on YouTube at least once a wee", 
+      description: "" 
     },
     { 
       number: 3, 
-      title: "Build Simple Systems for Growth", 
-      description: "Implement my proven framework for consistently growing your channel and turning viewers into loyal fans and customers." 
+      title: "Repeating this for at least 2 years", 
+      description: "" 
     }
   ];
-  const finalNote = data.finalNote || "This framework is what I teach my students who have gone on to build 6 and 7-figure YouTube channels and businesses - and now I'm sharing it with you.";
-  const buttonText = data.buttonText || "Get The Full Framework";
+  const finalNote = data.finalNote || "That's all it takes. I personally guarantee that if you follow this 3-part formula, your life will change in ways you can't imagine. You'll learn incredibly useful skills, you'll make friends with amazing people from all over the world and you'll start to generate 'passive' income. You might even get messages from people about how your videos have changed their lives. 😊 It seems simple in theory, but the execution is slightly more difficult.";
+  const buttonText = data.buttonText || "Enrol Now for $995";
   const buttonUrl = data.buttonUrl || "#buy";
   const backgroundColor = data.backgroundColor || "bg-gray-50";
 
   return (
     <section className={`py-16 ${backgroundColor}`}>
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="text-center mb-10">
-          <FaYoutube className="text-red-600 text-4xl mx-auto mb-4" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">{title}</h2>
-          <p className="text-xl font-medium text-gray-700 mb-4">{subtitle}</p>
-          <p className="text-gray-600 max-w-3xl mx-auto">{description}</p>
+        <div className="text-center mb-12">
+          <FaYoutube className="text-red-600 text-5xl mx-auto mb-6" />
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 max-w-5xl mx-auto leading-tight">{title}</h2>
+          
+          <div className="max-w-4xl mx-auto">
+            <p className="text-gray-800 text-lg mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: description }} />
+            
+            <p className="text-gray-700 italic text-lg mb-2">
+              And while I've learned a hell of a lot of things (more on that later), the biggest thing I've learned is this:
+            </p>
+            <p className="text-gray-700 font-medium text-lg mb-10">
+              There's no secret to building a life-changing YouTube channel. It's just a matter of:
+            </p>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {steps && steps.map((step) => (
-            <div key={step.number} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <div className="rounded-full bg-red-100 text-red-600 text-2xl font-bold w-12 h-12 flex items-center justify-center mb-4">
+            <div key={step.number} className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex flex-col items-center">
+              <div className="rounded-full bg-red-100 text-red-600 text-2xl font-bold w-16 h-16 flex items-center justify-center mb-6">
                 {step.number}
               </div>
-              <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-              <p className="text-gray-600">
-                {step.description}
-              </p>
+              <h3 className="text-xl font-semibold mb-3 text-center">{step.title}</h3>
+              {step.description && (
+                <p className="text-gray-600 text-center" dangerouslySetInnerHTML={{ __html: step.description }} />
+              )}
             </div>
           ))}
         </div>
         
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-gray-700 italic mb-8">{finalNote}</p>
+        <div className="text-center max-w-4xl mx-auto">
+          <p className="text-gray-700 text-lg mb-12 leading-relaxed" dangerouslySetInnerHTML={{ __html: finalNote }} />
           
           <a
             href={buttonUrl}
-            className="bg-red-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-red-700 transition duration-200 inline-block"
+            className="bg-red-600 text-white font-bold py-4 px-12 rounded-lg hover:bg-red-700 transition duration-200 inline-block text-lg"
           >
             {buttonText}
           </a>
