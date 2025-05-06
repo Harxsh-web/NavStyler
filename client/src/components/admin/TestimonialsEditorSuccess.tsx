@@ -75,7 +75,7 @@ interface Testimonial {
 
 // Schema for section title and success story
 const sectionSchema = z.object({
-  title: z.string().min(1, "Section title is required"),
+  title: z.string().optional(), // Title is now optional
   description: z.string().optional(),
   successStory: z.string().optional(),
 });
@@ -240,7 +240,7 @@ export function TestimonialsEditor() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Section Title</FormLabel>
+                    <FormLabel>Section Title (optional)</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter section title" {...field} />
                     </FormControl>
