@@ -249,7 +249,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     itemForm.reset({
       title: '',
       description: '',
-      order: items.length,
+      orderIndex: items.length,
       sectionId: bonusSection?.id || 0,
       imageUrl: null,
       backgroundColor: '#FFE382',
@@ -267,7 +267,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     // Update order indices
     const updatedItems = reorderedItems.map((item, index) => ({
       ...item,
-      order: index
+      orderIndex: index
     }));
     
     setItems(updatedItems);
@@ -276,7 +276,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     updatedItems.forEach(item => {
       updateItemMutation.mutate({
         id: item.id,
-        data: { order: item.order }
+        data: { orderIndex: item.orderIndex }
       });
     });
   };
