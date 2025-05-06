@@ -583,30 +583,39 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Quote section
-  async getQuoteSection(): Promise<schema.Quote | undefined> {
+  async getQuoteSection(): Promise<schema.QuoteSection | undefined> {
     try {
       const result = await db.execute(
-        `SELECT id, heading, content as "quoteText", updated_at as "updatedAt"
+        `SELECT id, heading, content, background_color as "backgroundColor", updated_at as "updatedAt"
          FROM quote_section LIMIT 1`
       );
-      return result.rows[0] as schema.Quote | undefined;
+      return result.rows[0] as schema.QuoteSection | undefined;
     } catch (error) {
       console.error('Error in getQuoteSection:', error);
       return undefined;
     }
   }
 
-  async updateQuoteSection(data: Partial<schema.InsertQuote>): Promise<schema.Quote> {
+  async updateQuoteSection(data: Partial<schema.InsertQuoteSection>): Promise<schema.QuoteSection> {
     const existing = await this.getQuoteSection();
     if (existing) {
       const [updated] = await db.update(schema.quoteSection)
-        .set({ ...data, updatedAt: new Date() })
+        .set({ 
+          heading: data.heading !== undefined ? data.heading : existing.heading,
+          content: data.content !== undefined ? data.content : existing.content,
+          backgroundColor: data.backgroundColor || existing.backgroundColor,
+          updatedAt: new Date()
+        })
         .where(eq(schema.quoteSection.id, existing.id))
         .returning();
       return updated;
     } else {
       const [newQuote] = await db.insert(schema.quoteSection)
-        .values(data as schema.InsertQuote)
+        .values({
+          heading: data.heading || "Luke Mikic",
+          content: data.content || "Productivity isn't about how much you do, it's about how good you feel about what you're doing.",
+          backgroundColor: data.backgroundColor || "#fffcf1",
+        } as schema.InsertQuoteSection)
         .returning();
       return newQuote;
     }

@@ -544,6 +544,18 @@ export default function AdminPage() {
             </div>
           )}
           
+          {activeTab === "quote" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Quote Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the featured quote and its appearance.</p>
+                <div className="mt-6">
+                  <QuoteEditor />
+                </div>
+              </div>
+            </div>
+          )}
+          
           {activeTab === "settings" && (
             <div>
               <h1 className="text-2xl font-bold mb-6">Site Settings</h1>

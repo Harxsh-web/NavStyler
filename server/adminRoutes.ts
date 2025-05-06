@@ -138,7 +138,13 @@ adminRouter.get("/quote", async (req, res, next) => {
   }
 });
 
-adminRouter.put("/quote", validateRequest(z.object({}).partial()), async (req, res, next) => {
+adminRouter.post("/quote", validateRequest(
+  z.object({
+    content: z.string().optional(),
+    heading: z.string().optional(),
+    backgroundColor: z.string().optional(),
+  })
+), async (req, res, next) => {
   try {
     const updatedQuote = await storage.updateQuoteSection(req.validatedBody);
     res.json(updatedQuote);
