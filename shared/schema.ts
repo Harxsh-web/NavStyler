@@ -118,7 +118,7 @@ export type InsertLearningPoint = z.infer<typeof insertLearningPointSchema>;
 // ----- Testimonial Section Schema -----
 export const testimonialSection = pgTable("testimonial_section", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: text("title"), // Now optional
   subtitle: text("subtitle"),
   description: text("description"),
   successStory: text("success_story"),

@@ -257,11 +257,22 @@ export default function TestimonialsDisplay() {
   return (
     <div className="py-16 md:py-24 bg-white w-full">
         {/* Main heading */}
-      <div className="bg-[#F9F6F3] w-full py-1">
-        <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
-          We've helped Beginners shortcut their YouTube learning curve <span className="text-amber-500">✋</span>
-        </h2>
-      </div>
+      {/* Only display section title if it exists in the section data */}
+      {sectionData && sectionData.title && (
+        <div className="bg-[#F9F6F3] w-full py-1">
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
+            {sectionData.title} <span className="text-amber-500">✋</span>
+          </h2>
+        </div>
+      )}
+      {/* Display default title if no section title exists and no section data is available */}
+      {(!sectionData || !sectionData.title) && (
+        <div className="bg-[#F9F6F3] w-full py-1">
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-center mb-16">
+            We've helped Beginners shortcut their YouTube learning curve <span className="text-amber-500">✋</span>
+          </h2>
+        </div>
+      )}
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         
         
@@ -289,20 +300,16 @@ export default function TestimonialsDisplay() {
                 </div>
               )}
 
-              {sectionData && (
-                <div>
-                  <p className="text-lg mx-auto font-serif">
-                    {sectionData.successStoryName || "Brandon"}'s channel has since grown from {sectionData.initialSubs || 700} subs to over {sectionData.currentSubs || 10000} subs in past {sectionData.timeframeSubs || "18 months"} we've been working together.
-                    <br/>
-                    {sectionData.successStoryName || "Brandon"} saw a {sectionData.viewsIncrease || 6300}% increase in views <b>OVERNIGHT, </b> in the first {sectionData.workPeriod || "12 weeks"} working together, most importantly, without doing any extra work.
-                    <br/>
-
-                    In the {sectionData.workPeriod || "12 weeks"} before working with us he was averaging around {sectionData.initialViews || 90} views per video.
-                    <br/>
-                    In the first {sectionData.workPeriod || "12 weeks"} working together, we averaged {sectionData.finalViews || 5700} views per video. 
-                    <br/>
-                    <b>Yes, that's a {sectionData.viewsIncrease || 6300}% increase in views, overnight.</b>
-                  </p>
+              {sectionData && sectionData.successStory && (
+                <div className="mb-12 max-w-4xl mx-auto">
+                  <div className="text-lg mx-auto font-serif">
+                    {sectionData.successStory.split(/(\*\*.*?\*\*)/).map((part: string, i: number) => {
+                      if (part.startsWith('**') && part.endsWith('**')) {
+                        return <strong key={i}>{part.slice(2, -2)}</strong>;
+                      }
+                      return <span key={i}>{part}</span>;
+                    })}
+                  </div>
                 </div>
               )}
               
