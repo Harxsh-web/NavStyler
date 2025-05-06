@@ -14,7 +14,7 @@ import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
 import BonusSectionEditor from "@/components/admin/BonusSectionEditor";
 import GuaranteeSectionEditor from "@/components/admin/GuaranteeSectionEditor";
 import YoutubeFrameworkSectionEditor from "@/components/admin/YoutubeFrameworkSectionEditor";
-import ScholarshipSectionEditor from "@/components/admin/ScholarshipSectionEditor";
+// ScholarshipSectionEditor import removed
 import LandingEditor from "@/components/admin/LandingEditor";
 import MilestonesEditor from "@/components/admin/MilestonesEditor";
 import { useLandingSection, useBonusSection, useBonusItems } from "@/hooks/use-content";
@@ -159,14 +159,7 @@ export default function AdminPage() {
               YouTube Framework
             </button>
             
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                activeTab === "scholarshipSection" ? "bg-cyan-50 text-cyan-700" : "text-gray-600 hover:bg-gray-50"
-              }`}
-              onClick={() => setActiveTab("scholarshipSection")}
-            >
-              Scholarship
-            </button>
+            {/* Scholarship section button removed */}
             
             <button
               className={`w-full text-left px-3 py-2 rounded-md ${
@@ -497,17 +490,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {activeTab === "scholarshipSection" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Scholarship Section</h1>
-              <div className="bg-white shadow-sm rounded-lg p-6">
-                <p className="text-gray-600 mb-4">Edit the scholarship application section content.</p>
-                <div className="mt-6">
-                  <ScholarshipSectionEditor />
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Scholarship section editor removed */}
           
           {/* Quote Section Editor duplicate removed as requested */}
           
