@@ -1303,23 +1303,51 @@ export class DatabaseStorage implements IStorage {
 
   async updateBonusSection(data: Partial<schema.InsertBonusSection>): Promise<schema.BonusSection> {
     try {
+      console.log("Updating bonus section with data:", data);
       const existing = await this.getBonusSection();
       
       if (existing) {
-        const result = await query(
-          `UPDATE bonus_section 
-           SET title = $1, subtitle = $2, background_color = $3, updated_at = NOW()
-           WHERE id = $4
-           RETURNING id, title, subtitle, background_color as "backgroundColor", updated_at as "updatedAt"`,
-          [
-            data.title ?? existing.title,
-            data.subtitle ?? existing.subtitle,
-            data.backgroundColor ?? existing.backgroundColor,
-            existing.id
-          ]
-        );
+        // Build the SQL dynamically based on the fields that exist in the database table
+        const updateFields = [];
+        const params = [];
+        let paramCount = 1;
         
-        return result.rows[0] as schema.BonusSection;
+        if (data.title !== undefined) {
+          updateFields.push(`title = $${paramCount}`);
+          params.push(data.title);
+          paramCount++;
+        }
+        
+        if (data.subtitle !== undefined) {
+          updateFields.push(`subtitle = $${paramCount}`);
+          params.push(data.subtitle);
+          paramCount++;
+        }
+        
+        if (data.backgroundColor !== undefined) {
+          updateFields.push(`background_color = $${paramCount}`);
+          params.push(data.backgroundColor);
+          paramCount++;
+        }
+        
+        updateFields.push(`updated_at = NOW()`);
+        
+        // Only proceed if there are fields to update
+        if (updateFields.length > 0) {
+          params.push(existing.id);
+          const result = await query(
+            `UPDATE bonus_section 
+             SET ${updateFields.join(', ')}
+             WHERE id = $${paramCount}
+             RETURNING id, title, subtitle, background_color as "backgroundColor", updated_at as "updatedAt"`,
+            params
+          );
+          
+          console.log("Bonus section update result:", result.rows[0]);
+          return result.rows[0] as schema.BonusSection;
+        } else {
+          return existing;
+        }
       } else {
         const result = await query(
           `INSERT INTO bonus_section (title, subtitle, background_color)
@@ -1332,6 +1360,7 @@ export class DatabaseStorage implements IStorage {
           ]
         );
         
+        console.log("Bonus section insert result:", result.rows[0]);
         return result.rows[0] as schema.BonusSection;
       }
     } catch (error) {

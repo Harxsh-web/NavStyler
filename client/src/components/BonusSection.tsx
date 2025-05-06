@@ -27,22 +27,22 @@ const BonusSection: React.FC<BonusSectionProps> = ({ bonusSection, bonusItems = 
           <p className="text-lg text-gray-700">{bonusSection.subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {bonusItems.map((item, index) => (
             <Card 
               key={item.id} 
-              className="overflow-hidden border-0 shadow-md"
+              className="overflow-hidden border-0 shadow-md flex flex-col"
               style={{ backgroundColor: item.backgroundColor || '#FFE382' }}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 flex flex-col flex-grow">
                 <div className="font-semibold text-lg mb-2">
                   Free Bonus #{index + 1}
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                <p className="text-gray-700 mb-6">{item.description}</p>
+                <p className="text-gray-700 mb-6 flex-grow">{item.description}</p>
                 
                 {item.buttonText && item.buttonUrl && (
-                  <div className="flex justify-end">
+                  <div className="flex justify-end mt-auto">
                     <Button 
                       variant="secondary" 
                       className="group"
