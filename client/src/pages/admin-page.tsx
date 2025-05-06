@@ -561,6 +561,18 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+          
+          {activeTab === "questionsSection" && (
+            <div>
+              <h1 className="text-2xl font-bold mb-6">Questions Section</h1>
+              <div className="bg-white shadow-sm rounded-lg p-6">
+                <p className="text-gray-600 mb-4">Edit the Questions section that appears at the bottom of the page.</p>
+                <div className="mt-6">
+                  <QuestionsSectionEditor />
+                </div>
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </div>

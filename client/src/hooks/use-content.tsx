@@ -813,6 +813,61 @@ export function useYoutubeFrameworkSection() {
 // Scholarship section hook removed
 
 /**
+ * Hook for managing Questions section
+ */
+export function useQuestionsSection() {
+  const { toast } = useToast();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["/api/admin/questions-section"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/admin/questions-section");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch Questions section");
+      }
+      return await response.json();
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (values: any) => {
+      const res = await apiRequest("PUT", "/api/admin/questions-section", values);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to update Questions section");
+      }
+      return await res.json();
+    },
+    onSuccess: () => {
+      // Invalidate both admin and public content endpoints
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/questions-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content/questions-section"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
+      toast({
+        title: "Success",
+        description: "Questions section updated successfully",
+        variant: "success",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error updating Questions section",
+        description: error.message || "Failed to update Questions section",
+        variant: "destructive",
+      });
+    },
+  });
+
+  return {
+    data,
+    isLoading,
+    error,
+    updateMutation
+  };
+}
+
+/**
  * Hook for managing landing section content
  */
 export function useLandingSection() {
