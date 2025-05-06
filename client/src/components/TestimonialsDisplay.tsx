@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
-import { usePublicTestimonials } from "@/hooks/use-public-content";
+import { usePublicTestimonials, usePublicSection } from "@/hooks/use-public-content";
 import { useState, useEffect } from "react";
-import { Testimonial } from "@shared/schema";
+import { Testimonial, TestimonialSection } from "@shared/schema";
 
 // Define interface type for testimonial data in display component
 interface TestimonialDisplayItem {
@@ -216,7 +216,8 @@ const GrowthChart = ({ imageUrl = "/attached_assets/image_1746469561985.png", al
 export default function TestimonialsDisplay() {
   // Fetch testimonials from API
   const { data, isLoading } = usePublicTestimonials();
-  
+  const { data: sectionData } = usePublicSection("testimonials");
+
   // Set up state for testimonials with an empty array that will be populated from API
   const [testimonials, setTestimonials] = useState<TestimonialDisplayItem[]>([]);
   

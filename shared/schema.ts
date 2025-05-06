@@ -121,6 +121,15 @@ export const testimonialSection = pgTable("testimonial_section", {
   title: text("title").notNull(),
   subtitle: text("subtitle"),
   description: text("description"),
+  successStory: text("success_story"),
+  successStoryName: text("success_story_name").default("Brandon"),
+  initialSubs: integer("initial_subs").default(700),
+  currentSubs: integer("current_subs").default(10000),
+  timeframeSubs: text("timeframe_subs").default("18 months"),
+  viewsIncrease: integer("views_increase").default(6300),
+  initialViews: integer("initial_views").default(90),
+  finalViews: integer("final_views").default(5700),
+  workPeriod: text("work_period").default("12 weeks"),
 });
 
 export type TestimonialSection = typeof testimonialSection.$inferSelect;

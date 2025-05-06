@@ -227,6 +227,23 @@ export function usePublicYoutubeFrameworkSection() {
 }
 
 /**
+ * Hook for fetching a generic section by key
+ */
+export function usePublicSection(sectionType: string) {
+  return useQuery({
+    queryKey: [`/api/content/${sectionType}-section`],
+    queryFn: async () => {
+      const response = await apiRequest("GET", `/api/content/${sectionType}-section`);
+      if (!response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
  * Hook for fetching the questions section for the public page
  */
 export function usePublicQuestionsSection() {
