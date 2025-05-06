@@ -29,7 +29,7 @@ const bonusItemFormSchema = insertBonusItemSchema.extend({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   sectionId: z.number(),
-  order: z.number(),
+  orderIndex: z.number(),
   imageUrl: z.string().optional().nullable(),
   backgroundColor: z.string().optional(),
 });
@@ -71,7 +71,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
     defaultValues: {
       title: '',
       description: '',
-      order: items.length,
+      orderIndex: items.length,
       sectionId: bonusSection?.id || 0,
       imageUrl: null,
       backgroundColor: '#FFE382',
@@ -119,7 +119,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       itemForm.reset({
         title: '',
         description: '',
-        order: items.length + 1,
+        orderIndex: items.length + 1,
         sectionId: bonusSection?.id || 0,
         imageUrl: null,
         backgroundColor: '#FFE382',
@@ -162,7 +162,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       itemForm.reset({
         title: '',
         description: '',
-        order: items.length,
+        orderIndex: items.length,
         sectionId: bonusSection?.id || 0,
         imageUrl: null,
         backgroundColor: '#FFE382',
