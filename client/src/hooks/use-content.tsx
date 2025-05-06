@@ -810,60 +810,7 @@ export function useYoutubeFrameworkSection() {
   };
 }
 
-/**
- * Hook for managing Scholarship section
- */
-export function useScholarshipSection() {
-  const { toast } = useToast();
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["/api/admin/scholarship-section"],
-    queryFn: async () => {
-      const response = await apiRequest("GET", "/api/admin/scholarship-section");
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch Scholarship section");
-      }
-      return await response.json();
-    }
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (values: any) => {
-      const res = await apiRequest("PUT", "/api/admin/scholarship-section", values);
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to update Scholarship section");
-      }
-      return await res.json();
-    },
-    onSuccess: () => {
-      // Invalidate both admin and public content endpoints
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/scholarship-section"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/content/scholarship-section"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/content"] }); // Main content endpoint
-      toast({
-        title: "Success",
-        description: "Scholarship section updated successfully",
-        variant: "success",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update Scholarship section",
-        variant: "destructive",
-      });
-    },
-  });
-
-  return {
-    data,
-    isLoading,
-    error,
-    updateMutation
-  };
-}
+// Scholarship section hook removed
 
 /**
  * Hook for managing landing section content
