@@ -326,11 +326,11 @@ export default function TestimonialsDisplay() {
                       </div>
                     </div>
                     
-                    {/* Right video side */}
+                    {/* Right media side (video or image) */}
                     <div className="w-full md:w-1/2">
                       <VideoPlayer 
                         name={testimonial.name}
-                        videoSrc={testimonial.videoUrl}
+                        videoSrc={testimonial.mediaType === 'image' ? testimonial.imageUrl : testimonial.videoUrl}
                       />
                     </div>
                   </>
