@@ -229,8 +229,8 @@ export default function TestimonialsDisplay() {
         name: item.name,
         title: item.title || "YouTube Creator",
         quote: item.quote,
-        headline: item.headline || `${item.name} transformed their YouTube channel with our course.`,
-        subheadline: item.subheadline || "Learn the strategies that helped creators like them grow their channels.",
+        headline: item.headline || (item.name ? `${item.name} transformed their YouTube channel with our course.` : ''),
+        subheadline: item.subheadline || (item.name ? "Learn the strategies that helped creators like them grow their channels." : ''),
         imageUrl: item.imageUrl || "https://randomuser.me/api/portraits/women/65.jpg",
         videoUrl: item.videoUrl || "/attached_assets/image_1746467734537.png",
         mediaType: item.mediaType || "image",
@@ -268,15 +268,21 @@ export default function TestimonialsDisplay() {
         <div className="mt-10 space-y-24">
           {testimonials.map((testimonial, index) => (
             <div key={testimonial.id} className="testimonial-item">
-              {/* Testimonial headline */}
-              <div className="text-center mb-8">
-                <h3 className="text-3xl md:text-5xl font-serif font-bold">
-                  {testimonial.headline}
-                </h3>
-                <p className="text-lg mt-6 max-w-3xl mx-auto">
-                  {testimonial.subheadline}
-                </p>
-              </div>
+              {/* Testimonial headline - only show if there is content */}
+              {(testimonial.headline || testimonial.subheadline) && (
+                <div className="text-center mb-8">
+                  {testimonial.headline && (
+                    <h3 className="text-3xl md:text-5xl font-serif font-bold">
+                      {testimonial.headline}
+                    </h3>
+                  )}
+                  {testimonial.subheadline && (
+                    <p className="text-lg mt-6 max-w-3xl mx-auto">
+                      {testimonial.subheadline}
+                    </p>
+                  )}
+                </div>
+              )}
               
               {/* Growth Chart - Using full-width YouTube analytics */}
               {testimonial.hasGrowthChart && (
@@ -288,21 +294,22 @@ export default function TestimonialsDisplay() {
                 </div>
               )}
 
-              <div>
-              <p className="text-lg  mx-auto font-serif">
-              Brandon's channel has since grown from 700 subs to over 10,000 subs in past 18 months we've been working together.
-              <br/>
-              Brandon saw a 6300% increase in views <b>OVERNIGHT, </b> in the first 12 weeks working together, most importantly, without doing any extra work.
-                <br/>
-
-
-              In the 12 weeks before working with us he was averaging around 90 views per video.
-                <br/>
-              In the first 12 weeks working together, we averaged 5,700 views per video. 
-                <br/>
-            <b>  Yes, that's a 6300% increase in views, overnight.</b>
-</p>
-              </div>
+              {/* Show growth stats only if we have a testimonial with a name */}
+              {testimonial.name && testimonial.quote.includes("6300%") && (
+                <div>
+                  <p className="text-lg mx-auto font-serif">
+                    {testimonial.name}'s channel has since grown from 700 subs to over 10,000 subs in past 18 months we've been working together.
+                    <br/>
+                    {testimonial.name} saw a 6300% increase in views <b>OVERNIGHT, </b> in the first 12 weeks working together, most importantly, without doing any extra work.
+                    <br/>
+                    In the 12 weeks before working with us he was averaging around 90 views per video.
+                    <br/>
+                    In the first 12 weeks working together, we averaged 5,700 views per video. 
+                    <br/>
+                    <b>Yes, that's a 6300% increase in views, overnight.</b>
+                  </p>
+                </div>
+              )}
               
               
               {/* Video testimonial section - alternating layout */}
