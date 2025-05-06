@@ -237,7 +237,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      order: item.order,
+      orderIndex: item.orderIndex,
       sectionId: item.sectionId,
       backgroundColor: item.backgroundColor || '#FFE382',
     });
@@ -402,7 +402,7 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                         </div>
                       ) : (
                         items
-                          .sort((a, b) => (a.order || 0) - (b.order || 0))
+                          .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
                           .map((item, index) => (
                             <Draggable key={item.id} draggableId={`item-${item.id}`} index={index}>
                               {(provided) => (
@@ -490,21 +490,59 @@ const BonusSectionEditor: React.FC<BonusSectionEditorProps> = ({
                 
                 <FormField
                   control={itemForm.control}
-                  name="imageUrl"
+                  name="iconName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image URL (optional)</FormLabel>
+                      <FormLabel>Icon Name (optional)</FormLabel>
                       <FormControl>
                         <Input 
                           {...field} 
                           value={field.value || ''}
-                          placeholder="https://example.com/image.jpg" 
+                          placeholder="gift" 
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={itemForm.control}
+                    name="buttonText"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button Text (optional)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            {...field} 
+                            value={field.value || ''}
+                            placeholder="Learn More" 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={itemForm.control}
+                    name="buttonUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button URL (optional)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            {...field} 
+                            value={field.value || ''}
+                            placeholder="https://example.com/learn-more" 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 
                 <FormField
                   control={itemForm.control}
