@@ -156,11 +156,7 @@ export default function Footer() {
             <h3 className="font-semibold text-gray-800 mb-4">Free Content</h3>
             <ul className="space-y-2">
               <li><a href="#bonus-section" className="text-gray-600 hover:text-gray-900 transition">Free Bonuses</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Newsletter</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Articles & Guides</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Podcast</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Videos</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-gray-900 transition">Book Notes</a></li>
+              
             </ul>
           </div>
           

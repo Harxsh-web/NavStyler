@@ -325,7 +325,7 @@ export default function TestimonialsDisplay() {
                       <div className="w-full md:w-1/2 bg-[#f8f6f3]">
                         <div className="p-8 md:p-10 flex flex-col justify-center h-full">
                           <p className="text-lg md:text-xl leading-relaxed mb-8">
-                            "{testimonial.quote}"
+                            {testimonial.quote}
                           </p>
                           <div>
                             {testimonial.name && (
@@ -363,7 +363,7 @@ export default function TestimonialsDisplay() {
                       <div className="w-full md:w-1/2 bg-[#f8f6f3]">
                         <div className="p-8 md:p-10 flex flex-col justify-center h-full">
                           <p className="text-lg md:text-xl leading-relaxed mb-8">
-                            "{testimonial.quote}"
+                            {testimonial.quote}
                           </p>
                           <div>
                             {testimonial.name && (
