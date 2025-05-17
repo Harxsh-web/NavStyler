@@ -18,7 +18,10 @@ export default function GuaranteeSection({ guaranteeSection }: GuaranteeSectionP
   
   if (!section) return null;
 
-  const contentParagraphs = section.content.split('\n\n').filter(p => p.trim() !== '');
+  // const contentParagraphs = section.content.split('\n\n').filter(p => p.trim() !== '');
+  const contentParagraphs = section.content 
+  ? section.content.split('\n\n').filter(p => p.trim() !== '')
+  : [];
 
   return (
     <section
