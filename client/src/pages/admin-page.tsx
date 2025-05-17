@@ -7,7 +7,7 @@ import { FooterEditor } from "@/components/admin/FooterEditor";
 import { TestimonialsEditor } from "@/components/admin/TestimonialsEditorSuccess";
 import { AuthorEditor } from "@/components/admin/AuthorEditor";
 import { SiteSettingsEditor } from "@/components/admin/SiteSettingsEditor";
-import { SEOEditor } from "@/components/admin/SEOEditor";
+// import { SEOEditor } from "@/components/admin/SEOEditor";
 import { AnalyticsEditor } from "@/components/admin/AnalyticsEditor";
 import { ThemeSettingsComponent } from "@/components/admin/ThemeSettings";
 import { ThemeSettingsProvider } from "@/hooks/use-theme-settings";
@@ -516,7 +516,7 @@ export default function AdminPage() {
             </div>
           )}
           
-          {activeTab === "seo" && (
+{/*           {activeTab === "seo" && (
             <div>
               <h1 className="text-2xl font-bold mb-6">SEO & Metadata</h1>
               <div className="bg-white shadow-sm rounded-lg p-6">
@@ -526,7 +526,7 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           
           {activeTab === "analytics" && (
             <div>
