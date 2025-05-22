@@ -268,7 +268,7 @@ export default function TestimonialsDisplay() {
       )}
       {/* Display default title if no section title exists and no section data is available */}
       {(!sectionData || !sectionData.title) && (
-        <div className="bg-[#F9F6F3] w-full py-1 px-5">
+        <div className="bg-[#F9F6F3] w-full py-1 px-5 pt-2">
           <h2 className="text-3xl  md:text-5xl font-serif font-bold text-center mb-16">
             We've helped Beginners shortcut their YouTube learning curve <span className="text-amber-500">✋</span>
           </h2>
@@ -284,10 +284,10 @@ export default function TestimonialsDisplay() {
               {/* Testimonial headline */}
               <div className="text-center mb-8">
                 <h3 className="text-3xl md:text-5xl font-serif font-bold">
-                  {testimonial?.headline || ""}
+                  {testimonial?.headline || "Brandon was about to give up on YouTube before working with us."}
                 </h3>
                 <p className="text-lg mt-6 max-w-3xl mx-auto">
-                  {testimonial?.subheadline || ""}
+                  {testimonial?.subheadline || "dsadasda"}
                 </p>
               </div>
               

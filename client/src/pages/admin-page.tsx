@@ -515,8 +515,11 @@ export default function AdminPage() {
               </div>
             </div>
           )}
-          
+        
+          {/* {activeTab === "seo" && (
+=======
 {/*           {activeTab === "seo" && (
+>>>>>>> 34d9c7c2727ca7c071e74f08e84afb1ad027d04f
             <div>
               <h1 className="text-2xl font-bold mb-6">SEO & Metadata</h1>
               <div className="bg-white shadow-sm rounded-lg p-6">

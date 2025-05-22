@@ -12,7 +12,7 @@ import { ArrowLeft, Loader2, Info, CheckCircle, AlertCircle } from 'lucide-react
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string  || "");
 
 // Credit card icons
 const cardIcons = [

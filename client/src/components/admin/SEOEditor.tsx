@@ -62,29 +62,62 @@ export function SeoEditor() {
   });
   
   // Create mutation
+  // const createMutation = useMutation({
+  //   mutationFn: async (data: FormValues) => {
+  //     const response = await apiRequest('POST', '/api/seo', data);
+  //     return await response.json();
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['/api/seo'] });
+  //     toast({
+  //       title: 'SEO settings saved',
+  //       description: 'Your SEO metadata has been created successfully.',
+  //       variant: 'success',
+  //     });
+  //     form.reset();
+  //   },
+  //   onError: (error: any) => {
+  //     toast({
+  //       title: 'Failed to save SEO settings',
+  //       description: error.message || 'An error occurred while saving SEO metadata',
+  //       variant: 'destructive',
+  //     });
+  //   },
+  // });
   const createMutation = useMutation({
-    mutationFn: async (data: FormValues) => {
-      const response = await apiRequest('POST', '/api/seo', data);
-      return await response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/seo'] });
-      toast({
-        title: 'SEO settings saved',
-        description: 'Your SEO metadata has been created successfully.',
-        variant: 'success',
-      });
-      form.reset();
-    },
-    onError: (error: any) => {
-      toast({
-        title: 'Failed to save SEO settings',
-        description: error.message || 'An error occurred while saving SEO metadata',
-        variant: 'destructive',
-      });
-    },
-  });
-  
+  mutationFn: async (data: FormValues) => {
+    const response = await apiRequest('POST', '/api/seo', data);
+    return await response.json();
+  },
+  onMutate: async (data) => {
+    // Optimistically update the cache
+    await queryClient.cancelQueries({ queryKey: ['/api/seo'] });
+    const previousData = queryClient.getQueryData(['/api/seo']);
+    queryClient.setQueryData(['/api/seo'], (oldData) => [
+      ...(oldData || []),
+      data, // Assuming the response will include the newly created SEO entry
+    ]);
+    return { previousData };
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['/api/seo'] });
+    toast({
+      title: 'SEO settings saved',
+      description: 'Your SEO metadata has been created successfully.',
+      variant: 'success',
+    });
+    form.reset();
+  },
+  onError: (error: any, _, context) => {
+    queryClient.setQueryData(['/api/seo'], context.previousData);
+    toast({
+      title: 'Failed to save SEO settings',
+      description: error.message || 'An error occurred while saving SEO metadata',
+      variant: 'destructive',
+    });
+  },
+});
+
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (data: FormValues) => {

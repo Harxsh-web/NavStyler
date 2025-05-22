@@ -23,7 +23,7 @@ const BonusSection: React.FC<BonusSectionProps> = ({ bonusSection, bonusItems = 
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-3 flex items-center justify-center">
             <GiftIcon className="w-10 h-10 mr-2 text-yellow-500" />
-            {bonusSection.title}
+            {bonusSection?.title || 'Free Bonuses'}
           </h2>
           <p className="text-lg text-gray-700">{bonusSection.subtitle}</p>
         </div>
